@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Properties4You · Costa Blanca
 
-## Getting Started
+Web inmobiliaria de obra nueva en la Costa Blanca. Catálogo multiidioma (ES/DE/NL/EN)
+con panel de administración para que el cliente suba y gestione sus propiedades.
 
-First, run the development server:
+## Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Next.js 16** (App Router, RSC, Server Actions) + **React 19** + **TypeScript strict**
+- **TailwindCSS v4** — sistema de diseño oscuro/premium (Cormorant Garamond + Inter)
+- **Supabase** — Postgres + RLS + Auth + Storage (proyecto `njlbbvkdkuavbayqcszp`)
+- **Framer Motion / Lenis** — scroll suave y reveals
+- **Anthropic (Opus)** — autotraducción ES → DE/NL/EN al guardar
+- **Vercel** — despliegue
+
+## Estructura
+
+```
+app/
+  [lang]/                 → web pública (es | de | nl | en)
+    page.tsx              → home (hero, destacadas, destino, CTA)
+    propiedades/          → catálogo con filtros
+    propiedad/[slug]/     → ficha completa + galería + mapa
+    nosotros/             → sobre + contacto
+  admin/
+    login/                → acceso panel (Supabase Auth)
+    (panel)/              → dashboard + alta/edición de propiedades
+  actions.ts              → server actions (guardar, borrar, publicar, autotraducir)
+lib/
+  supabase/               → clientes browser / server / admin
+  i18n/                   → config + diccionarios de UI (4 idiomas)
+  queries.ts, types.ts, utils.ts, translate.ts
+components/site · components/admin
+middleware.ts             → refresco de sesión + enrutado de idioma + guard admin
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Modelo de datos
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Tabla `properties` con campos estructurados (precio, dormitorios, baños, m², tipo,
+certificado energético, ubicación) + `translations` JSONB (`{es,de,nl,en}` con
+`description` y `features`) + `gallery` JSONB. RLS: lectura pública de publicadas,
+escritura solo para `app_admins`. Bucket `properties` (público) para imágenes.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Variables de entorno (`.env.local`)
 
-## Learn More
+```
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=      # solo scripts server-side
+ANTHROPIC_API_KEY=              # autotraducción (sin key: copia el español)
+ANTHROPIC_MODEL=claude-opus-4-8
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Desarrollo
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm install
+npm run dev      # http://localhost:3000
+npm run build
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Panel admin
 
-## Deploy on Vercel
+`/admin` → login con email + contraseña (usuario en `app_admins`). Desde ahí se
+crea/edita cada propiedad con todos los campos de la ficha, se suben imágenes
+(portada + galería) y al guardar se traduce automáticamente a los 4 idiomas.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+PACAME · [pacameagencia.com](https://pacameagencia.com)

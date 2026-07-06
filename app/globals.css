@@ -1,26 +1,116 @@
 @import "tailwindcss";
 
+/* ============================================================
+   Properties4You · Sistema de diseño
+   Costa Blanca premium — carbón profundo, oro cálido, luz mediterránea
+   ============================================================ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --p4y-bg:        #0a0d10;   /* fondo base casi negro azulado */
+  --p4y-bg-2:      #0f1418;   /* secciones alternas */
+  --p4y-surface:   #151b21;   /* tarjetas */
+  --p4y-surface-2: #1c242b;   /* hover / elevación */
+  --p4y-ink:       #efe9df;   /* texto principal, blanco cálido */
+  --p4y-muted:     #9aa4ad;   /* texto secundario */
+  --p4y-faint:     #6b747c;   /* labels tenues */
+  --p4y-line:      rgba(239, 233, 223, 0.10);
+  --p4y-line-2:    rgba(239, 233, 223, 0.18);
+  --p4y-gold:      #c9a464;   /* acento oro arena */
+  --p4y-gold-soft: #d8ba86;
+  --p4y-sea:       #6f9490;   /* acento mediterráneo sutil */
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg:        var(--p4y-bg);
+  --color-bg-2:      var(--p4y-bg-2);
+  --color-surface:   var(--p4y-surface);
+  --color-surface-2: var(--p4y-surface-2);
+  --color-ink:       var(--p4y-ink);
+  --color-muted:     var(--p4y-muted);
+  --color-faint:     var(--p4y-faint);
+  --color-line:      var(--p4y-line);
+  --color-gold:      var(--p4y-gold);
+  --color-gold-soft: var(--p4y-gold-soft);
+  --color-sea:       var(--p4y-sea);
+
+  --font-display: var(--font-cormorant);
+  --font-sans:    var(--font-inter);
+
+  --radius-xl: 1.25rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: var(--p4y-line);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--p4y-bg);
+  color: var(--p4y-ink);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+/* Tipografía display */
+.font-display { font-family: var(--font-cormorant), Georgia, serif; }
+
+/* Kicker / labels con tracking */
+.kicker {
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--p4y-faint);
+  font-weight: 500;
+}
+
+/* Enlace con subrayado animado */
+.link-underline { position: relative; }
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 1px;
+  width: 0;
+  background: var(--p4y-gold);
+  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.link-underline:hover::after { width: 100%; }
+
+/* Grano/textura sutil de fondo */
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Reveal on scroll */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.in { opacity: 1; transform: none; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--p4y-bg); }
+::-webkit-scrollbar-thumb { background: var(--p4y-surface-2); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--p4y-faint); }
+
+::selection { background: var(--p4y-gold); color: var(--p4y-bg); }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1 !important; transform: none !important; }
+  html { scroll-behavior: auto; }
 }
