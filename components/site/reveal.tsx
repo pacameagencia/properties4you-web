@@ -1,78 +1,69 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
+import { motion, type Variants } from "framer-motion";
 
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+/**
+ * Entrada animada FIABLE: se dispara al montar (no depende de scroll ni de
+ * IntersectionObserver), así el contenido nunca queda oculto. Los efectos
+ * ligados al scroll (parallax, scroll horizontal) viven en otros componentes.
+ */
 export function Reveal({
   children,
   className,
   delay = 0,
-  as: Tag = "div",
 }: {
   children: React.ReactNode;
   className?: string;
   delay?: number;
-  as?: React.ElementType;
 }) {
-  const ref = useRef<HTMLElement>(null);
-  const [shown, setShown] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) {
-      setShown(true);
-      return;
-    }
-
-    let done = false;
-    const reveal = () => {
-      if (done) return;
-      done = true;
-      setShown(true);
-    };
-
-    // 1) Si ya está en viewport al montar → mostrar ya.
-    const rect = el.getBoundingClientRect();
-    if (rect.top < window.innerHeight * 1.05) {
-      reveal();
-      return;
-    }
-
-    // 2) Observer para animar al entrar en viewport.
-    let io: IntersectionObserver | null = null;
-    if (typeof IntersectionObserver !== "undefined") {
-      io = new IntersectionObserver(
-        (entries) => {
-          if (entries.some((e) => e.isIntersecting)) reveal();
-        },
-        { threshold: 0.01, rootMargin: "0px 0px -5% 0px" },
-      );
-      io.observe(el);
-    }
-
-    // 3) Red de seguridad por scroll (por si el observer no dispara con scroll suave).
-    const onScroll = () => {
-      if (el.getBoundingClientRect().top < window.innerHeight) reveal();
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-
-    // 4) Garantía absoluta: el contenido NUNCA queda oculto más de ~1.2 s.
-    const failsafe = window.setTimeout(reveal, 1200);
-
-    return () => {
-      io?.disconnect();
-      window.removeEventListener("scroll", onScroll);
-      window.clearTimeout(failsafe);
-    };
-  }, []);
-
   return (
-    <Tag
-      ref={ref}
-      className={cn("reveal", shown && "in", className)}
-      style={{ transitionDelay: `${delay}ms` }}
+    <motion.div
+      className={className}
+      initial={{ opacity: 0, y: 26 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, delay: delay / 1000, ease: EASE }}
     >
       {children}
-    </Tag>
+    </motion.div>
+  );
+}
+
+export function RevealGroup({
+  children,
+  className,
+  stagger = 0.1,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  stagger?: number;
+}) {
+  const variants: Variants = {
+    hidden: {},
+    show: { transition: { staggerChildren: stagger } },
+  };
+  return (
+    <motion.div className={className} variants={variants} initial="hidden" animate="show">
+      {children}
+    </motion.div>
+  );
+}
+
+export function RevealItem({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  const variants: Variants = {
+    hidden: { opacity: 0, y: 26 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.75, ease: EASE } },
+  };
+  return (
+    <motion.div className={className} variants={variants}>
+      {children}
+    </motion.div>
   );
 }

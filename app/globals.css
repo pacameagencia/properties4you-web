@@ -44,7 +44,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
 body {
@@ -53,7 +53,7 @@ body {
   font-family: var(--font-inter), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* Tipografía display */
@@ -110,7 +110,56 @@ body {
 
 ::selection { background: var(--p4y-gold); color: var(--p4y-bg); }
 
+/* Ken Burns lento para el hero */
+.hero-kenburns {
+  animation: kenburns 26s ease-in-out infinite alternate;
+  transform-origin: 60% 40%;
+}
+@keyframes kenburns {
+  from { transform: scale(1.02) translate3d(0, 0, 0); }
+  to   { transform: scale(1.14) translate3d(-1.5%, -1.5%, 0); }
+}
+
+/* Brillo que recorre un elemento (shimmer) */
+.shine {
+  position: relative;
+  overflow: hidden;
+}
+.shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-120%) skewX(-18deg);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.14),
+    transparent
+  );
+  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.group:hover .shine::after { transform: translateX(120%) skewX(-18deg); }
+
+/* Filmstrip "paseo por la colección" (keyframes viven inline en el componente) */
+.film-track { will-change: transform; }
+.film-mask {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 6%,
+    #000 94%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 6%,
+    #000 94%,
+    transparent
+  );
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal { opacity: 1 !important; transform: none !important; }
-  html { scroll-behavior: auto; }
+  .hero-kenburns { animation: none; }
 }
