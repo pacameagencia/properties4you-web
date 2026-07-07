@@ -28,6 +28,7 @@ export default async function HomePage({
   const locale = lang as Locale;
   const dict = getDictionary(locale);
   const featured = await getFeaturedProperties(6);
+  const heroImage = featured.find((p) => p.cover_image)?.cover_image ?? null;
 
   const stats = [
     { value: "320", label: dict.stats.sun },
@@ -40,12 +41,15 @@ export default async function HomePage({
     <>
       {/* ============== HERO ============== */}
       <section className="relative flex min-h-[100svh] items-end overflow-hidden">
-        {/* fondo: capa de imagen (si existe) + degradados */}
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "var(--hero-image, none)" }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0d10] via-[#0a0d10]/40 to-[#0a0d10]" />
+        {/* fondo: mejor foto de la cartera + degradados */}
+        {heroImage && (
+          <div
+            className="absolute inset-0 scale-105 bg-cover bg-center"
+            style={{ backgroundImage: `url(${heroImage})` }}
+          />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0d10]/85 via-[#0a0d10]/45 to-[#0a0d10]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0a0d10]/80 via-[#0a0d10]/20 to-transparent" />
         <div className="absolute inset-0 bg-[radial-gradient(120%_80%_at_70%_10%,rgba(201,164,100,0.10),transparent_55%)]" />
         {/* halo de luz mediterránea */}
         <div className="pointer-events-none absolute -top-40 right-0 h-[520px] w-[520px] rounded-full bg-gold/10 blur-[120px]" />
