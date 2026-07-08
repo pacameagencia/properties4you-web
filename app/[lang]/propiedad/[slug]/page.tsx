@@ -14,11 +14,11 @@ import {
 } from "lucide-react";
 import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
-import { getPropertyBySlug, getPublishedProperties } from "@/lib/queries";
+import { getPropertyBySlug, getPublishedProperties, getSettings } from "@/lib/queries";
 import { formatPrice, localizedContent } from "@/lib/utils";
 import { PropertyMedia } from "@/components/site/property-media";
 import { EnergyBadge } from "@/components/site/energy-badge";
-import { Gallery } from "@/components/site/gallery";
+import { StoriesGallery } from "@/components/site/stories-gallery";
 import { Reveal } from "@/components/site/reveal";
 
 export async function generateMetadata({
@@ -47,11 +47,14 @@ export default async function PropertyPage({
   const locale = lang as Locale;
   const dict = getDictionary(locale);
 
-  const [property, all] = await Promise.all([
+  const [property, all, settings] = await Promise.all([
     getPropertyBySlug(slug),
     getPublishedProperties(),
+    getSettings(),
   ]);
   if (!property) notFound();
+
+  const whatsapp = (settings?.contact_phone || "+34 650 37 92 58").replace(/\D/g, "");
 
   const content = localizedContent(property, locale);
   const idx = all.findIndex((p) => p.slug === slug);
@@ -169,9 +172,12 @@ export default async function PropertyPage({
             {property.gallery.length > 0 && (
               <Reveal>
                 <h2 className="kicker mb-6">{dict.property.gallery}</h2>
-                <Gallery
+                <StoriesGallery
                   images={property.gallery}
                   name={property.name}
+                  zone={property.zone}
+                  dict={dict}
+                  whatsapp={whatsapp}
                   viewAllLabel={dict.property.viewGallery}
                 />
               </Reveal>

@@ -10,7 +10,7 @@ const LETTERS = ["P", "R", "O", "P", "E", "R", "T", "I", "E", "S", "4", "Y", "O"
  * Preloader cinematográfico: marca que se revela letra a letra + línea dorada,
  * y cortina que sube. Solo una vez por sesión (el cliente lo mira a diario).
  */
-export function Preloader() {
+export function Preloader({ kicker }: { kicker: string }) {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -66,7 +66,7 @@ export function Preloader() {
             transition={{ duration: 0.8, delay: 1.0 }}
             className="kicker mt-5"
           >
-            Costa Blanca · España
+            {kicker}
           </motion.p>
         </motion.div>
       )}

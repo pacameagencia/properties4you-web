@@ -23,6 +23,13 @@ const ZONES = [
   "San Fulgencio",
 ];
 
+const MARQUEE_WORDS: Record<Locale, string[]> = {
+  es: ["Costa Blanca", "Mediterráneo", "Obra Nueva"],
+  de: ["Costa Blanca", "Mittelmeer", "Neubau"],
+  nl: ["Costa Blanca", "Middellandse Zee", "Nieuwbouw"],
+  en: ["Costa Blanca", "Mediterranean", "New Build"],
+};
+
 export default async function HomePage({
   params,
 }: {
@@ -138,7 +145,7 @@ export default async function HomePage({
       </section>
 
       {/* MARQUEE EDITORIAL OUTLINE */}
-      <OutlineMarquee words={["Costa Blanca", "Mediterráneo", "Obra Nueva"]} gold />
+      <OutlineMarquee words={MARQUEE_WORDS[locale]} gold />
 
       {/* PASEO POR LA COLECCIÓN — filmstrip */}
       <CollectionShowcase properties={all} locale={locale} dict={dict} />

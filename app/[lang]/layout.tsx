@@ -27,7 +27,7 @@ export default async function LangLayout({
 
   return (
     <>
-      <Preloader />
+      <Preloader kicker={dict.hero.kicker} />
       <Cursor />
       <ScrollProgress />
       <Header locale={lang} dict={dict} />

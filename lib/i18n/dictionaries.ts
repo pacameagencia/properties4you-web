@@ -51,6 +51,7 @@ export type Dictionary = {
     sort: string;
     results: string;
   };
+  stories: { reply: string; send: string; interested: string; tapHint: string };
   types: Record<string, string>;
   status: Record<string, string>;
   about: { kicker: string; title: string; body: string };
@@ -134,6 +135,12 @@ const es: Dictionary = {
     priceDown: "Precio: mayor a menor",
     sort: "Ordenar",
     results: "propiedades",
+  },
+  stories: {
+    reply: "Escribe un mensaje…",
+    send: "Enviar",
+    interested: "Me interesa esta propiedad",
+    tapHint: "Toca para pasar · mantén para pausar",
   },
   types: {
     villa: "Villa",
@@ -237,6 +244,12 @@ const de: Dictionary = {
     sort: "Sortieren",
     results: "Immobilien",
   },
+  stories: {
+    reply: "Nachricht schreiben…",
+    send: "Senden",
+    interested: "Diese Immobilie interessiert mich",
+    tapHint: "Tippen zum Weiterblättern · halten zum Pausieren",
+  },
   types: {
     villa: "Villa",
     apartamento: "Apartment",
@@ -339,6 +352,12 @@ const nl: Dictionary = {
     sort: "Sorteren",
     results: "woningen",
   },
+  stories: {
+    reply: "Stuur een bericht…",
+    send: "Versturen",
+    interested: "Ik ben geïnteresseerd in deze woning",
+    tapHint: "Tik om verder te gaan · houd vast om te pauzeren",
+  },
   types: {
     villa: "Villa",
     apartamento: "Appartement",
@@ -440,6 +459,12 @@ const en: Dictionary = {
     priceDown: "Price: high to low",
     sort: "Sort",
     results: "properties",
+  },
+  stories: {
+    reply: "Send a message…",
+    send: "Send",
+    interested: "I am interested in this property",
+    tapHint: "Tap to advance · hold to pause",
   },
   types: {
     villa: "Villa",
