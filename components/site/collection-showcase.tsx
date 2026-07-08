@@ -28,7 +28,7 @@ export function CollectionShowcase({
       <div className="mx-auto mb-12 w-full max-w-7xl px-5 sm:px-8">
         <p className="kicker mb-3">{dict.featured.kicker}</p>
         <h2 className="font-display text-4xl font-light text-ink sm:text-6xl">
-          Un paseo por la colección
+          {dict.featured.collection}
         </h2>
       </div>
 

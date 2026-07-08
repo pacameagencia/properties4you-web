@@ -13,7 +13,7 @@ export type Dictionary = {
   };
   stats: { sun: string; developments: string; warranty: string; energy: string };
   firm: { kicker: string; title: string; body: string };
-  featured: { kicker: string; title: string; subtitle: string; viewAll: string };
+  featured: { kicker: string; title: string; subtitle: string; viewAll: string; collection: string };
   destination: { kicker: string; title: string; body: string };
   cta: { title: string; body: string; button: string };
   card: { from: string; view: string; forSale: string; reserved: string; sold: string };
@@ -87,6 +87,7 @@ const es: Dictionary = {
     subtitle:
       "Una selección de nuestra cartera. Toca cualquier vivienda para entrar en su ficha completa.",
     viewAll: "Ver todas las propiedades",
+    collection: "Un paseo por la colección",
   },
   destination: {
     kicker: "El destino",
@@ -188,6 +189,7 @@ const de: Dictionary = {
     subtitle:
       "Eine Auswahl aus unserem Portfolio. Tippen Sie auf eine Immobilie für alle Details.",
     viewAll: "Alle Immobilien ansehen",
+    collection: "Ein Spaziergang durch die Kollektion",
   },
   destination: {
     kicker: "Das Reiseziel",
@@ -289,6 +291,7 @@ const nl: Dictionary = {
     subtitle:
       "Een selectie uit ons portfolio. Tik op een woning voor alle details.",
     viewAll: "Bekijk alle woningen",
+    collection: "Een wandeling door de collectie",
   },
   destination: {
     kicker: "De bestemming",
@@ -390,6 +393,7 @@ const en: Dictionary = {
     subtitle:
       "A selection from our portfolio. Tap any home to enter its full profile.",
     viewAll: "View all properties",
+    collection: "A walk through the collection",
   },
   destination: {
     kicker: "The destination",

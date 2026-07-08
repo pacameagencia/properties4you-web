@@ -110,14 +110,35 @@ body {
 
 ::selection { background: var(--p4y-gold); color: var(--p4y-bg); }
 
-/* Ken Burns lento para el hero */
+/* Ken Burns lento para el hero (dos direcciones alternadas) */
 .hero-kenburns {
   animation: kenburns 26s ease-in-out infinite alternate;
   transform-origin: 60% 40%;
 }
+.hero-kenburns-alt {
+  animation: kenburns-alt 26s ease-in-out infinite alternate;
+  transform-origin: 35% 60%;
+}
 @keyframes kenburns {
   from { transform: scale(1.02) translate3d(0, 0, 0); }
   to   { transform: scale(1.14) translate3d(-1.5%, -1.5%, 0); }
+}
+@keyframes kenburns-alt {
+  from { transform: scale(1.05) translate3d(1%, 0.5%, 0); }
+  to   { transform: scale(1.16) translate3d(-0.5%, -1.5%, 0); }
+}
+
+/* Cursor custom activo (puntero fino): ocultar cursor nativo */
+.p4y-cursor, .p4y-cursor * { cursor: none !important; }
+
+/* Texto outline gigante (marquee editorial) */
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(239, 233, 223, 0.16);
+}
+.text-outline-gold {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(201, 164, 100, 0.35);
 }
 
 /* Brillo que recorre un elemento (shimmer) */

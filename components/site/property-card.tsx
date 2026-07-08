@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import { useRef } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+  useMotionTemplate,
+} from "framer-motion";
 import { BedDouble, Bath, Maximize, ArrowUpRight } from "lucide-react";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
@@ -38,16 +44,26 @@ export function PropertyCard({
     damping: 18,
   });
 
+  // Glare: destello dorado que sigue al ratón dentro de la tarjeta
+  const gx = useMotionValue(50);
+  const gy = useMotionValue(50);
+  const glareOpacity = useMotionValue(0);
+  const glare = useMotionTemplate`radial-gradient(420px circle at ${gx}% ${gy}%, rgba(216,186,134,0.16), transparent 65%)`;
+
   function onMove(e: React.MouseEvent) {
     const el = ref.current;
     if (!el) return;
     const r = el.getBoundingClientRect();
     mx.set((e.clientX - r.left) / r.width - 0.5);
     my.set((e.clientY - r.top) / r.height - 0.5);
+    gx.set(((e.clientX - r.left) / r.width) * 100);
+    gy.set(((e.clientY - r.top) / r.height) * 100);
+    glareOpacity.set(1);
   }
   function onLeave() {
     mx.set(0);
     my.set(0);
+    glareOpacity.set(0);
   }
 
   return (
@@ -60,6 +76,11 @@ export function PropertyCard({
         style={{ rotateX: rx, rotateY: ry, transformStyle: "preserve-3d" }}
         className="group relative flex flex-col overflow-hidden rounded-2xl border border-line bg-surface transition-colors duration-500 hover:border-gold/40"
       >
+        {/* glare dorado que sigue al ratón */}
+        <motion.div
+          style={{ backgroundImage: glare, opacity: glareOpacity }}
+          className="pointer-events-none absolute inset-0 z-30 transition-opacity duration-500"
+        />
         <div className="relative aspect-[4/3] overflow-hidden">
           <div className="shine absolute inset-0 z-20" />
           <div className="h-full w-full transition-transform duration-[1100ms] ease-out group-hover:scale-[1.08]">

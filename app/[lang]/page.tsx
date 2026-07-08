@@ -12,6 +12,7 @@ import { Hero } from "@/components/site/hero";
 import { CountUp } from "@/components/site/count-up";
 import { CollectionShowcase } from "@/components/site/collection-showcase";
 import { Magnetic } from "@/components/site/magnetic";
+import { OutlineMarquee } from "@/components/site/outline-marquee";
 
 const ZONES = [
   "Los Montesinos",
@@ -37,7 +38,10 @@ export default async function HomePage({
     ? all.filter((p) => p.featured)
     : all
   ).slice(0, 6);
-  const heroImage = featured.find((p) => p.cover_image)?.cover_image ?? null;
+  const heroImages = featured
+    .map((p) => p.cover_image)
+    .filter((s): s is string => !!s)
+    .slice(0, 5);
 
   const stats = [
     { value: 320, suffix: "", label: dict.stats.sun },
@@ -48,7 +52,7 @@ export default async function HomePage({
 
   return (
     <>
-      <Hero locale={locale} dict={dict} heroImage={heroImage} />
+      <Hero locale={locale} dict={dict} images={heroImages} />
 
       <Marquee items={ZONES} />
 
@@ -133,7 +137,10 @@ export default async function HomePage({
         </div>
       </section>
 
-      {/* PASEO POR LA COLECCIÓN — scroll horizontal */}
+      {/* MARQUEE EDITORIAL OUTLINE */}
+      <OutlineMarquee words={["Costa Blanca", "Mediterráneo", "Obra Nueva"]} gold />
+
+      {/* PASEO POR LA COLECCIÓN — filmstrip */}
       <CollectionShowcase properties={all} locale={locale} dict={dict} />
 
       {/* DESTINO */}
