@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import { X, Send, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -122,9 +123,11 @@ export function StoriesGallery({
         {viewAllLabel} ({count}) →
       </button>
 
-      {/* ============ VISOR STORIES ============ */}
-      <AnimatePresence>
-        {open && (
+      {/* ============ VISOR STORIES (portal: escapa del stacking context de main) ============ */}
+      {typeof document !== "undefined" &&
+        createPortal(
+          <AnimatePresence>
+            {open && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -159,13 +162,23 @@ export function StoriesGallery({
                   transition={{ duration: 0.4 }}
                   className="absolute inset-0"
                 >
+                  {/* fondo: misma foto difuminada rellenando el 9:16 */}
+                  <Image
+                    src={images[index].url}
+                    alt=""
+                    aria-hidden
+                    fill
+                    sizes="(max-width:640px) 100vw, 500px"
+                    className="scale-125 object-cover opacity-50 blur-2xl"
+                  />
+                  {/* foto completa, sin recorte */}
                   <Image
                     src={images[index].url}
                     alt={images[index].alt || name}
                     fill
                     sizes="(max-width:640px) 100vw, 500px"
                     priority
-                    className="object-cover"
+                    className="object-contain"
                   />
                 </motion.div>
               </AnimatePresence>
@@ -294,8 +307,10 @@ export function StoriesGallery({
               </div>
             </motion.div>
           </motion.div>
+            )}
+          </AnimatePresence>,
+          document.body,
         )}
-      </AnimatePresence>
     </>
   );
 }
