@@ -44,3 +44,6 @@ next-env.d.ts
 
 # script de importación puntual (contiene credenciales)
 scripts/import-beta.mjs
+
+# Local Netlify folder
+.netlify
