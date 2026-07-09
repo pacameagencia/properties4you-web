@@ -92,7 +92,7 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                 key={l}
                 href={swapLocale(l)}
                 className={cn(
-                  "text-[0.72rem] uppercase tracking-widest transition-colors",
+                  "p-1.5 text-[0.72rem] uppercase tracking-widest transition-colors",
                   l === locale ? "text-gold" : "text-faint hover:text-ink",
                 )}
               >

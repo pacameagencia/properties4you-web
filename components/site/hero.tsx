@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import {
   motion,
@@ -123,12 +124,19 @@ export function Hero({
               transition={{ duration: 1.6, ease: "easeInOut" }}
               className="absolute inset-0"
             >
-              <div
-                className={`absolute inset-0 bg-cover bg-center ${
-                  slide % 2 === 0 ? "hero-kenburns" : "hero-kenburns-alt"
-                }`}
-                style={{ backgroundImage: `url(${images[slide] ?? ""})` }}
-              />
+              {images[slide] && (
+                <Image
+                  src={images[slide]}
+                  alt=""
+                  fill
+                  priority={slide === 0}
+                  fetchPriority={slide === 0 ? "high" : "auto"}
+                  sizes="100vw"
+                  className={`object-cover ${
+                    slide % 2 === 0 ? "hero-kenburns" : "hero-kenburns-alt"
+                  }`}
+                />
+              )}
             </motion.div>
           </AnimatePresence>
         </motion.div>

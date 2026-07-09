@@ -51,6 +51,7 @@ export function MortgageCalculator({
             min={10}
             max={60}
             step={5}
+            aria-label={dict.tools.downPayment}
             value={down}
             onChange={(e) => setDown(Number(e.target.value))}
             className={`${slider} mt-2`}
@@ -67,6 +68,7 @@ export function MortgageCalculator({
             min={10}
             max={35}
             step={5}
+            aria-label={dict.tools.years}
             value={years}
             onChange={(e) => setYears(Number(e.target.value))}
             className={`${slider} mt-2`}
@@ -83,6 +85,7 @@ export function MortgageCalculator({
             min={1.5}
             max={6}
             step={0.1}
+            aria-label={dict.tools.rate}
             value={rate}
             onChange={(e) => setRate(Number(e.target.value))}
             className={`${slider} mt-2`}

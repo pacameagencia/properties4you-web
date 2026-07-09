@@ -51,6 +51,7 @@ export function VisitForm({
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder={dict.visit.name}
+          aria-label={dict.visit.name}
           required
           className={input}
         />
@@ -65,6 +66,7 @@ export function VisitForm({
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder={dict.visit.message}
+          aria-label={dict.visit.message}
           rows={3}
           className={input}
         />

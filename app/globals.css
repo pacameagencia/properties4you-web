@@ -12,7 +12,7 @@
   --p4y-surface-2: #1c242b;   /* hover / elevación */
   --p4y-ink:       #efe9df;   /* texto principal, blanco cálido */
   --p4y-muted:     #9aa4ad;   /* texto secundario */
-  --p4y-faint:     #6b747c;   /* labels tenues */
+  --p4y-faint:     #8b949d;   /* labels tenues (AA 4.5:1 sobre bg) */
   --p4y-line:      rgba(239, 233, 223, 0.10);
   --p4y-line-2:    rgba(239, 233, 223, 0.18);
   --p4y-gold:      #c9a464;   /* acento oro arena */
@@ -109,6 +109,13 @@ body {
 ::-webkit-scrollbar-thumb:hover { background: var(--p4y-faint); }
 
 ::selection { background: var(--p4y-gold); color: var(--p4y-bg); }
+
+/* Foco visible para navegación por teclado (el cursor custom no lo sustituye) */
+:focus-visible {
+  outline: 2px solid var(--p4y-gold);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
 
 /* Ken Burns lento para el hero (dos direcciones alternadas) */
 .hero-kenburns {

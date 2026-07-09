@@ -152,6 +152,7 @@ export function PropertiesExplorer({
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value as Sort)}
+            aria-label={dict.filters.sort}
             className="rounded-full border border-line bg-surface px-4 py-2 text-[0.72rem] uppercase tracking-[0.12em] text-muted outline-none focus:border-gold"
           >
             <option value="featured">{dict.filters.sort}</option>
