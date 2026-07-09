@@ -14,12 +14,23 @@ import {
 import { useEffect, useRef, useState } from "react";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
+import { useEntrance } from "@/lib/use-entrance";
 import { Magnetic } from "./magnetic";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 const SLIDE_MS = 6500;
 
-function Words({ text, accent }: { text: string; accent?: boolean }) {
+function Words({
+  text,
+  accent,
+  ready,
+  base = 0,
+}: {
+  text: string;
+  accent?: boolean;
+  ready: boolean;
+  base?: number;
+}) {
   return (
     <span className="inline">
       {text.split(" ").map((w, i) => (
@@ -27,8 +38,8 @@ function Words({ text, accent }: { text: string; accent?: boolean }) {
           <motion.span
             className={`inline-block ${accent ? "italic text-gold-soft" : ""}`}
             initial={{ y: "110%" }}
-            animate={{ y: 0 }}
-            transition={{ duration: 0.9, ease: EASE, delay: 0.15 + i * 0.08 }}
+            animate={ready ? { y: 0 } : { y: "110%" }}
+            transition={{ duration: 0.9, ease: EASE, delay: base + i * 0.09 }}
           >
             {w}&nbsp;
           </motion.span>
@@ -49,6 +60,11 @@ export function Hero({
 }) {
   const ref = useRef<HTMLElement>(null);
   const [slide, setSlide] = useState(0);
+  const ready = useEntrance();
+
+  // nº de palabras del titular para encadenar la línea y el subtítulo
+  const titleWords =
+    dict.hero.title.split(" ").length + dict.hero.titleAccent.split(" ").length;
 
   // Parallax al scroll
   const { scrollYProgress } = useScroll({
@@ -68,10 +84,10 @@ export function Hero({
 
   // Slideshow crossfade
   useEffect(() => {
-    if (images.length < 2) return;
+    if (!ready || images.length < 2) return;
     const iv = setInterval(() => setSlide((s) => (s + 1) % images.length), SLIDE_MS);
     return () => clearInterval(iv);
-  }, [images.length]);
+  }, [ready, images.length]);
 
   function onMove(e: React.MouseEvent) {
     const r = ref.current?.getBoundingClientRect();
@@ -84,27 +100,38 @@ export function Hero({
     <section
       ref={ref}
       onMouseMove={onMove}
-      className="relative flex min-h-[100svh] items-end overflow-hidden"
+      className="relative flex min-h-[100svh] items-end overflow-hidden bg-[#07090b]"
     >
-      {/* Slideshow con Ken Burns alternado */}
+      {/* Imagen: asienta de ampliada+borrosa a nítida al levantar la cortina */}
       <motion.div style={{ y: imgY }} className="absolute inset-0">
-        <AnimatePresence>
-          <motion.div
-            key={slide}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.6, ease: "easeInOut" }}
-            className="absolute inset-0"
-          >
-            <div
-              className={`absolute inset-0 bg-cover bg-center ${
-                slide % 2 === 0 ? "hero-kenburns" : "hero-kenburns-alt"
-              }`}
-              style={{ backgroundImage: `url(${images[slide] ?? ""})` }}
-            />
-          </motion.div>
-        </AnimatePresence>
+        <motion.div
+          initial={{ scale: 1.18, filter: "blur(10px)" }}
+          animate={
+            ready
+              ? { scale: 1, filter: "blur(0px)" }
+              : { scale: 1.18, filter: "blur(10px)" }
+          }
+          transition={{ duration: 1.9, ease: EASE }}
+          className="absolute inset-0"
+        >
+          <AnimatePresence>
+            <motion.div
+              key={slide}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.6, ease: "easeInOut" }}
+              className="absolute inset-0"
+            >
+              <div
+                className={`absolute inset-0 bg-cover bg-center ${
+                  slide % 2 === 0 ? "hero-kenburns" : "hero-kenburns-alt"
+                }`}
+                style={{ backgroundImage: `url(${images[slide] ?? ""})` }}
+              />
+            </motion.div>
+          </AnimatePresence>
+        </motion.div>
       </motion.div>
 
       {/* Veladuras */}
@@ -126,31 +153,44 @@ export function Hero({
       >
         <motion.p
           initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          animate={ready ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, delay: 0.15 }}
           className="kicker mb-6"
         >
           {dict.hero.kicker}
         </motion.p>
 
         <h1 className="max-w-4xl font-display text-5xl font-light leading-[1.03] text-ink sm:text-7xl lg:text-8xl">
-          <Words text={dict.hero.title} />
-          <Words text={dict.hero.titleAccent} accent />
+          <Words text={dict.hero.title} ready={ready} base={0.25} />
+          <Words
+            text={dict.hero.titleAccent}
+            accent
+            ready={ready}
+            base={0.25 + dict.hero.title.split(" ").length * 0.09}
+          />
         </h1>
+
+        {/* Barrido de línea dorada bajo el titular */}
+        <motion.div
+          initial={{ scaleX: 0 }}
+          animate={ready ? { scaleX: 1 } : {}}
+          transition={{ duration: 1.1, ease: EASE, delay: 0.3 + titleWords * 0.09 }}
+          className="mt-7 h-px w-40 origin-left bg-gradient-to-r from-gold via-gold-soft to-transparent sm:w-64"
+        />
 
         <motion.p
           initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="mt-8 max-w-xl text-lg leading-relaxed text-muted"
+          animate={ready ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.5 + titleWords * 0.09 }}
+          className="mt-7 max-w-xl text-lg leading-relaxed text-muted"
         >
           {dict.hero.subtitle}
         </motion.p>
 
         <motion.div
           initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.78 }}
+          animate={ready ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.68 + titleWords * 0.09 }}
           className="mt-10 flex flex-wrap items-center gap-4"
         >
           <Magnetic>
@@ -177,8 +217,8 @@ export function Hero({
         {images.length > 1 && (
           <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.1 }}
+            animate={ready ? { opacity: 1 } : {}}
+            transition={{ delay: 1.0 + titleWords * 0.09 }}
             className="mt-10 flex gap-2"
           >
             {images.map((_, i) => (
@@ -202,8 +242,8 @@ export function Hero({
       {/* Indicador de scroll */}
       <motion.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2, duration: 1 }}
+        animate={ready ? { opacity: 1 } : {}}
+        transition={{ delay: 1.3 + titleWords * 0.09, duration: 1 }}
         className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 text-center"
       >
         <div className="mx-auto h-10 w-px overflow-hidden bg-white/10">

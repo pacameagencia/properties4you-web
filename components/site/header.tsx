@@ -3,15 +3,18 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { locales, type Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
+import { useEntrance } from "@/lib/use-entrance";
 import { cn } from "@/lib/utils";
 
 export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const ready = useEntrance();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -32,7 +35,10 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   ];
 
   return (
-    <header
+    <motion.header
+      initial={{ y: -24, opacity: 0 }}
+      animate={ready ? { y: 0, opacity: 1 } : {}}
+      transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all duration-500",
         scrolled
@@ -120,6 +126,6 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
           </div>
         </nav>
       </div>
-    </header>
+    </motion.header>
   );
 }
