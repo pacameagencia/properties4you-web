@@ -25,7 +25,10 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => setOpen(false), [pathname]);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- cierra el menú móvil al navegar
+    setOpen(false);
+  }, [pathname]);
 
   const rest = pathname.replace(/^\/(es|en|de|nl|fr)/, "") || "";
   const swapLocale = (l: Locale) => `/${l}${rest}`;

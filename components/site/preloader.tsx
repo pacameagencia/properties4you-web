@@ -21,6 +21,7 @@ export function Preloader({ kicker }: { kicker: string }) {
     if (sessionStorage.getItem("p4y-intro")) return;
     sessionStorage.setItem("p4y-intro", "1");
     window.__p4yIntroUntil = Date.now() + INTRO_MS;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- decide mostrar intro tras leer sessionStorage
     setShow(true);
     document.documentElement.style.overflow = "hidden";
     const t = setTimeout(() => {

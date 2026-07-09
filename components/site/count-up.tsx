@@ -25,6 +25,7 @@ export function CountUp({
       if (p < 1) raf = requestAnimationFrame(tick);
     };
     // arranca desde 0 al montar
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- inicialización del contador al montar
     setN(0);
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);

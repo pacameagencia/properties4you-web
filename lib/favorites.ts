@@ -18,6 +18,7 @@ export function useFavorites() {
   const [favs, setFavs] = useState<string[]>([]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- hidrata favoritos desde localStorage al montar
     setFavs(read());
     const sync = () => setFavs(read());
     window.addEventListener(EVENT, sync);

@@ -17,6 +17,7 @@ export function Cursor() {
   useEffect(() => {
     const fine = window.matchMedia("(pointer: fine)").matches;
     if (!fine) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- gate de hidratación (solo puntero fino)
     setEnabled(true);
     document.documentElement.classList.add("p4y-cursor");
 
