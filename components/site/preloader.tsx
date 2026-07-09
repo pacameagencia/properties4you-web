@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 const EASE = [0.76, 0, 0.24, 1] as const;
 const LETTERS = ["P", "R", "O", "P", "E", "R", "T", "I", "E", "S", "4", "Y", "O", "U"];
 /** Duración del preloader antes de levantar la cortina (ms). */
-const INTRO_MS = 2050;
+const INTRO_MS = 1600;
 
 /**
  * Preloader cinematográfico: marca letra a letra + línea dorada y cortina

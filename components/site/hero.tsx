@@ -131,6 +131,7 @@ export function Hero({
                   fill
                   priority={slide === 0}
                   fetchPriority={slide === 0 ? "high" : "auto"}
+                  quality={60}
                   sizes="100vw"
                   className={`object-cover ${
                     slide % 2 === 0 ? "hero-kenburns" : "hero-kenburns-alt"
