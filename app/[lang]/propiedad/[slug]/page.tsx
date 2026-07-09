@@ -21,6 +21,13 @@ import { EnergyBadge } from "@/components/site/energy-badge";
 import { StoriesGallery } from "@/components/site/stories-gallery";
 import { Reveal } from "@/components/site/reveal";
 
+export const revalidate = 600;
+
+export async function generateStaticParams() {
+  const properties = await getPublishedProperties();
+  return properties.map((p) => ({ slug: p.slug }));
+}
+
 export async function generateMetadata({
   params,
 }: {

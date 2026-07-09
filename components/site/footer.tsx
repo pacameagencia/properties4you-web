@@ -18,8 +18,16 @@ export function Footer({
   const address = settings?.address || "03187 Los Montesinos, Alicante";
 
   return (
-    <footer className="relative z-10 border-t border-line bg-bg-2">
-      <div className="mx-auto grid max-w-7xl gap-12 px-5 py-16 sm:px-8 md:grid-cols-3">
+    <footer className="relative z-10 overflow-hidden border-t border-line bg-bg-2">
+      {/* wordmark gigante de fondo */}
+      <div
+        aria-hidden
+        className="text-outline pointer-events-none absolute -bottom-6 left-1/2 -translate-x-1/2 select-none whitespace-nowrap font-display text-[13vw] font-light uppercase leading-none tracking-tight opacity-70"
+      >
+        Properties4You
+      </div>
+      <div className="pointer-events-none absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
+      <div className="relative mx-auto grid max-w-7xl gap-12 px-5 py-16 sm:px-8 md:grid-cols-3">
         <div>
           <div className="mb-4 flex items-center gap-[2px]">
             <span className="font-display text-xl text-ink">PROPERTIES</span>
@@ -74,7 +82,7 @@ export function Footer({
         </div>
       </div>
 
-      <div className="border-t border-line">
+      <div className="relative border-t border-line">
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-2 px-5 py-6 text-xs text-faint sm:flex-row sm:items-center sm:px-8">
           <span>
             ©{new Date().getFullYear()} Properties4You · {dict.footer.rights}

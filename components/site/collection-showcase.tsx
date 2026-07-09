@@ -49,7 +49,7 @@ export function CollectionShowcase({
               href={`/${locale}/propiedad/${p.slug}`}
               className="film-card group/card relative h-[58vh] max-h-[560px] w-[78vw] shrink-0 overflow-hidden rounded-3xl border border-line sm:w-[46vw] lg:w-[34vw]"
             >
-              <div className="h-full w-full transition-transform duration-[1200ms] ease-out group-hover/card:scale-105">
+              <div className="relative h-full w-full transition-transform duration-[1200ms] ease-out group-hover/card:scale-105">
                 <PropertyMedia
                   src={p.cover_image}
                   alt={p.name}

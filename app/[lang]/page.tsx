@@ -14,6 +14,8 @@ import { CollectionShowcase } from "@/components/site/collection-showcase";
 import { Magnetic } from "@/components/site/magnetic";
 import { OutlineMarquee } from "@/components/site/outline-marquee";
 
+export const revalidate = 600;
+
 const ZONES = [
   "Los Montesinos",
   "Dolores",
@@ -84,8 +86,15 @@ export default async function HomePage({
       </section>
 
       {/* FIRMA */}
-      <section className="relative z-10 border-t border-line bg-bg-2">
-        <div className="mx-auto max-w-5xl px-5 py-28 text-center sm:px-8">
+      <section className="relative z-10 overflow-hidden border-t border-line bg-bg-2">
+        {heroImages[1] && (
+          <div
+            className="absolute inset-0 bg-cover bg-center opacity-[0.08]"
+            style={{ backgroundImage: `url(${heroImages[1]})` }}
+          />
+        )}
+        <div className="pointer-events-none absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+        <div className="relative mx-auto max-w-5xl px-5 py-28 text-center sm:px-8">
           <Reveal>
             <p className="kicker mb-8">{dict.firm.kicker}</p>
           </Reveal>
@@ -171,18 +180,35 @@ export default async function HomePage({
           </div>
           <Reveal delay={200}>
             <div className="grid grid-cols-2 gap-4">
-              {ZONES.slice(0, 4).map((z) => (
-                <div
-                  key={z}
-                  className="flex aspect-square flex-col justify-end rounded-2xl border border-line bg-gradient-to-br from-surface to-bg p-5 transition-colors hover:border-gold/40"
-                >
-                  <span className="text-gold">◆</span>
-                  <span className="mt-2 font-display text-2xl text-ink">{z}</span>
-                  <span className="text-xs uppercase tracking-widest text-faint">
-                    Alicante
-                  </span>
-                </div>
-              ))}
+              {ZONES.slice(0, 4).map((z) => {
+                const zoneProperty = all.find(
+                  (p) => p.zone === z && p.cover_image,
+                );
+                return (
+                  <Link
+                    key={z}
+                    href={`/${locale}/propiedades`}
+                    className="group relative flex aspect-square flex-col justify-end overflow-hidden rounded-2xl border border-line p-5 transition-colors hover:border-gold/50"
+                  >
+                    {zoneProperty?.cover_image && (
+                      <div
+                        className="absolute inset-0 bg-cover bg-center opacity-60 transition-all duration-700 group-hover:scale-105 group-hover:opacity-80"
+                        style={{
+                          backgroundImage: `url(${zoneProperty.cover_image})`,
+                        }}
+                      />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0d10]/95 via-[#0a0d10]/30 to-transparent" />
+                    <span className="relative text-gold">◆</span>
+                    <span className="relative mt-2 font-display text-2xl text-ink">
+                      {z}
+                    </span>
+                    <span className="relative text-xs uppercase tracking-widest text-muted">
+                      Alicante
+                    </span>
+                  </Link>
+                );
+              })}
             </div>
           </Reveal>
         </div>

@@ -83,7 +83,7 @@ export function PropertyCard({
         />
         <div className="relative aspect-[4/3] overflow-hidden">
           <div className="shine absolute inset-0 z-20" />
-          <div className="h-full w-full transition-transform duration-[1100ms] ease-out group-hover:scale-[1.08]">
+          <div className="relative h-full w-full transition-transform duration-[1100ms] ease-out group-hover:scale-[1.08]">
             <PropertyMedia src={p.cover_image} alt={p.name} priority={priority} />
           </div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />

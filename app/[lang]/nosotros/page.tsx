@@ -7,6 +7,8 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getSettings } from "@/lib/queries";
 import { Reveal } from "@/components/site/reveal";
 
+export const revalidate = 600;
+
 export async function generateMetadata({
   params,
 }: {

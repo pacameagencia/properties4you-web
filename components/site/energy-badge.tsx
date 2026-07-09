@@ -1,15 +1,9 @@
 import { cn } from "@/lib/utils";
 
-const SCALE: Record<string, string> = {
-  A: "bg-emerald-500",
-  B: "bg-green-500",
-  C: "bg-lime-500",
-  D: "bg-yellow-500",
-  E: "bg-amber-500",
-  F: "bg-orange-500",
-  G: "bg-red-500",
-};
-
+/**
+ * Badge de certificado energético en clave de marca (oro/carbón),
+ * sin el semáforo RGB de portal genérico.
+ */
 export function EnergyBadge({
   rating,
   className,
@@ -18,18 +12,16 @@ export function EnergyBadge({
   className?: string;
 }) {
   if (!rating) return null;
-  const letter = rating.trim().toUpperCase().charAt(0);
-  const color = SCALE[letter] ?? "bg-neutral-500";
+  const label = rating.trim().toUpperCase();
   return (
     <span
       className={cn(
-        "inline-flex h-7 min-w-7 items-center justify-center rounded-md px-2 text-sm font-semibold text-black",
-        color,
+        "inline-flex h-7 min-w-7 items-center justify-center rounded-md border border-gold/60 bg-gold/10 px-2 font-display text-sm font-semibold text-gold",
         className,
       )}
-      title={`Certificado energético ${rating}`}
+      title={`Certificado energético ${label}`}
     >
-      {rating}
+      {label}
     </span>
   );
 }

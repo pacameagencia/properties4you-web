@@ -120,7 +120,7 @@ const es: Dictionary = {
     energy: "Calificación energética",
     interested: "¿Te interesa esta vivienda?",
     interestedBody:
-      "Disponible a través de nuestras agencias colaboradoras. Tu agencia te acompañará en todo el proceso, en tu idioma.",
+      "Te acompaña un agente especializado de nuestra red, en tu idioma, durante todo el proceso.",
     contact: "Solicitar información",
     prev: "Anterior",
     next: "Siguiente",
@@ -228,7 +228,7 @@ const de: Dictionary = {
     energy: "Energieklasse",
     interested: "Interessiert an dieser Immobilie?",
     interestedBody:
-      "Verfügbar über unsere Partneragenturen. Ihre Agentur begleitet Sie durch den gesamten Prozess, in Ihrer Sprache.",
+      "Ein spezialisierter Agent unseres Netzwerks begleitet Sie während des gesamten Prozesses — in Ihrer Sprache.",
     contact: "Informationen anfordern",
     prev: "Zurück",
     next: "Weiter",
@@ -336,7 +336,7 @@ const nl: Dictionary = {
     energy: "Energielabel",
     interested: "Interesse in deze woning?",
     interestedBody:
-      "Beschikbaar via onze partneragentschappen. Uw agentschap begeleidt u door het hele proces, in uw taal.",
+      "Een gespecialiseerde agent uit ons netwerk begeleidt u tijdens het hele proces, in uw taal.",
     contact: "Informatie aanvragen",
     prev: "Vorige",
     next: "Volgende",
@@ -444,7 +444,7 @@ const en: Dictionary = {
     energy: "Energy rating",
     interested: "Interested in this home?",
     interestedBody:
-      "Available through our partner agencies. Your agency will guide you through the whole process, in your language.",
+      "A specialist agent from our network will guide you through the whole process, in your language.",
     contact: "Request information",
     prev: "Previous",
     next: "Next",

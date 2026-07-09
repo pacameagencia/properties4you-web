@@ -6,6 +6,8 @@ import { getPublishedProperties } from "@/lib/queries";
 import { PropertiesExplorer } from "@/components/site/properties-explorer";
 import { Reveal } from "@/components/site/reveal";
 
+export const revalidate = 600;
+
 export async function generateMetadata({
   params,
 }: {
