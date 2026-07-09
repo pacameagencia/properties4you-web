@@ -71,9 +71,30 @@ export default async function LangLayout({
   const dict = getDictionary(lang);
   const settings = await getSettings();
 
+  const orgJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "RealEstateAgent",
+    name: "Properties4You",
+    url: "https://properties4you.netlify.app",
+    areaServed: "Costa Blanca, Alicante, España",
+    telephone: settings?.contact_phone || "+34 650 37 92 58",
+    email: settings?.contact_email || "info@properties4you.es",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Los Montesinos",
+      addressRegion: "Alicante",
+      postalCode: "03187",
+      addressCountry: "ES",
+    },
+  };
+
   return (
     <html lang={lang} className={`${cormorant.variable} ${inter.variable}`}>
       <body className="grain min-h-screen">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
+        />
         <Preloader kicker={dict.hero.kicker} />
         <Cursor />
         <ScrollProgress />

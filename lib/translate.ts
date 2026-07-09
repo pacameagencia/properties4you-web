@@ -2,12 +2,13 @@ import Anthropic from "@anthropic-ai/sdk";
 import type { Locale } from "./i18n/config";
 import type { PropertyContent, Translations } from "./types";
 
-const TARGETS: Locale[] = ["de", "nl", "en"];
+const TARGETS: Locale[] = ["en", "de", "nl", "fr"];
 const LANG_NAME: Record<Locale, string> = {
   es: "español",
+  en: "inglés",
   de: "alemán",
   nl: "neerlandés",
-  en: "inglés",
+  fr: "francés",
 };
 
 // Regla PACAME: LLM en código = Opus. Override por env si hace falta.

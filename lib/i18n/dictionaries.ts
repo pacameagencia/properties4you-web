@@ -1,7 +1,7 @@
 import type { Locale } from "./config";
 
 export type Dictionary = {
-  nav: { home: string; properties: string; about: string };
+  nav: { home: string; properties: string; about: string; blog: string };
   hero: {
     kicker: string;
     title: string;
@@ -52,6 +52,16 @@ export type Dictionary = {
     results: string;
   };
   stories: { reply: string; send: string; interested: string; tapHint: string };
+  tools: { mortgage: string; downPayment: string; years: string; rate: string; monthly: string; disclaimer: string };
+  visit: { title: string; name: string; date: string; message: string; cta: string };
+  share: { title: string; copy: string; copied: string };
+  quick: { call: string; whatsapp: string; email: string; directions: string };
+  related: { title: string };
+  zoneInfo: { title: string };
+  favs: { title: string; empty: string; save: string; saved: string; browse: string };
+  alertCta: string;
+  testimonials: { kicker: string; title: string };
+  blog: { title: string; kicker: string; readMore: string; back: string; empty: string };
   types: Record<string, string>;
   status: Record<string, string>;
   about: { kicker: string; title: string; body: string };
@@ -59,7 +69,7 @@ export type Dictionary = {
 };
 
 const es: Dictionary = {
-  nav: { home: "Inicio", properties: "Propiedades", about: "Nosotros" },
+  nav: { home: "Inicio", properties: "Propiedades", about: "Nosotros", blog: "Guía" },
   hero: {
     kicker: "Costa Blanca · España",
     title: "Tu hogar bajo la luz",
@@ -142,6 +152,16 @@ const es: Dictionary = {
     interested: "Me interesa esta propiedad",
     tapHint: "Toca para pasar · mantén para pausar",
   },
+  tools: { mortgage: "Calculadora de hipoteca", downPayment: "Entrada", years: "Plazo (años)", rate: "Interés (%)", monthly: "Cuota mensual estimada", disclaimer: "Cálculo orientativo, no vinculante." },
+  visit: { title: "Reservar una visita", name: "Tu nombre", date: "Fecha preferida", message: "Mensaje (opcional)", cta: "Solicitar visita" },
+  share: { title: "Compartir", copy: "Copiar enlace", copied: "¡Enlace copiado!" },
+  quick: { call: "Llamar", whatsapp: "WhatsApp", email: "Email", directions: "Cómo llegar" },
+  related: { title: "También te puede interesar" },
+  zoneInfo: { title: "El entorno" },
+  favs: { title: "Favoritos", empty: "Aún no has guardado propiedades.", save: "Guardar", saved: "Guardada", browse: "Explorar propiedades" },
+  alertCta: "Avísame cuando haya propiedades como esta búsqueda",
+  testimonials: { kicker: "Compradores", title: "Quienes ya viven aquí" },
+  blog: { title: "Guía del comprador", kicker: "Blog", readMore: "Leer artículo", back: "Volver a la guía", empty: "Próximamente artículos." },
   types: {
     villa: "Villa",
     apartamento: "Apartamento",
@@ -167,7 +187,7 @@ const es: Dictionary = {
 };
 
 const de: Dictionary = {
-  nav: { home: "Start", properties: "Immobilien", about: "Über uns" },
+  nav: { home: "Start", properties: "Immobilien", about: "Über uns", blog: "Ratgeber" },
   hero: {
     kicker: "Costa Blanca · Spanien",
     title: "Ihr Zuhause im Licht",
@@ -250,6 +270,16 @@ const de: Dictionary = {
     interested: "Diese Immobilie interessiert mich",
     tapHint: "Tippen zum Weiterblättern · halten zum Pausieren",
   },
+  tools: { mortgage: "Hypothekenrechner", downPayment: "Anzahlung", years: "Laufzeit (Jahre)", rate: "Zins (%)", monthly: "Geschätzte Monatsrate", disclaimer: "Unverbindliche Orientierungsrechnung." },
+  visit: { title: "Besichtigung vereinbaren", name: "Ihr Name", date: "Wunschtermin", message: "Nachricht (optional)", cta: "Besichtigung anfragen" },
+  share: { title: "Teilen", copy: "Link kopieren", copied: "Link kopiert!" },
+  quick: { call: "Anrufen", whatsapp: "WhatsApp", email: "E-Mail", directions: "Route planen" },
+  related: { title: "Das könnte Sie auch interessieren" },
+  zoneInfo: { title: "Die Umgebung" },
+  favs: { title: "Favoriten", empty: "Sie haben noch keine Immobilien gespeichert.", save: "Speichern", saved: "Gespeichert", browse: "Immobilien entdecken" },
+  alertCta: "Benachrichtigen Sie mich bei neuen passenden Immobilien",
+  testimonials: { kicker: "Käufer", title: "Stimmen unserer Käufer" },
+  blog: { title: "Käufer-Ratgeber", kicker: "Blog", readMore: "Artikel lesen", back: "Zurück zum Ratgeber", empty: "Artikel folgen in Kürze." },
   types: {
     villa: "Villa",
     apartamento: "Apartment",
@@ -275,7 +305,7 @@ const de: Dictionary = {
 };
 
 const nl: Dictionary = {
-  nav: { home: "Home", properties: "Woningen", about: "Over ons" },
+  nav: { home: "Home", properties: "Woningen", about: "Over ons", blog: "Gids" },
   hero: {
     kicker: "Costa Blanca · Spanje",
     title: "Uw thuis in het licht",
@@ -358,6 +388,16 @@ const nl: Dictionary = {
     interested: "Ik ben geïnteresseerd in deze woning",
     tapHint: "Tik om verder te gaan · houd vast om te pauzeren",
   },
+  tools: { mortgage: "Hypotheekcalculator", downPayment: "Aanbetaling", years: "Looptijd (jaren)", rate: "Rente (%)", monthly: "Geschat maandbedrag", disclaimer: "Indicatieve berekening, niet bindend." },
+  visit: { title: "Bezichtiging plannen", name: "Uw naam", date: "Voorkeursdatum", message: "Bericht (optioneel)", cta: "Bezichtiging aanvragen" },
+  share: { title: "Delen", copy: "Link kopiëren", copied: "Link gekopieerd!" },
+  quick: { call: "Bellen", whatsapp: "WhatsApp", email: "E-mail", directions: "Routebeschrijving" },
+  related: { title: "Dit vindt u misschien ook interessant" },
+  zoneInfo: { title: "De omgeving" },
+  favs: { title: "Favorieten", empty: "U heeft nog geen woningen opgeslagen.", save: "Opslaan", saved: "Opgeslagen", browse: "Woningen bekijken" },
+  alertCta: "Waarschuw mij bij nieuwe woningen zoals deze zoekopdracht",
+  testimonials: { kicker: "Kopers", title: "Wie hier al woont" },
+  blog: { title: "Kopersgids", kicker: "Blog", readMore: "Artikel lezen", back: "Terug naar de gids", empty: "Binnenkort artikelen." },
   types: {
     villa: "Villa",
     apartamento: "Appartement",
@@ -383,7 +423,7 @@ const nl: Dictionary = {
 };
 
 const en: Dictionary = {
-  nav: { home: "Home", properties: "Properties", about: "About" },
+  nav: { home: "Home", properties: "Properties", about: "About", blog: "Guide" },
   hero: {
     kicker: "Costa Blanca · Spain",
     title: "Your home in the light",
@@ -466,6 +506,16 @@ const en: Dictionary = {
     interested: "I am interested in this property",
     tapHint: "Tap to advance · hold to pause",
   },
+  tools: { mortgage: "Mortgage calculator", downPayment: "Down payment", years: "Term (years)", rate: "Interest (%)", monthly: "Estimated monthly payment", disclaimer: "Indicative calculation, not binding." },
+  visit: { title: "Book a viewing", name: "Your name", date: "Preferred date", message: "Message (optional)", cta: "Request a viewing" },
+  share: { title: "Share", copy: "Copy link", copied: "Link copied!" },
+  quick: { call: "Call", whatsapp: "WhatsApp", email: "Email", directions: "Get directions" },
+  related: { title: "You may also like" },
+  zoneInfo: { title: "The area" },
+  favs: { title: "Favourites", empty: "You haven't saved any properties yet.", save: "Save", saved: "Saved", browse: "Browse properties" },
+  alertCta: "Alert me about new properties like this search",
+  testimonials: { kicker: "Buyers", title: "Those who already live here" },
+  blog: { title: "Buyer's guide", kicker: "Blog", readMore: "Read article", back: "Back to the guide", empty: "Articles coming soon." },
   types: {
     villa: "Villa",
     apartamento: "Apartment",
@@ -490,7 +540,126 @@ const en: Dictionary = {
   },
 };
 
-const dictionaries: Record<Locale, Dictionary> = { es, de, nl, en };
+
+const fr: Dictionary = {
+  nav: { home: "Accueil", properties: "Propriétés", about: "À propos", blog: "Guide" },
+  hero: {
+    kicker: "Costa Blanca · Espagne",
+    title: "Votre maison sous la lumière",
+    titleAccent: "de la Méditerranée",
+    subtitle:
+      "Villas et appartements neufs sur la Costa Blanca, présentés comme ils le méritent.",
+    ctaProperties: "Voir les propriétés",
+    ctaAbout: "Qui sommes-nous",
+    scroll: "Défiler",
+  },
+  stats: {
+    sun: "Jours de soleil par an",
+    developments: "Programmes neufs",
+    warranty: "Ans de garantie structurelle",
+    energy: "Certificat énergétique",
+  },
+  firm: {
+    kicker: "La maison",
+    title:
+      "Nous ne vendons pas des maisons. Nous créons le décor où commence une nouvelle vie face à la Méditerranée.",
+    body: "Chaque propriété de notre portefeuille est choisie pour son architecture, sa lumière et son emplacement. Du neuf haut de gamme dans les enclaves les plus recherchées de la Costa Blanca.",
+  },
+  featured: {
+    kicker: "Neuf · À vendre",
+    title: "Propriétés à la une",
+    subtitle:
+      "Une sélection de notre portefeuille. Touchez une propriété pour découvrir sa fiche complète.",
+    viewAll: "Voir toutes les propriétés",
+    collection: "Une promenade dans la collection",
+  },
+  destination: {
+    kicker: "La destination",
+    title: "Vivre sur la Costa Blanca",
+    body: "L'une des côtes les plus lumineuses d'Europe, choisie chaque année par des milliers d'acheteurs en quête de qualité de vie, de climat et de mer.",
+  },
+  cta: {
+    title: "Vous cherchez votre place face à la mer ?",
+    body: "Dites-nous ce que vous imaginez et nous vous accompagnons, dans votre langue, à chaque étape.",
+    button: "Parler avec nous",
+  },
+  card: { from: "À partir de", view: "Voir la propriété", forSale: "À vendre", reserved: "Réservée", sold: "Vendue" },
+  property: {
+    back: "Retour aux propriétés",
+    description: "Description",
+    features: "Prestations",
+    location: "Emplacement",
+    gallery: "Galerie",
+    viewGallery: "Voir toute la galerie",
+    virtualTour: "Visite virtuelle",
+    openMaps: "Ouvrir dans Google Maps",
+    from: "À partir de",
+    ref: "Réf.",
+    bedrooms: "Chambres",
+    bathrooms: "Salles de bain",
+    area: "Surface",
+    plot: "Terrain",
+    type: "Type",
+    energy: "Classe énergétique",
+    interested: "Cette propriété vous intéresse ?",
+    interestedBody:
+      "Un agent spécialisé de notre réseau vous accompagne, dans votre langue, tout au long du processus.",
+    contact: "Demander des informations",
+    prev: "Précédente",
+    next: "Suivante",
+    noResults: "Aucune propriété ne correspond à votre recherche.",
+  },
+  filters: {
+    all: "Toutes",
+    zone: "Zone",
+    type: "Type",
+    bedrooms: "Chambres",
+    priceUp: "Prix : croissant",
+    priceDown: "Prix : décroissant",
+    sort: "Trier",
+    results: "propriétés",
+  },
+  stories: {
+    reply: "Écrivez un message…",
+    send: "Envoyer",
+    interested: "Cette propriété m'intéresse",
+    tapHint: "Touchez pour avancer · maintenez pour mettre en pause",
+  },
+  tools: { mortgage: "Calculatrice de prêt", downPayment: "Apport", years: "Durée (années)", rate: "Taux (%)", monthly: "Mensualité estimée", disclaimer: "Calcul indicatif, non contractuel." },
+  visit: { title: "Réserver une visite", name: "Votre nom", date: "Date souhaitée", message: "Message (optionnel)", cta: "Demander une visite" },
+  share: { title: "Partager", copy: "Copier le lien", copied: "Lien copié !" },
+  quick: { call: "Appeler", whatsapp: "WhatsApp", email: "E-mail", directions: "Itinéraire" },
+  related: { title: "Cela pourrait aussi vous intéresser" },
+  zoneInfo: { title: "Le quartier" },
+  favs: { title: "Favoris", empty: "Vous n'avez pas encore enregistré de propriétés.", save: "Enregistrer", saved: "Enregistrée", browse: "Explorer les propriétés" },
+  alertCta: "Prévenez-moi des nouvelles propriétés comme cette recherche",
+  testimonials: { kicker: "Acheteurs", title: "Ceux qui vivent déjà ici" },
+  blog: { title: "Guide de l'acheteur", kicker: "Blog", readMore: "Lire l'article", back: "Retour au guide", empty: "Articles à venir." },
+  types: {
+    villa: "Villa",
+    apartamento: "Appartement",
+    atico: "Penthouse",
+    bungalow: "Bungalow",
+    adosado: "Maison mitoyenne",
+    duplex: "Duplex",
+    parcela: "Terrain",
+  },
+  status: { en_venta: "À vendre", reservado: "Réservée", vendido: "Vendue" },
+  about: {
+    kicker: "À propos",
+    title: "Des propriétés avec un art de vivre",
+    body: "Là où la Méditerranée devient un foyer. Nous sélectionnons du neuf haut de gamme sur la Costa Blanca et accompagnons des acheteurs de toute l'Europe.",
+  },
+  footer: {
+    tagline: "Des propriétés avec un art de vivre. Là où la Méditerranée devient un foyer.",
+    nav: "Navigation",
+    contact: "Contact",
+    rights: "Costa Blanca",
+    disclaimer: "Prix indicatifs · Disponibilité via votre agence",
+  },
+};
+
+const dictionaries: Record<Locale, Dictionary> = { es, en, de, nl, fr };
 
 export function getDictionary(locale: Locale): Dictionary {
   return dictionaries[locale] ?? es;

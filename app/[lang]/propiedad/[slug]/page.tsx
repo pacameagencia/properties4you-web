@@ -11,15 +11,23 @@ import {
   Play,
   ArrowLeft,
   ArrowRight,
+  Navigation,
 } from "lucide-react";
 import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getPropertyBySlug, getPublishedProperties, getSettings } from "@/lib/queries";
 import { formatPrice, localizedContent } from "@/lib/utils";
+import { ZONE_INFO, CHIP_LABELS } from "@/lib/zones";
 import { PropertyMedia } from "@/components/site/property-media";
 import { EnergyBadge } from "@/components/site/energy-badge";
 import { StoriesGallery } from "@/components/site/stories-gallery";
 import { Reveal } from "@/components/site/reveal";
+import { PropertyCard } from "@/components/site/property-card";
+import { MortgageCalculator } from "@/components/site/mortgage-calculator";
+import { VisitForm } from "@/components/site/visit-form";
+import { ShareButtons } from "@/components/site/share-buttons";
+import { QuickContact } from "@/components/site/quick-contact";
+import { FavButton } from "@/components/site/fav-button";
 
 export const revalidate = 600;
 
@@ -41,7 +49,23 @@ export async function generateMetadata({
   return {
     title: `${p.name} · ${p.zone}`,
     description: content.description?.slice(0, 160) || undefined,
+    openGraph: {
+      title: `${p.name} · ${p.zone}`,
+      description: content.description?.slice(0, 160) || undefined,
+      images: p.cover_image ? [{ url: p.cover_image }] : undefined,
+    },
   };
+}
+
+/** Convierte una URL de YouTube/Vimeo en URL embebible. */
+function embedUrl(url: string): string | null {
+  const yt = url.match(
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([\w-]{6,})/,
+  );
+  if (yt) return `https://www.youtube-nocookie.com/embed/${yt[1]}`;
+  const vimeo = url.match(/vimeo\.com\/(\d+)/);
+  if (vimeo) return `https://player.vimeo.com/video/${vimeo[1]}`;
+  return null;
 }
 
 export default async function PropertyPage({
@@ -61,13 +85,30 @@ export default async function PropertyPage({
   ]);
   if (!property) notFound();
 
-  const whatsapp = (settings?.contact_phone || "+34 650 37 92 58").replace(/\D/g, "");
+  const phone = settings?.contact_phone || "+34 650 37 92 58";
+  const email = settings?.contact_email || "info@properties4you.es";
+  const whatsapp = phone.replace(/\D/g, "");
 
   const content = localizedContent(property, locale);
   const idx = all.findIndex((p) => p.slug === slug);
   const prev = idx >= 0 ? all[(idx - 1 + all.length) % all.length] : null;
   const next = idx >= 0 ? all[(idx + 1) % all.length] : null;
   const typeLabel = dict.types[property.type] ?? property.type;
+
+  // "También te puede interesar": misma zona primero, luego mismo tipo
+  const related = [
+    ...all.filter((p) => p.slug !== slug && p.zone === property.zone),
+    ...all.filter((p) => p.slug !== slug && p.zone !== property.zone && p.type === property.type),
+    ...all.filter((p) => p.slug !== slug),
+  ]
+    .filter((p, i, arr) => arr.findIndex((x) => x.slug === p.slug) === i)
+    .slice(0, 3);
+
+  const zoneInfo = property.zone ? ZONE_INFO[property.zone] : undefined;
+  const video = property.video_url ? embedUrl(property.video_url) : null;
+  const mapQuery = encodeURIComponent(
+    `${property.zone ?? ""} ${property.province ?? "Alicante"} España`,
+  );
 
   const specs = [
     property.bedrooms != null && {
@@ -93,8 +134,44 @@ export default async function PropertyPage({
     { icon: Home, label: dict.property.type, value: typeLabel },
   ].filter(Boolean) as { icon: typeof Home; label: string; value: React.ReactNode }[];
 
+  // SEO: datos estructurados del anuncio inmobiliario
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: property.name,
+    description: content.description?.slice(0, 300),
+    image: property.cover_image ?? undefined,
+    sku: property.reference ?? property.slug,
+    offers: {
+      "@type": "Offer",
+      price: property.price ?? undefined,
+      priceCurrency: "EUR",
+      availability:
+        property.status === "en_venta"
+          ? "https://schema.org/InStock"
+          : "https://schema.org/SoldOut",
+      seller: { "@type": "RealEstateAgent", name: "Properties4You" },
+    },
+    additionalProperty: [
+      property.bedrooms != null && {
+        "@type": "PropertyValue",
+        name: "bedrooms",
+        value: property.bedrooms,
+      },
+      property.area_m2 != null && {
+        "@type": "PropertyValue",
+        name: "floorSize",
+        value: `${property.area_m2} m²`,
+      },
+    ].filter(Boolean),
+  };
+
   return (
-    <article>
+    <article className="pb-20 sm:pb-0">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* HERO */}
       <section className="relative h-[72vh] min-h-[520px] w-full overflow-hidden">
         <PropertyMedia
@@ -105,6 +182,13 @@ export default async function PropertyPage({
           className="scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0a0d10] via-[#0a0d10]/30 to-[#0a0d10]/60" />
+        <div className="absolute right-5 top-24 z-10 sm:right-8">
+          <FavButton
+            slug={property.slug}
+            label={{ save: dict.favs.save, saved: dict.favs.saved }}
+            className="h-11 w-11"
+          />
+        </div>
         <div className="absolute inset-x-0 bottom-0">
           <div className="mx-auto max-w-7xl px-5 pb-12 sm:px-8">
             <nav className="mb-6 flex items-center gap-2 text-xs uppercase tracking-[0.16em] text-faint">
@@ -138,9 +222,14 @@ export default async function PropertyPage({
         </div>
       </section>
 
+      {/* COMPARTIR */}
+      <div className="mx-auto max-w-7xl px-5 pt-8 sm:px-8">
+        <ShareButtons dict={dict} title={`${property.name} · ${property.zone}`} />
+      </div>
+
       {/* CONTENIDO */}
-      <section className="mx-auto max-w-7xl px-5 py-20 sm:px-8">
-        <div className="grid gap-14 lg:grid-cols-[1fr_360px]">
+      <section className="mx-auto max-w-7xl px-5 py-12 sm:px-8">
+        <div className="grid gap-14 lg:grid-cols-[1fr_380px]">
           {/* Izquierda */}
           <div className="space-y-16">
             {content.description && (
@@ -149,16 +238,18 @@ export default async function PropertyPage({
                 <p className="text-lg leading-relaxed text-muted">
                   {content.description}
                 </p>
-                {property.virtual_tour_url && (
-                  <a
-                    href={property.virtual_tour_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-8 inline-flex items-center gap-3 rounded-full border border-line px-6 py-3 text-[0.75rem] uppercase tracking-[0.16em] text-ink transition-colors hover:border-gold hover:text-gold"
-                  >
-                    <Play size={15} /> {dict.property.virtualTour}
-                  </a>
-                )}
+                <div className="mt-8 flex flex-wrap gap-3">
+                  {property.virtual_tour_url && (
+                    <a
+                      href={property.virtual_tour_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-3 rounded-full border border-line px-6 py-3 text-[0.75rem] uppercase tracking-[0.16em] text-ink transition-colors hover:border-gold hover:text-gold"
+                    >
+                      <Play size={15} /> {dict.property.virtualTour}
+                    </a>
+                  )}
+                </div>
               </Reveal>
             )}
 
@@ -190,32 +281,82 @@ export default async function PropertyPage({
               </Reveal>
             )}
 
-            {(property.maps_url || property.latitude) && (
+            {video && (
               <Reveal>
-                <h2 className="kicker mb-6">{dict.property.location}</h2>
-                <a
-                  href={
-                    property.maps_url ||
-                    `https://www.google.com/maps/search/?api=1&query=${property.latitude},${property.longitude}`
-                  }
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-between rounded-2xl border border-line bg-surface p-6 transition-colors hover:border-gold"
-                >
-                  <span className="flex items-center gap-4 text-ink">
-                    <MapPin size={20} className="text-gold" />
+                <h2 className="kicker mb-6">Video</h2>
+                <div className="aspect-video overflow-hidden rounded-2xl border border-line">
+                  <iframe
+                    src={video}
+                    title={property.name}
+                    className="h-full w-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
+              </Reveal>
+            )}
+
+            {property.floor_plan && (
+              <Reveal>
+                <h2 className="kicker mb-6">Plano</h2>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={property.floor_plan}
+                  alt={`Plano · ${property.name}`}
+                  className="w-full rounded-2xl border border-line bg-white object-contain p-3"
+                />
+              </Reveal>
+            )}
+
+            {/* UBICACIÓN: mapa embebido + cómo llegar */}
+            <Reveal>
+              <h2 className="kicker mb-6">{dict.property.location}</h2>
+              <div className="overflow-hidden rounded-2xl border border-line">
+                <iframe
+                  src={`https://www.google.com/maps?q=${mapQuery}&z=13&output=embed`}
+                  title={`${dict.property.location} · ${property.name}`}
+                  className="h-[320px] w-full grayscale-[35%] contrast-[1.05]"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+                <div className="flex flex-wrap items-center justify-between gap-3 bg-surface p-5">
+                  <span className="flex items-center gap-3 text-ink">
+                    <MapPin size={18} className="text-gold" />
                     {property.zone} · {property.province}
                   </span>
-                  <span className="text-[0.72rem] uppercase tracking-[0.16em] text-gold">
-                    {dict.property.openMaps} ↗
-                  </span>
-                </a>
+                  <a
+                    href={`https://www.google.com/maps/dir/?api=1&destination=${mapQuery}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-full border border-gold/40 px-5 py-2.5 text-[0.72rem] uppercase tracking-[0.14em] text-gold transition-colors hover:bg-gold/10"
+                  >
+                    <Navigation size={14} /> {dict.quick.directions}
+                  </a>
+                </div>
+              </div>
+            </Reveal>
+
+            {/* EL ENTORNO */}
+            {zoneInfo && (
+              <Reveal>
+                <h2 className="kicker mb-6">{dict.zoneInfo.title}</h2>
+                <p className="leading-relaxed text-muted">{zoneInfo.text[locale]}</p>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {zoneInfo.chips.map((c) => (
+                    <span
+                      key={c}
+                      className="rounded-full border border-line bg-surface px-4 py-1.5 text-[0.7rem] uppercase tracking-[0.12em] text-muted"
+                    >
+                      {CHIP_LABELS[c][locale]}
+                    </span>
+                  ))}
+                </div>
               </Reveal>
             )}
           </div>
 
-          {/* Derecha — ficha sticky */}
-          <aside className="lg:sticky lg:top-28 lg:self-start">
+          {/* Derecha — sticky */}
+          <aside className="space-y-6 lg:sticky lg:top-28 lg:self-start">
             <div className="rounded-2xl border border-line bg-surface p-7">
               <div className="mb-6 flex items-center justify-between border-b border-line pb-5">
                 <span className="text-[0.72rem] uppercase tracking-[0.16em] text-gold">
@@ -255,17 +396,41 @@ export default async function PropertyPage({
                 <p className="mt-2 text-sm leading-relaxed text-muted">
                   {dict.property.interestedBody}
                 </p>
-                <Link
-                  href={`/${locale}/nosotros`}
-                  className="mt-5 flex items-center justify-center gap-3 rounded-full bg-gold px-6 py-3.5 text-[0.75rem] uppercase tracking-[0.16em] text-bg transition-transform hover:scale-[1.02]"
-                >
-                  {dict.property.contact}
-                </Link>
               </div>
             </div>
+
+            <VisitForm
+              dict={dict}
+              whatsapp={whatsapp}
+              propertyName={`${property.name} (${property.reference ?? property.slug})`}
+            />
+
+            {property.price != null && property.price > 0 && (
+              <MortgageCalculator
+                price={property.price}
+                dict={dict}
+                locale={locale}
+              />
+            )}
           </aside>
         </div>
       </section>
+
+      {/* TAMBIÉN TE PUEDE INTERESAR */}
+      {related.length > 0 && (
+        <section className="border-t border-line bg-bg-2">
+          <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8">
+            <h2 className="mb-10 font-display text-3xl font-light text-ink sm:text-5xl">
+              {dict.related.title}
+            </h2>
+            <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
+              {related.map((p) => (
+                <PropertyCard key={p.id} property={p} locale={locale} dict={dict} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* PREV / NEXT */}
       {(prev || next) && (
@@ -308,6 +473,15 @@ export default async function PropertyPage({
           </div>
         </section>
       )}
+
+      {/* CONTACTO RÁPIDO: barra móvil + flotante WhatsApp */}
+      <QuickContact
+        dict={dict}
+        whatsapp={whatsapp}
+        phone={phone}
+        email={email}
+        context={`${dict.stories.interested}: ${property.name} (${property.reference ?? ""})`}
+      />
     </article>
   );
 }

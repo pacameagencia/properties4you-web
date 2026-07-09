@@ -44,6 +44,40 @@ export async function getFeaturedProperties(limit = 6): Promise<Property[]> {
   return (featured.length ? featured : all).slice(0, limit);
 }
 
+export type Post = {
+  id: string;
+  slug: string;
+  published: boolean;
+  cover_image: string | null;
+  sort_order: number;
+  translations: Partial<
+    Record<string, { title?: string; excerpt?: string; body?: string }>
+  >;
+  created_at: string;
+  updated_at: string;
+};
+
+export async function getPublishedPosts(): Promise<Post[]> {
+  const supabase = publicClient();
+  const { data } = await supabase
+    .from("posts")
+    .select("*")
+    .eq("published", true)
+    .order("sort_order", { ascending: false });
+  return (data ?? []) as Post[];
+}
+
+export async function getPostBySlug(slug: string): Promise<Post | null> {
+  const supabase = publicClient();
+  const { data } = await supabase
+    .from("posts")
+    .select("*")
+    .eq("slug", slug)
+    .eq("published", true)
+    .maybeSingle();
+  return (data as Post) ?? null;
+}
+
 export async function getPropertyBySlug(slug: string): Promise<Property | null> {
   const supabase = publicClient();
   const { data, error } = await supabase

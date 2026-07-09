@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
-import { getPublishedProperties } from "@/lib/queries";
+import { getPublishedProperties, getSettings } from "@/lib/queries";
 import { PropertiesExplorer } from "@/components/site/properties-explorer";
 import { Reveal } from "@/components/site/reveal";
 
@@ -27,7 +27,11 @@ export default async function PropertiesPage({
   if (!isLocale(lang)) notFound();
   const locale = lang as Locale;
   const dict = getDictionary(locale);
-  const properties = await getPublishedProperties();
+  const [properties, settings] = await Promise.all([
+    getPublishedProperties(),
+    getSettings(),
+  ]);
+  const whatsapp = (settings?.contact_phone || "+34 650 37 92 58").replace(/\D/g, "");
 
   return (
     <section className="mx-auto max-w-7xl px-5 pb-28 pt-36 sm:px-8">
@@ -44,7 +48,12 @@ export default async function PropertiesPage({
       </Reveal>
 
       <div className="mt-16">
-        <PropertiesExplorer properties={properties} locale={locale} dict={dict} />
+        <PropertiesExplorer
+          properties={properties}
+          locale={locale}
+          dict={dict}
+          whatsapp={whatsapp}
+        />
       </div>
     </section>
   );

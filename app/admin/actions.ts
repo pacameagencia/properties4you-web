@@ -29,6 +29,8 @@ export type PropertyInput = {
   virtual_tour_url: string | null;
   cover_image: string | null;
   gallery: GalleryImage[];
+  floor_plan: string | null;
+  video_url: string | null;
   description_es: string;
   features_es: string[];
 };
@@ -81,6 +83,8 @@ export async function saveProperty(input: PropertyInput) {
     virtual_tour_url: input.virtual_tour_url,
     cover_image: input.cover_image,
     gallery: input.gallery,
+    floor_plan: input.floor_plan,
+    video_url: input.video_url,
     translations,
   };
 

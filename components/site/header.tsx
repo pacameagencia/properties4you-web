@@ -4,10 +4,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Heart } from "lucide-react";
 import { locales, type Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 import { useEntrance } from "@/lib/use-entrance";
+import { useFavorites } from "@/lib/favorites";
 import { cn } from "@/lib/utils";
 
 export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
@@ -15,6 +16,7 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const ready = useEntrance();
+  const { favs } = useFavorites();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -25,12 +27,13 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
 
   useEffect(() => setOpen(false), [pathname]);
 
-  const rest = pathname.replace(/^\/(es|de|nl|en)/, "") || "";
+  const rest = pathname.replace(/^\/(es|en|de|nl|fr)/, "") || "";
   const swapLocale = (l: Locale) => `/${l}${rest}`;
 
   const links = [
     { href: `/${locale}`, label: dict.nav.home },
     { href: `/${locale}/propiedades`, label: dict.nav.properties },
+    { href: `/${locale}/blog`, label: dict.nav.blog },
     { href: `/${locale}/nosotros`, label: dict.nav.about },
   ];
 
@@ -68,6 +71,18 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
               {l.label}
             </Link>
           ))}
+          <Link
+            href={`/${locale}/favoritos`}
+            aria-label={dict.favs.title}
+            className="relative text-muted transition-colors hover:text-gold"
+          >
+            <Heart size={17} />
+            {favs.length > 0 && (
+              <span className="absolute -right-2 -top-2 grid h-4 min-w-4 place-items-center rounded-full bg-gold px-1 text-[0.58rem] font-semibold text-bg">
+                {favs.length}
+              </span>
+            )}
+          </Link>
           <div className="ml-2 flex items-center gap-2 border-l border-line pl-5">
             {locales.map((l) => (
               <Link

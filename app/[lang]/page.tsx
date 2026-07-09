@@ -13,6 +13,7 @@ import { CountUp } from "@/components/site/count-up";
 import { CollectionShowcase } from "@/components/site/collection-showcase";
 import { Magnetic } from "@/components/site/magnetic";
 import { OutlineMarquee } from "@/components/site/outline-marquee";
+import { TESTIMONIALS } from "@/lib/testimonials";
 
 export const revalidate = 600;
 
@@ -27,9 +28,10 @@ const ZONES = [
 
 const MARQUEE_WORDS: Record<Locale, string[]> = {
   es: ["Costa Blanca", "Mediterráneo", "Obra Nueva"],
+  en: ["Costa Blanca", "Mediterranean", "New Build"],
   de: ["Costa Blanca", "Mittelmeer", "Neubau"],
   nl: ["Costa Blanca", "Middellandse Zee", "Nieuwbouw"],
-  en: ["Costa Blanca", "Mediterranean", "New Build"],
+  fr: ["Costa Blanca", "Méditerranée", "Immobilier Neuf"],
 };
 
 export default async function HomePage({
@@ -211,6 +213,40 @@ export default async function HomePage({
               })}
             </div>
           </Reveal>
+        </div>
+      </section>
+
+      {/* TESTIMONIOS */}
+      <section className="relative z-10 border-t border-line bg-bg">
+        <div className="mx-auto max-w-7xl px-5 py-28 sm:px-8">
+          <Reveal>
+            <p className="kicker mb-4 text-center">{dict.testimonials.kicker}</p>
+          </Reveal>
+          <Reveal delay={100}>
+            <h2 className="text-center font-display text-4xl font-light text-ink sm:text-6xl">
+              {dict.testimonials.title}
+            </h2>
+          </Reveal>
+          <div className="mt-14 grid gap-6 md:grid-cols-3">
+            {TESTIMONIALS.map((t, i) => (
+              <Reveal key={t.name} delay={i * 130}>
+                <figure className="flex h-full flex-col rounded-2xl border border-line bg-surface p-7">
+                  <span className="font-display text-5xl leading-none text-gold/40">
+                    “
+                  </span>
+                  <blockquote className="mt-2 flex-1 leading-relaxed text-muted">
+                    {t.text[locale]}
+                  </blockquote>
+                  <figcaption className="mt-6 border-t border-line pt-4">
+                    <p className="font-display text-lg text-ink">{t.name}</p>
+                    <p className="text-xs uppercase tracking-widest text-faint">
+                      {t.origin}
+                    </p>
+                  </figcaption>
+                </figure>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 

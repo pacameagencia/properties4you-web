@@ -34,6 +34,8 @@ export type Property = {
   virtual_tour_url: string | null;
   cover_image: string | null;
   gallery: GalleryImage[];
+  floor_plan: string | null;
+  video_url: string | null;
   translations: Translations;
   created_at: string;
   updated_at: string;

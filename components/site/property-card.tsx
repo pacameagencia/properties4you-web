@@ -15,6 +15,7 @@ import type { Dictionary } from "@/lib/i18n/dictionaries";
 import type { Property } from "@/lib/types";
 import { formatPrice } from "@/lib/utils";
 import { PropertyMedia } from "./property-media";
+import { FavButton } from "./fav-button";
 
 const MotionLink = motion.create(Link);
 
@@ -90,8 +91,14 @@ export function PropertyCard({
           <span className="absolute left-4 top-4 z-10 rounded-full border border-white/20 bg-black/40 px-3 py-1 text-[0.62rem] uppercase tracking-[0.18em] text-ink backdrop-blur">
             {dict.status[p.status] ?? p.status}
           </span>
-          <span className="absolute right-4 top-4 z-10 grid h-9 w-9 place-items-center rounded-full border border-white/20 bg-black/30 text-ink opacity-0 backdrop-blur transition-all duration-500 group-hover:opacity-100">
-            <ArrowUpRight size={16} />
+          <span className="absolute right-4 top-4 z-10 flex items-center gap-2">
+            <FavButton
+              slug={p.slug}
+              label={{ save: dict.favs.save, saved: dict.favs.saved }}
+            />
+            <span className="grid h-9 w-9 place-items-center rounded-full border border-white/20 bg-black/30 text-ink opacity-0 backdrop-blur transition-all duration-500 group-hover:opacity-100">
+              <ArrowUpRight size={16} />
+            </span>
           </span>
         </div>
 

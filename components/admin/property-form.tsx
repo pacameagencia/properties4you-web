@@ -50,6 +50,7 @@ export function PropertyForm({ initial }: { initial: Property | null }) {
     energy_rating: initial?.energy_rating ?? "",
     maps_url: initial?.maps_url ?? "",
     virtual_tour_url: initial?.virtual_tour_url ?? "",
+    video_url: initial?.video_url ?? "",
     featured: initial?.featured ?? false,
     published: initial?.published ?? true,
     sort_order: initial?.sort_order?.toString() ?? "0",
@@ -59,6 +60,9 @@ export function PropertyForm({ initial }: { initial: Property | null }) {
 
   const [cover, setCover] = useState<string | null>(initial?.cover_image ?? null);
   const [gallery, setGallery] = useState(initial?.gallery ?? []);
+  const [floorPlan, setFloorPlan] = useState<string | null>(
+    initial?.floor_plan ?? null,
+  );
 
   const set = (k: keyof typeof f, v: string | boolean) =>
     setF((prev) => ({ ...prev, [k]: v }));
@@ -89,6 +93,8 @@ export function PropertyForm({ initial }: { initial: Property | null }) {
       energy_rating: f.energy_rating || null,
       maps_url: f.maps_url.trim() || null,
       virtual_tour_url: f.virtual_tour_url.trim() || null,
+      video_url: f.video_url.trim() || null,
+      floor_plan: floorPlan,
       featured: f.featured,
       published: f.published,
       sort_order: Number(f.sort_order) || 0,
@@ -280,6 +286,15 @@ export function PropertyForm({ initial }: { initial: Property | null }) {
         />
       </Section>
 
+      {/* Plano de la vivienda */}
+      <Section title="Plano de la vivienda" hint="Imagen del plano (opcional).">
+        <FloorPlanUpload
+          folder={f.slug || f.name || "propiedad"}
+          value={floorPlan}
+          onChange={setFloorPlan}
+        />
+      </Section>
+
       {/* Enlaces */}
       <Section title="Enlaces">
         <Grid>
@@ -295,6 +310,14 @@ export function PropertyForm({ initial }: { initial: Property | null }) {
               className={inputCls}
               value={f.virtual_tour_url}
               onChange={(e) => set("virtual_tour_url", e.target.value)}
+            />
+          </Field>
+          <Field label="Vídeo (YouTube/Vimeo URL)">
+            <input
+              className={inputCls}
+              value={f.video_url}
+              onChange={(e) => set("video_url", e.target.value)}
+              placeholder="https://youtube.com/watch?v=…"
             />
           </Field>
         </Grid>
@@ -380,6 +403,62 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
       </span>
       {children}
     </label>
+  );
+}
+
+function FloorPlanUpload({
+  folder,
+  value,
+  onChange,
+}: {
+  folder: string;
+  value: string | null;
+  onChange: (url: string | null) => void;
+}) {
+  const [busy, setBusy] = useState(false);
+
+  async function handle(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setBusy(true);
+    const { createClient } = await import("@/lib/supabase/client");
+    const supabase = createClient();
+    const ext = file.name.split(".").pop() || "jpg";
+    const path = `${slugify(folder) || "propiedad"}/plano-${Date.now()}.${ext}`;
+    const { error } = await supabase.storage
+      .from("properties")
+      .upload(path, file, { upsert: true });
+    if (!error) {
+      const { data } = supabase.storage.from("properties").getPublicUrl(path);
+      onChange(data.publicUrl);
+    }
+    setBusy(false);
+  }
+
+  return (
+    <div className="flex items-center gap-4">
+      {value ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={value}
+          alt="Plano"
+          className="h-24 rounded-lg border border-line bg-white object-contain p-1"
+        />
+      ) : null}
+      <label className="cursor-pointer rounded-full border border-line px-5 py-2.5 text-[0.72rem] uppercase tracking-widest text-muted hover:border-gold hover:text-gold">
+        {busy ? "Subiendo…" : value ? "Cambiar plano" : "Subir plano"}
+        <input type="file" accept="image/*,.pdf" hidden onChange={handle} />
+      </label>
+      {value && (
+        <button
+          type="button"
+          onClick={() => onChange(null)}
+          className="text-xs text-faint hover:text-red-400"
+        >
+          Quitar
+        </button>
+      )}
+    </div>
   );
 }
 
