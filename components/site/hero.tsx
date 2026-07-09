@@ -162,8 +162,8 @@ export function Hero({
       >
         <motion.p
           initial={{ opacity: 0, y: 12 }}
-          animate={ready ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, delay: 0.15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.2 }}
           className="kicker mb-6"
         >
           {dict.hero.kicker}
@@ -189,8 +189,8 @@ export function Hero({
 
         <motion.p
           initial={{ opacity: 0, y: 16 }}
-          animate={ready ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.5 + titleWords * 0.09 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.35 }}
           className="mt-7 max-w-xl text-lg leading-relaxed text-muted"
         >
           {dict.hero.subtitle}
@@ -198,8 +198,8 @@ export function Hero({
 
         <motion.div
           initial={{ opacity: 0, y: 16 }}
-          animate={ready ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.68 + titleWords * 0.09 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.5 }}
           className="mt-10 flex flex-wrap items-center gap-4"
         >
           <Magnetic>
