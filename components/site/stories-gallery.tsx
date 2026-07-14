@@ -144,7 +144,7 @@ export function StoriesGallery({
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.94, y: 16 }}
               transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="relative h-[100dvh] w-full overflow-hidden bg-[#0b0e11] sm:h-[92vh] sm:max-h-[860px] sm:w-auto sm:aspect-[9/16] sm:rounded-3xl sm:border sm:border-line"
+              className="relative h-[100dvh] w-full overflow-hidden bg-[#0b0e11] sm:h-[82vh] sm:w-auto sm:aspect-[16/10] sm:max-w-[92vw] sm:rounded-3xl sm:border sm:border-line"
               onPointerDown={(e) => {
                 const t = e.target as HTMLElement;
                 if (!t.closest("[data-noswipe]")) setPaused(true);
@@ -176,7 +176,7 @@ export function StoriesGallery({
                     src={images[index].url}
                     alt={images[index].alt || name}
                     fill
-                    sizes="(max-width:640px) 100vw, 500px"
+                    sizes="(max-width:640px) 100vw, 1200px"
                     priority
                     className="object-contain"
                   />

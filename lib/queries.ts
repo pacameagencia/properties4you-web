@@ -32,8 +32,9 @@ export async function getPublishedProperties(): Promise<Property[]> {
     .order("sort_order", { ascending: false })
     .order("created_at", { ascending: false });
   if (error) {
-    console.error("getPublishedProperties:", error.message);
-    return [];
+    // Error transitorio (red/DB): lanzar para que ISR conserve la versión
+    // buena anterior en vez de regenerar un catálogo vacío.
+    throw new Error("getPublishedProperties: " + error.message);
   }
   return (data ?? []) as Property[];
 }
@@ -87,8 +88,8 @@ export async function getPropertyBySlug(slug: string): Promise<Property | null> 
     .eq("published", true)
     .maybeSingle();
   if (error) {
-    console.error("getPropertyBySlug:", error.message);
-    return null;
+    // Error transitorio ≠ "no existe": lanzar evita cachear un 404 falso.
+    throw new Error("getPropertyBySlug: " + error.message);
   }
   return (data as Property) ?? null;
 }
