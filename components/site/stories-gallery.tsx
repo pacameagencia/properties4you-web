@@ -224,7 +224,7 @@ export function StoriesGallery({
                 <button
                   data-noswipe
                   onClick={close}
-                  aria-label="Cerrar"
+                  aria-label={dict.a11y.close}
                   className="grid h-9 w-9 place-items-center rounded-full bg-black/40 text-white/90 backdrop-blur hover:text-white"
                 >
                   <X size={18} />
@@ -233,12 +233,12 @@ export function StoriesGallery({
 
               {/* Zonas táctiles prev / next */}
               <button
-                aria-label="Anterior"
+                aria-label={dict.a11y.previous}
                 onClick={() => go(-1)}
                 className="absolute inset-y-0 left-0 z-10 w-1/3"
               />
               <button
-                aria-label="Siguiente"
+                aria-label={dict.a11y.next}
                 onClick={() => go(1)}
                 className="absolute inset-y-0 right-0 z-10 w-2/3"
               />
@@ -247,14 +247,14 @@ export function StoriesGallery({
               <button
                 onClick={() => go(-1)}
                 className="absolute left-3 top-1/2 z-20 hidden -translate-y-1/2 rounded-full bg-black/30 p-2 text-white/70 backdrop-blur hover:text-white sm:grid"
-                aria-label="Anterior"
+                aria-label={dict.a11y.previous}
               >
                 <ChevronLeft size={20} />
               </button>
               <button
                 onClick={() => go(1)}
                 className="absolute right-3 top-1/2 z-20 hidden -translate-y-1/2 rounded-full bg-black/30 p-2 text-white/70 backdrop-blur hover:text-white sm:grid"
-                aria-label="Siguiente"
+                aria-label={dict.a11y.next}
               >
                 <ChevronRight size={20} />
               </button>

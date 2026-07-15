@@ -283,7 +283,7 @@ export default async function PropertyPage({
 
             {video && (
               <Reveal>
-                <h2 className="kicker mb-6">Video</h2>
+                <h2 className="kicker mb-6">{dict.media.video}</h2>
                 <div className="aspect-video overflow-hidden rounded-2xl border border-line">
                   <iframe
                     src={video}
@@ -298,11 +298,11 @@ export default async function PropertyPage({
 
             {property.floor_plan && (
               <Reveal>
-                <h2 className="kicker mb-6">Plano</h2>
+                <h2 className="kicker mb-6">{dict.media.plan}</h2>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={property.floor_plan}
-                  alt={`Plano · ${property.name}`}
+                  alt={`${dict.media.plan} · ${property.name}`}
                   className="w-full rounded-2xl border border-line bg-white object-contain p-3"
                 />
               </Reveal>

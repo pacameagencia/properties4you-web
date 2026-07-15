@@ -234,7 +234,7 @@ export function Hero({
               <button
                 key={i}
                 onClick={() => setSlide(i)}
-                aria-label={`Imagen ${i + 1}`}
+                aria-label={`${dict.a11y.image} ${i + 1}`}
                 className="group/dot relative h-3 w-8 cursor-pointer"
               >
                 <span

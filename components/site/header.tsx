@@ -105,7 +105,7 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
         <button
           onClick={() => setOpen((v) => !v)}
           className="text-ink md:hidden"
-          aria-label="Menu"
+          aria-label={dict.a11y.menu}
         >
           {open ? <X size={22} /> : <Menu size={22} />}
         </button>

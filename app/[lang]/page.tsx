@@ -240,7 +240,7 @@ export default async function HomePage({
                   <figcaption className="mt-6 border-t border-line pt-4">
                     <p className="font-display text-lg text-ink">{t.name}</p>
                     <p className="text-xs uppercase tracking-widest text-faint">
-                      {t.origin}
+                      {t.origin[locale]}
                     </p>
                   </figcaption>
                 </figure>

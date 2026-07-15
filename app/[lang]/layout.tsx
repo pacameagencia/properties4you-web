@@ -7,6 +7,7 @@ import { getSettings } from "@/lib/queries";
 import { Header } from "@/components/site/header";
 import { Footer } from "@/components/site/footer";
 import { Preloader } from "@/components/site/preloader";
+import { LangSetter } from "@/components/site/lang-setter";
 import { Cursor } from "@/components/site/cursor";
 import { ScrollProgress } from "@/components/site/scroll-progress";
 import "../globals.css";
@@ -32,14 +33,14 @@ export async function generateMetadata({
   params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
   const { lang } = await params;
+  const d = getDictionary(isLocale(lang) ? lang : "es");
   return {
     metadataBase: new URL("https://properties4you.netlify.app"),
     title: {
       default: "Properties4You · Costa Blanca",
       template: "%s · Properties4You",
     },
-    description:
-      "Obra nueva exclusiva en la Costa Blanca. Villas y apartamentos junto al Mediterráneo.",
+    description: d.meta.description,
     alternates: {
       languages: Object.fromEntries(locales.map((l) => [l, `/${l}`])),
       canonical: `/${lang}`,
@@ -95,7 +96,8 @@ export default async function LangLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
         />
-        <Preloader kicker={dict.hero.kicker} />
+        <LangSetter locale={lang} />
+      <Preloader kicker={dict.hero.kicker} />
         <Cursor />
         <ScrollProgress />
         <Header locale={lang} dict={dict} />

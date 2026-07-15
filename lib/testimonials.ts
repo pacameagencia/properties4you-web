@@ -2,7 +2,7 @@ import type { Locale } from "./i18n/config";
 
 export type Testimonial = {
   name: string;
-  origin: string; // bandera + país
+  origin: Record<Locale, string>; // bandera + país, por idioma
   text: Record<Locale, string>;
 };
 
@@ -13,7 +13,7 @@ export type Testimonial = {
 export const TESTIMONIALS: Testimonial[] = [
   {
     name: "Marlies & Jan",
-    origin: "🇳🇱 Países Bajos",
+    origin: { es: "🇳🇱 Países Bajos", en: "🇳🇱 Netherlands", de: "🇳🇱 Niederlande", nl: "🇳🇱 Nederland", fr: "🇳🇱 Pays-Bas" },
     text: {
       es: "Compramos nuestra villa sin hablar español y todo el proceso fue impecable: visitas, notaría y entrega de llaves, siempre acompañados en nuestro idioma.",
       en: "We bought our villa without speaking Spanish and the whole process was flawless: viewings, notary and key handover, always guided in our own language.",
@@ -24,7 +24,7 @@ export const TESTIMONIALS: Testimonial[] = [
   },
   {
     name: "Stefan K.",
-    origin: "🇩🇪 Alemania",
+    origin: { es: "🇩🇪 Alemania", en: "🇩🇪 Germany", de: "🇩🇪 Deutschland", nl: "🇩🇪 Duitsland", fr: "🇩🇪 Allemagne" },
     text: {
       es: "La calidad de la obra nueva superó lo que vimos en fotos. Un año después, la garantía y el servicio postventa siguen respondiendo de maravilla.",
       en: "The quality of the new build exceeded what we saw in the photos. A year later, the warranty and after-sales service are still responding wonderfully.",
@@ -35,7 +35,7 @@ export const TESTIMONIALS: Testimonial[] = [
   },
   {
     name: "Familia Moreno",
-    origin: "🇪🇸 España",
+    origin: { es: "🇪🇸 España", en: "🇪🇸 Spain", de: "🇪🇸 Spanien", nl: "🇪🇸 Spanje", fr: "🇪🇸 Espagne" },
     text: {
       es: "Buscábamos una segunda residencia cerca del mar y encontramos algo mejor: un lugar al que ya llamamos casa. El acompañamiento fue cercano de principio a fin.",
       en: "We were looking for a second home near the sea and found something better: a place we already call home. The support was personal from start to finish.",

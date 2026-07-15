@@ -62,6 +62,10 @@ export type Dictionary = {
   alertCta: string;
   testimonials: { kicker: string; title: string };
   blog: { title: string; kicker: string; readMore: string; back: string; empty: string };
+  media: { video: string; plan: string };
+  a11y: { close: string; previous: string; next: string; image: string; menu: string };
+  meta: { description: string };
+  notFound: { title: string; body: string; back: string };
   types: Record<string, string>;
   status: Record<string, string>;
   about: { kicker: string; title: string; body: string };
@@ -162,6 +166,10 @@ const es: Dictionary = {
   alertCta: "Avísame cuando haya propiedades como esta búsqueda",
   testimonials: { kicker: "Compradores", title: "Quienes ya viven aquí" },
   blog: { title: "Guía del comprador", kicker: "Blog", readMore: "Leer artículo", back: "Volver a la guía", empty: "Próximamente artículos." },
+  media: { video: "Vídeo", plan: "Plano de la vivienda" },
+  a11y: { close: "Cerrar", previous: "Anterior", next: "Siguiente", image: "Imagen", menu: "Menú" },
+  meta: { description: "Obra nueva exclusiva en la Costa Blanca. Villas y apartamentos junto al Mediterráneo, presentados en 5 idiomas." },
+  notFound: { title: "Página no encontrada", body: "La página que buscas no existe o ya no está disponible.", back: "Volver al inicio" },
   types: {
     villa: "Villa",
     apartamento: "Apartamento",
@@ -280,6 +288,10 @@ const de: Dictionary = {
   alertCta: "Benachrichtigen Sie mich bei neuen passenden Immobilien",
   testimonials: { kicker: "Käufer", title: "Stimmen unserer Käufer" },
   blog: { title: "Käufer-Ratgeber", kicker: "Blog", readMore: "Artikel lesen", back: "Zurück zum Ratgeber", empty: "Artikel folgen in Kürze." },
+  media: { video: "Video", plan: "Grundriss" },
+  a11y: { close: "Schließen", previous: "Zurück", next: "Weiter", image: "Bild", menu: "Menü" },
+  meta: { description: "Exklusiver Neubau an der Costa Blanca. Villen und Apartments am Mittelmeer, präsentiert in 5 Sprachen." },
+  notFound: { title: "Seite nicht gefunden", body: "Die gesuchte Seite existiert nicht oder ist nicht mehr verfügbar.", back: "Zur Startseite" },
   types: {
     villa: "Villa",
     apartamento: "Apartment",
@@ -398,6 +410,10 @@ const nl: Dictionary = {
   alertCta: "Waarschuw mij bij nieuwe woningen zoals deze zoekopdracht",
   testimonials: { kicker: "Kopers", title: "Wie hier al woont" },
   blog: { title: "Kopersgids", kicker: "Blog", readMore: "Artikel lezen", back: "Terug naar de gids", empty: "Binnenkort artikelen." },
+  media: { video: "Video", plan: "Plattegrond" },
+  a11y: { close: "Sluiten", previous: "Vorige", next: "Volgende", image: "Afbeelding", menu: "Menu" },
+  meta: { description: "Exclusieve nieuwbouw aan de Costa Blanca. Villa's en appartementen aan de Middellandse Zee, gepresenteerd in 5 talen." },
+  notFound: { title: "Pagina niet gevonden", body: "De pagina die u zoekt bestaat niet of is niet meer beschikbaar.", back: "Terug naar home" },
   types: {
     villa: "Villa",
     apartamento: "Appartement",
@@ -516,6 +532,10 @@ const en: Dictionary = {
   alertCta: "Alert me about new properties like this search",
   testimonials: { kicker: "Buyers", title: "Those who already live here" },
   blog: { title: "Buyer's guide", kicker: "Blog", readMore: "Read article", back: "Back to the guide", empty: "Articles coming soon." },
+  media: { video: "Video", plan: "Floor plan" },
+  a11y: { close: "Close", previous: "Previous", next: "Next", image: "Image", menu: "Menu" },
+  meta: { description: "Exclusive new-build homes on the Costa Blanca. Villas and apartments by the Mediterranean, presented in 5 languages." },
+  notFound: { title: "Page not found", body: "The page you are looking for does not exist or is no longer available.", back: "Back to home" },
   types: {
     villa: "Villa",
     apartamento: "Apartment",
@@ -635,6 +655,10 @@ const fr: Dictionary = {
   alertCta: "Prévenez-moi des nouvelles propriétés comme cette recherche",
   testimonials: { kicker: "Acheteurs", title: "Ceux qui vivent déjà ici" },
   blog: { title: "Guide de l'acheteur", kicker: "Blog", readMore: "Lire l'article", back: "Retour au guide", empty: "Articles à venir." },
+  media: { video: "Vidéo", plan: "Plan du logement" },
+  a11y: { close: "Fermer", previous: "Précédente", next: "Suivante", image: "Image", menu: "Menu" },
+  meta: { description: "Immobilier neuf exclusif sur la Costa Blanca. Villas et appartements au bord de la Méditerranée, présentés en 5 langues." },
+  notFound: { title: "Page introuvable", body: "La page que vous cherchez n'existe pas ou n'est plus disponible.", back: "Retour à l'accueil" },
   types: {
     villa: "Villa",
     apartamento: "Appartement",
