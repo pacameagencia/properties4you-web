@@ -7,7 +7,6 @@ import { motion } from "framer-motion";
 import { Menu, X, Heart } from "lucide-react";
 import { locales, type Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
-import { useEntrance } from "@/lib/use-entrance";
 import { useFavorites } from "@/lib/favorites";
 import { cn } from "@/lib/utils";
 
@@ -15,7 +14,6 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const ready = useEntrance();
   const { favs } = useFavorites();
 
   useEffect(() => {
@@ -42,13 +40,18 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
 
   return (
     <motion.header
-      initial={{ y: -24, opacity: 0 }}
-      animate={ready ? { y: 0, opacity: 1 } : {}}
-      transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+      // Solo fade: NUNCA transform en un elemento fixed (en móvil provoca
+      // que el header "flote" con retardo y deje un hueco arriba al scrollear).
+      // Y sin esperar al preloader: cuando existe, ya lo cubre él.
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
+      style={{ paddingTop: "env(safe-area-inset-top)" }}
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-all duration-500",
+        // transiciones SOLO de estilo (nada posicional); blur solo en desktop
+        "fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,padding] duration-500",
         scrolled
-          ? "bg-[#0a0d10]/85 backdrop-blur-xl border-b border-line py-3"
+          ? "border-b border-line bg-[#0a0d10]/95 py-3 sm:bg-[#0a0d10]/85 sm:backdrop-blur-xl"
           : "bg-transparent py-6",
       )}
     >
@@ -114,7 +117,7 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
       {/* Mobile menu */}
       <div
         className={cn(
-          "overflow-hidden border-line bg-[#0a0d10]/95 backdrop-blur-xl transition-all duration-500 md:hidden",
+          "overflow-hidden border-line bg-[#0a0d10] transition-[max-height] duration-500 md:hidden",
           open ? "max-h-96 border-t" : "max-h-0",
         )}
       >
