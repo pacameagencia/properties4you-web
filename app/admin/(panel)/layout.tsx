@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { Home, Plus, LogOut } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { signOutAction } from "../actions";
+import { AdminTabs } from "@/components/admin/admin-tabs";
 
 export default async function PanelLayout({
   children,
@@ -14,6 +15,11 @@ export default async function PanelLayout({
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect("/admin/login");
+
+  const { count: newLeads } = await supabase
+    .from("leads")
+    .select("id", { count: "exact", head: true })
+    .eq("status", "nuevo");
 
   return (
     <div className="min-h-screen bg-bg">
@@ -53,6 +59,7 @@ export default async function PanelLayout({
             </form>
           </div>
         </div>
+        <AdminTabs newLeads={newLeads ?? 0} />
       </header>
       <main className="mx-auto max-w-6xl px-5 py-10 sm:px-8">{children}</main>
     </div>

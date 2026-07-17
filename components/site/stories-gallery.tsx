@@ -7,6 +7,7 @@ import { X, Send, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { GalleryImage } from "@/lib/types";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
+import { saveLead } from "@/lib/leads";
 
 const STORY_MS = 5000;
 const REACTIONS = ["🔥", "😍", "🏡"];
@@ -18,6 +19,8 @@ export function StoriesGallery({
   dict,
   whatsapp,
   viewAllLabel,
+  propertyId,
+  locale,
 }: {
   images: GalleryImage[];
   name: string;
@@ -25,6 +28,8 @@ export function StoriesGallery({
   dict: Dictionary;
   whatsapp: string; // dígitos, ej. 34650379258
   viewAllLabel: string;
+  propertyId?: string;
+  locale?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
@@ -79,6 +84,14 @@ export function StoriesGallery({
 
   function sendMessage() {
     const text = message.trim() || dict.stories.interested;
+    // lead a la bandeja del admin (best-effort) + WhatsApp
+    void saveLead({
+      property_id: propertyId ?? null,
+      property_name: name,
+      message: text,
+      locale,
+      source: "stories",
+    });
     window.open(waLink(text), "_blank", "noopener");
     setMessage("");
   }

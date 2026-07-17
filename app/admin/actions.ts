@@ -131,3 +131,44 @@ export async function signOutAction() {
   await supabase.auth.signOut();
   redirect("/admin/login");
 }
+
+// ==================== LEADS ====================
+
+export async function updateLeadStatus(id: string, status: string) {
+  const supabase = await requireAdmin();
+  if (!["nuevo", "contactado", "cerrado"].includes(status))
+    return { ok: false, error: "Estado inválido" };
+  const { error } = await supabase.from("leads").update({ status }).eq("id", id);
+  if (error) return { ok: false, error: error.message };
+  revalidatePath("/admin/leads");
+  return { ok: true };
+}
+
+export async function deleteLead(id: string) {
+  const supabase = await requireAdmin();
+  const { error } = await supabase.from("leads").delete().eq("id", id);
+  if (error) return { ok: false, error: error.message };
+  revalidatePath("/admin/leads");
+  return { ok: true };
+}
+
+// ==================== AJUSTES ====================
+
+export async function saveSettings(input: {
+  contact_email: string;
+  contact_phone: string;
+  address: string;
+}) {
+  const supabase = await requireAdmin();
+  const { error } = await supabase
+    .from("site_settings")
+    .update({
+      contact_email: input.contact_email.trim() || null,
+      contact_phone: input.contact_phone.trim() || null,
+      address: input.address.trim() || null,
+    })
+    .eq("id", 1);
+  if (error) return { ok: false, error: error.message };
+  revalidatePath("/", "layout");
+  return { ok: true };
+}

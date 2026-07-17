@@ -53,7 +53,7 @@ export type Dictionary = {
   };
   stories: { reply: string; send: string; interested: string; tapHint: string };
   tools: { mortgage: string; downPayment: string; years: string; rate: string; monthly: string; disclaimer: string };
-  visit: { title: string; name: string; date: string; message: string; cta: string };
+  visit: { title: string; name: string; phone: string; date: string; message: string; cta: string; sent: string };
   share: { title: string; copy: string; copied: string };
   quick: { call: string; whatsapp: string; email: string; directions: string };
   related: { title: string };
@@ -158,7 +158,7 @@ const es: Dictionary = {
     tapHint: "Toca para pasar · mantén para pausar",
   },
   tools: { mortgage: "Calculadora de hipoteca", downPayment: "Entrada", years: "Plazo (años)", rate: "Interés (%)", monthly: "Cuota mensual estimada", disclaimer: "Cálculo orientativo, no vinculante." },
-  visit: { title: "Reservar una visita", name: "Tu nombre", date: "Fecha preferida", message: "Mensaje (opcional)", cta: "Solicitar visita" },
+  visit: { title: "Reservar una visita", name: "Tu nombre", phone: "Tu teléfono (opcional)", date: "Fecha preferida", message: "Mensaje (opcional)", cta: "Solicitar visita", sent: "Solicitud registrada — te contactaremos en breve." },
   share: { title: "Compartir", copy: "Copiar enlace", copied: "¡Enlace copiado!" },
   quick: { call: "Llamar", whatsapp: "WhatsApp", email: "Email", directions: "Cómo llegar" },
   related: { title: "También te puede interesar" },
@@ -281,7 +281,7 @@ const de: Dictionary = {
     tapHint: "Tippen zum Weiterblättern · halten zum Pausieren",
   },
   tools: { mortgage: "Hypothekenrechner", downPayment: "Anzahlung", years: "Laufzeit (Jahre)", rate: "Zins (%)", monthly: "Geschätzte Monatsrate", disclaimer: "Unverbindliche Orientierungsrechnung." },
-  visit: { title: "Besichtigung vereinbaren", name: "Ihr Name", date: "Wunschtermin", message: "Nachricht (optional)", cta: "Besichtigung anfragen" },
+  visit: { title: "Besichtigung vereinbaren", name: "Ihr Name", phone: "Ihre Telefonnummer (optional)", date: "Wunschtermin", message: "Nachricht (optional)", cta: "Besichtigung anfragen", sent: "Anfrage erhalten — wir melden uns in Kürze." },
   share: { title: "Teilen", copy: "Link kopieren", copied: "Link kopiert!" },
   quick: { call: "Anrufen", whatsapp: "WhatsApp", email: "E-Mail", directions: "Route planen" },
   related: { title: "Das könnte Sie auch interessieren" },
@@ -404,7 +404,7 @@ const nl: Dictionary = {
     tapHint: "Tik om verder te gaan · houd vast om te pauzeren",
   },
   tools: { mortgage: "Hypotheekcalculator", downPayment: "Aanbetaling", years: "Looptijd (jaren)", rate: "Rente (%)", monthly: "Geschat maandbedrag", disclaimer: "Indicatieve berekening, niet bindend." },
-  visit: { title: "Bezichtiging plannen", name: "Uw naam", date: "Voorkeursdatum", message: "Bericht (optioneel)", cta: "Bezichtiging aanvragen" },
+  visit: { title: "Bezichtiging plannen", name: "Uw naam", phone: "Uw telefoonnummer (optioneel)", date: "Voorkeursdatum", message: "Bericht (optioneel)", cta: "Bezichtiging aanvragen", sent: "Aanvraag ontvangen — we nemen spoedig contact op." },
   share: { title: "Delen", copy: "Link kopiëren", copied: "Link gekopieerd!" },
   quick: { call: "Bellen", whatsapp: "WhatsApp", email: "E-mail", directions: "Routebeschrijving" },
   related: { title: "Dit vindt u misschien ook interessant" },
@@ -527,7 +527,7 @@ const en: Dictionary = {
     tapHint: "Tap to advance · hold to pause",
   },
   tools: { mortgage: "Mortgage calculator", downPayment: "Down payment", years: "Term (years)", rate: "Interest (%)", monthly: "Estimated monthly payment", disclaimer: "Indicative calculation, not binding." },
-  visit: { title: "Book a viewing", name: "Your name", date: "Preferred date", message: "Message (optional)", cta: "Request a viewing" },
+  visit: { title: "Book a viewing", name: "Your name", phone: "Your phone (optional)", date: "Preferred date", message: "Message (optional)", cta: "Request a viewing", sent: "Request received — we will contact you shortly." },
   share: { title: "Share", copy: "Copy link", copied: "Link copied!" },
   quick: { call: "Call", whatsapp: "WhatsApp", email: "Email", directions: "Get directions" },
   related: { title: "You may also like" },
@@ -651,7 +651,7 @@ const fr: Dictionary = {
     tapHint: "Touchez pour avancer · maintenez pour mettre en pause",
   },
   tools: { mortgage: "Calculatrice de prêt", downPayment: "Apport", years: "Durée (années)", rate: "Taux (%)", monthly: "Mensualité estimée", disclaimer: "Calcul indicatif, non contractuel." },
-  visit: { title: "Réserver une visite", name: "Votre nom", date: "Date souhaitée", message: "Message (optionnel)", cta: "Demander une visite" },
+  visit: { title: "Réserver une visite", name: "Votre nom", phone: "Votre téléphone (facultatif)", date: "Date souhaitée", message: "Message (optionnel)", cta: "Demander une visite", sent: "Demande reçue — nous vous contacterons rapidement." },
   share: { title: "Partager", copy: "Copier le lien", copied: "Lien copié !" },
   quick: { call: "Appeler", whatsapp: "WhatsApp", email: "E-mail", directions: "Itinéraire" },
   related: { title: "Cela pourrait aussi vous intéresser" },

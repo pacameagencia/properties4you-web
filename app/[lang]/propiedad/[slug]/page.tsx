@@ -303,6 +303,8 @@ export default async function PropertyPage({
                   dict={dict}
                   whatsapp={whatsapp}
                   viewAllLabel={dict.property.viewGallery}
+                  propertyId={property.id}
+                  locale={locale}
                 />
               </Reveal>
             )}
@@ -427,7 +429,9 @@ export default async function PropertyPage({
 
             <VisitForm
               dict={dict}
+              locale={locale}
               whatsapp={whatsapp}
+              propertyId={property.id}
               propertyName={`${property.name} (${property.reference ?? property.slug})`}
             />
 
