@@ -15,35 +15,36 @@ import {
 import { useEffect, useRef, useState } from "react";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
-import { useEntrance } from "@/lib/use-entrance";
 import { Magnetic } from "./magnetic";
 
-const EASE = [0.22, 1, 0.36, 1] as const;
 const SLIDE_MS = 6500;
+
+/*
+ * RENDIMIENTO: la coreografía de entrada es CSS puro (keyframes inline),
+ * así corre ANTES de que hidrate el JS y el contenido pinta al primer
+ * frame (LCP bajo). Framer Motion queda solo para lo interactivo:
+ * parallax, spotlight, crossfade del slideshow y microinteracciones.
+ */
 
 function Words({
   text,
   accent,
-  ready,
   base = 0,
 }: {
   text: string;
   accent?: boolean;
-  ready: boolean;
   base?: number;
 }) {
   return (
     <span className="inline">
       {text.split(" ").map((w, i) => (
         <span key={i} className="inline-block overflow-hidden align-bottom">
-          <motion.span
-            className={`inline-block ${accent ? "italic text-gold-soft" : ""}`}
-            initial={{ y: "110%" }}
-            animate={ready ? { y: 0 } : { y: "110%" }}
-            transition={{ duration: 0.9, ease: EASE, delay: base + i * 0.09 }}
+          <span
+            className={`hero-word inline-block ${accent ? "italic text-gold-soft" : ""}`}
+            style={{ animationDelay: `${(base + i * 0.09).toFixed(2)}s` }}
           >
             {w}&nbsp;
-          </motion.span>
+          </span>
         </span>
       ))}
     </span>
@@ -61,13 +62,11 @@ export function Hero({
 }) {
   const ref = useRef<HTMLElement>(null);
   const [slide, setSlide] = useState(0);
-  const ready = useEntrance();
 
-  // nº de palabras del titular para encadenar la línea y el subtítulo
   const titleWords =
     dict.hero.title.split(" ").length + dict.hero.titleAccent.split(" ").length;
 
-  // Parallax al scroll
+  // Parallax al scroll (mejora progresiva; sin JS no resta nada)
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
@@ -85,10 +84,10 @@ export function Hero({
 
   // Slideshow crossfade
   useEffect(() => {
-    if (!ready || images.length < 2) return;
+    if (images.length < 2) return;
     const iv = setInterval(() => setSlide((s) => (s + 1) % images.length), SLIDE_MS);
     return () => clearInterval(iv);
-  }, [ready, images.length]);
+  }, [images.length]);
 
   function onMove(e: React.MouseEvent) {
     const r = ref.current?.getBoundingClientRect();
@@ -97,25 +96,37 @@ export function Hero({
     my.set(((e.clientY - r.top) / r.height) * 100);
   }
 
+  const lineDelay = 0.3 + titleWords * 0.09;
+
   return (
     <section
       ref={ref}
       onMouseMove={onMove}
       className="relative flex min-h-[100svh] items-end overflow-hidden bg-[#07090b]"
     >
-      {/* Imagen: asienta de ampliada+borrosa a nítida al levantar la cortina */}
-      <motion.div style={{ y: imgY }} className="absolute inset-0">
-        <motion.div
-          initial={{ scale: 1.18, filter: "blur(10px)" }}
-          animate={
-            ready
-              ? { scale: 1, filter: "blur(0px)" }
-              : { scale: 1.18, filter: "blur(10px)" }
+      <style>{`
+        @keyframes hero-word-in { from { transform: translateY(110%); } to { transform: translateY(0); } }
+        @keyframes hero-fade-up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+        @keyframes hero-fade    { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes hero-line    { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+        @keyframes hero-settle  { from { transform: scale(1.14); filter: blur(10px); } to { transform: scale(1); filter: blur(0); } }
+        .hero-word   { transform: translateY(110%); animation: hero-word-in .9s cubic-bezier(.22,1,.36,1) forwards; }
+        .hero-fadeup { opacity: 0; animation: hero-fade-up .7s cubic-bezier(.22,1,.36,1) forwards; }
+        .hero-fadein { opacity: 0; animation: hero-fade 1s ease forwards; }
+        .hero-line   { transform: scaleX(0); animation: hero-line 1.1s cubic-bezier(.22,1,.36,1) forwards; }
+        .hero-settle { animation: hero-settle 1.9s cubic-bezier(.22,1,.36,1) forwards; }
+        @media (prefers-reduced-motion: reduce) {
+          .hero-word, .hero-fadeup, .hero-fadein, .hero-line, .hero-settle {
+            animation: none !important; opacity: 1 !important; transform: none !important; filter: none !important;
           }
-          transition={{ duration: 1.9, ease: EASE }}
-          className="absolute inset-0"
-        >
-          <AnimatePresence>
+        }
+      `}</style>
+
+      {/* Imagen: asienta de ampliada+borrosa a nítida (CSS, corre pre-hidratación) */}
+      <motion.div style={{ y: imgY }} className="absolute inset-0">
+        <div className="hero-settle absolute inset-0">
+          {/* initial={false}: la primera diapositiva pinta visible en SSR (LCP) */}
+          <AnimatePresence initial={false}>
             <motion.div
               key={slide}
               initial={{ opacity: 0 }}
@@ -140,7 +151,7 @@ export function Hero({
               )}
             </motion.div>
           </AnimatePresence>
-        </motion.div>
+        </div>
       </motion.div>
 
       {/* Veladuras */}
@@ -155,52 +166,40 @@ export function Hero({
         className="pointer-events-none absolute inset-0 hidden sm:block"
       />
 
-      {/* Contenido */}
+      {/* Contenido — entrada CSS con retardos escalonados */}
       <motion.div
         style={{ y: contentY }}
         className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-24 pt-40 sm:px-8"
       >
-        <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-          className="kicker mb-6"
-        >
+        <p className="hero-fadeup kicker mb-6" style={{ animationDelay: "0.2s" }}>
           {dict.hero.kicker}
-        </motion.p>
+        </p>
 
         <h1 className="max-w-4xl font-display text-5xl font-light leading-[1.03] text-ink sm:text-7xl lg:text-8xl">
-          <Words text={dict.hero.title} ready={ready} base={0.25} />
+          <Words text={dict.hero.title} base={0.25} />
           <Words
             text={dict.hero.titleAccent}
             accent
-            ready={ready}
             base={0.25 + dict.hero.title.split(" ").length * 0.09}
           />
         </h1>
 
         {/* Barrido de línea dorada bajo el titular */}
-        <motion.div
-          initial={{ scaleX: 0 }}
-          animate={ready ? { scaleX: 1 } : {}}
-          transition={{ duration: 1.1, ease: EASE, delay: 0.3 + titleWords * 0.09 }}
-          className="mt-7 h-px w-40 origin-left bg-gradient-to-r from-gold via-gold-soft to-transparent sm:w-64"
+        <div
+          className="hero-line mt-7 h-px w-40 origin-left bg-gradient-to-r from-gold via-gold-soft to-transparent sm:w-64"
+          style={{ animationDelay: `${lineDelay.toFixed(2)}s` }}
         />
 
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.35 }}
-          className="mt-7 max-w-xl text-lg leading-relaxed text-muted"
+        <p
+          className="hero-fadeup mt-7 max-w-xl text-lg leading-relaxed text-muted"
+          style={{ animationDelay: "0.35s" }}
         >
           {dict.hero.subtitle}
-        </motion.p>
+        </p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.5 }}
-          className="mt-10 flex flex-wrap items-center gap-4"
+        <div
+          className="hero-fadeup mt-10 flex flex-wrap items-center gap-4"
+          style={{ animationDelay: "0.5s" }}
         >
           <Magnetic>
             <Link
@@ -220,15 +219,13 @@ export function Hero({
           >
             {dict.hero.ctaAbout}
           </Link>
-        </motion.div>
+        </div>
 
         {/* Indicadores del slideshow */}
         {images.length > 1 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={ready ? { opacity: 1 } : {}}
-            transition={{ delay: 1.0 + titleWords * 0.09 }}
-            className="mt-10 flex gap-2"
+          <div
+            className="hero-fadein mt-10 flex gap-2"
+            style={{ animationDelay: `${(1.0 + titleWords * 0.09).toFixed(2)}s` }}
           >
             {images.map((_, i) => (
               <button
@@ -244,16 +241,14 @@ export function Hero({
                 />
               </button>
             ))}
-          </motion.div>
+          </div>
         )}
       </motion.div>
 
       {/* Indicador de scroll */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={ready ? { opacity: 1 } : {}}
-        transition={{ delay: 1.3 + titleWords * 0.09, duration: 1 }}
-        className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 text-center"
+      <div
+        className="hero-fadein absolute bottom-8 left-1/2 z-10 -translate-x-1/2 text-center"
+        style={{ animationDelay: `${(1.3 + titleWords * 0.09).toFixed(2)}s` }}
       >
         <div className="mx-auto h-10 w-px overflow-hidden bg-white/10">
           <motion.div
@@ -265,7 +260,7 @@ export function Hero({
         <span className="mt-2 block text-[0.6rem] uppercase tracking-[0.3em] text-faint">
           {dict.hero.scroll}
         </span>
-      </motion.div>
+      </div>
     </section>
   );
 }

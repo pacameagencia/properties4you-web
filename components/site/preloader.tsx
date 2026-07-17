@@ -10,7 +10,6 @@ const INTRO_MS = 1600;
 
 /**
  * Preloader cinematográfico: marca letra a letra + línea dorada y cortina
- * que sube con filo de oro. Publica window.__p4yIntroUntil para que el hero
  * y el header esperen y su coreografía se vea SIEMPRE tras la cortina.
  * Solo una vez por sesión.
  */
@@ -19,8 +18,13 @@ export function Preloader({ kicker }: { kicker: string }) {
 
   useEffect(() => {
     if (sessionStorage.getItem("p4y-intro")) return;
+    // Si la hidratación llegó tarde (móvil lento), el contenido ya está a la
+    // vista: taparlo ahora sería peor UX y hunde el LCP. Saltamos la intro.
+    if (performance.now() > 2500) {
+      sessionStorage.setItem("p4y-intro", "1");
+      return;
+    }
     sessionStorage.setItem("p4y-intro", "1");
-    window.__p4yIntroUntil = Date.now() + INTRO_MS;
     // eslint-disable-next-line react-hooks/set-state-in-effect -- decide mostrar intro tras leer sessionStorage
     setShow(true);
     document.documentElement.style.overflow = "hidden";

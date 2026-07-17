@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import { Menu, X, Heart } from "lucide-react";
 import { locales, type Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
@@ -39,14 +38,14 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   ];
 
   return (
-    <motion.header
-      // Solo fade: NUNCA transform en un elemento fixed (en móvil provoca
-      // que el header "flote" con retardo y deje un hueco arriba al scrollear).
-      // Y sin esperar al preloader: cuando existe, ya lo cubre él.
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
-      style={{ paddingTop: "env(safe-area-inset-top)" }}
+    <header
+      // Fade por CSS: pinta antes de hidratar (LCP) y NUNCA transform en un
+      // elemento fixed (en móvil provoca hueco/retardo al hacer scroll).
+      style={{
+        paddingTop: "env(safe-area-inset-top)",
+        opacity: 0,
+        animation: "p4y-header-in .7s cubic-bezier(.22,1,.36,1) .15s forwards",
+      }}
       className={cn(
         // transiciones SOLO de estilo (nada posicional); blur solo en desktop
         "fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,padding] duration-500",
@@ -147,6 +146,7 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
           </div>
         </nav>
       </div>
-    </motion.header>
+      <style>{`@keyframes p4y-header-in { to { opacity: 1 } }`}</style>
+    </header>
   );
 }

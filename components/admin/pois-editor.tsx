@@ -72,7 +72,7 @@ export function PoisEditor({
         <Plus size={13} /> Añadir servicio cercano
       </button>
       <p className="text-xs text-faint">
-        La distancia se escribe una vez y vale para los 5 idiomas ("10 min", "2 km").
+        La distancia se escribe una vez y vale para los 5 idiomas («10 min», «2 km»).
         Las etiquetas del catálogo se traducen solas.
       </p>
     </div>
