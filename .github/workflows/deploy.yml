@@ -1,0 +1,36 @@
+name: Deploy a Netlify
+
+# Compila en GitHub Actions (gratis en repos públicos) y publica en Netlify
+# con deploy directo, que NO consume créditos de build de Netlify.
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Build + deploy a producción
+        run: npx netlify-cli@17 deploy --build --prod --message "GH Actions ${{ github.sha }}"
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NEXT_PUBLIC_SUPABASE_URL: https://njlbbvkdkuavbayqcszp.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: sb_publishable_ZuAG90j9E1ox-M6t9KfPIA_hJhtxABE
+          ANTHROPIC_MODEL: claude-opus-4-8
