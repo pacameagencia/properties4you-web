@@ -14,6 +14,7 @@ import { CollectionShowcase } from "@/components/site/collection-showcase";
 import { Magnetic } from "@/components/site/magnetic";
 import { OutlineMarquee } from "@/components/site/outline-marquee";
 import { TESTIMONIALS } from "@/lib/testimonials";
+import { HeroSearch } from "@/components/site/hero-search";
 
 export const revalidate = 600;
 
@@ -64,6 +65,14 @@ export default async function HomePage({
   return (
     <>
       <Hero locale={locale} dict={dict} images={heroImages} />
+
+      {/* Buscador principal: la mayoría de visitantes empieza filtrando */}
+      <HeroSearch
+        locale={locale}
+        dict={dict}
+        zones={[...new Set(all.map((p) => p.zone).filter(Boolean))] as string[]}
+        types={[...new Set(all.map((p) => p.type))]}
+      />
 
       <Marquee items={ZONES} />
 

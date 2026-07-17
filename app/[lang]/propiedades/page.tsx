@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
@@ -48,12 +49,14 @@ export default async function PropertiesPage({
       </Reveal>
 
       <div className="mt-16">
-        <PropertiesExplorer
+        <Suspense fallback={null}>
+          <PropertiesExplorer
           properties={properties}
           locale={locale}
           dict={dict}
           whatsapp={whatsapp}
         />
+        </Suspense>
       </div>
     </section>
   );

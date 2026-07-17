@@ -18,6 +18,7 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getPropertyBySlug, getPublishedProperties, getSettings } from "@/lib/queries";
 import { formatPrice, localizedContent } from "@/lib/utils";
 import { ZONE_INFO, CHIP_LABELS } from "@/lib/zones";
+import { poiLabel, poiEmoji, AMENITY_LABELS, type Amenity } from "@/lib/pois";
 import { PropertyMedia } from "@/components/site/property-media";
 import { EnergyBadge } from "@/components/site/energy-badge";
 import { StoriesGallery } from "@/components/site/stories-gallery";
@@ -218,6 +219,31 @@ export default async function PropertyPage({
                 </p>
               </div>
             </div>
+
+            {/* Servicios cercanos bajo el precio (lo primero que mira el comprador internacional) */}
+            {(property.pois.length > 0 || property.amenities.length > 0) && (
+              <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-white/10 pt-5">
+                {property.pois.map((poi, i) => (
+                  <span
+                    key={i}
+                    className="flex items-center gap-1.5 text-sm text-ink/90"
+                  >
+                    <span aria-hidden>{poiEmoji(poi)}</span>
+                    {poiLabel(poi, locale)}
+                    <span className="text-gold">·</span>
+                    <span className="text-muted">{poi.distance}</span>
+                  </span>
+                ))}
+                {property.amenities.map((a) => (
+                  <span
+                    key={a}
+                    className="rounded-full border border-gold/40 bg-gold/10 px-3 py-1 text-[0.68rem] uppercase tracking-[0.14em] text-gold"
+                  >
+                    {AMENITY_LABELS[a as Amenity]?.[locale] ?? a}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </section>

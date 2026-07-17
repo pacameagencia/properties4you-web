@@ -1,11 +1,13 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { BellRing } from "lucide-react";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 import type { Property } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { AMENITIES, AMENITY_LABELS, type Amenity } from "@/lib/pois";
 import { PropertyCard } from "./property-card";
 import { Reveal } from "./reveal";
 
@@ -30,10 +32,20 @@ export function PropertiesExplorer({
   dict: Dictionary;
   whatsapp: string;
 }) {
-  const [zone, setZone] = useState<string>("");
-  const [type, setType] = useState<string>("");
-  const [band, setBand] = useState<number>(-1);
-  const [beds, setBeds] = useState<number>(0);
+  const params = useSearchParams();
+  const [zone, setZone] = useState<string>(params.get("zona") ?? "");
+  const [type, setType] = useState<string>(params.get("tipo") ?? "");
+  const [band, setBand] = useState<number>(() => {
+    const raw = params.get("precio");
+    if (raw === null || raw === "") return -1; // Number(null) sería 0 y activaría la 1ª banda
+    const b = Number(raw);
+    return Number.isInteger(b) && b >= 0 && b < PRICE_BANDS.length ? b : -1;
+  });
+  const [beds, setBeds] = useState<number>(Number(params.get("dorm")) || 0);
+  const [amenities, setAmenities] = useState<string[]>(() => {
+    const a = params.get("extras");
+    return a ? a.split(",").filter((x) => (AMENITIES as readonly string[]).includes(x)) : [];
+  });
   const [sort, setSort] = useState<Sort>("featured");
 
   const zones = useMemo(
@@ -50,6 +62,8 @@ export function PropertiesExplorer({
       if (zone && p.zone !== zone) return false;
       if (type && p.type !== type) return false;
       if (beds && (p.bedrooms ?? 0) < beds) return false;
+      if (amenities.length && !amenities.every((a) => p.amenities?.includes(a)))
+        return false;
       if (band >= 0) {
         const b = PRICE_BANDS[band];
         const price = p.price ?? 0;
@@ -67,7 +81,7 @@ export function PropertiesExplorer({
           Number(b.featured) - Number(a.featured) || b.sort_order - a.sort_order,
       );
     return list;
-  }, [properties, zone, type, band, beds, sort]);
+  }, [properties, zone, type, band, beds, amenities, sort]);
 
   const chip = (active: boolean) =>
     cn(
@@ -132,6 +146,24 @@ export function PropertiesExplorer({
           {PRICE_BANDS.map((b, i) => (
             <button key={b.label} className={chip(band === i)} onClick={() => setBand(i)}>
               {b.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Extras (vistas al mar, piscina privada, lista para entrar, 1ª línea golf) */}
+        <div className="flex flex-wrap items-center gap-2">
+          <span className={filterLabel}>✦</span>
+          {AMENITIES.map((a) => (
+            <button
+              key={a}
+              className={chip(amenities.includes(a))}
+              onClick={() =>
+                setAmenities((prev) =>
+                  prev.includes(a) ? prev.filter((x) => x !== a) : [...prev, a],
+                )
+              }
+            >
+              {AMENITY_LABELS[a as Amenity][locale]}
             </button>
           ))}
         </div>

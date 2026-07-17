@@ -6,6 +6,8 @@ import { Loader2 } from "lucide-react";
 import { saveProperty, type PropertyInput } from "@/app/admin/actions";
 import type { Property } from "@/lib/types";
 import { ImageUploader } from "./image-uploader";
+import { PoisEditor, AmenitiesEditor } from "./pois-editor";
+import type { Poi } from "@/lib/pois";
 
 const TYPES = ["villa", "apartamento", "atico", "bungalow", "adosado", "duplex", "parcela"];
 const STATUSES = [
@@ -63,6 +65,8 @@ export function PropertyForm({ initial }: { initial: Property | null }) {
   const [floorPlan, setFloorPlan] = useState<string | null>(
     initial?.floor_plan ?? null,
   );
+  const [pois, setPois] = useState<Poi[]>(initial?.pois ?? []);
+  const [amenities, setAmenities] = useState<string[]>(initial?.amenities ?? []);
 
   const set = (k: keyof typeof f, v: string | boolean) =>
     setF((prev) => ({ ...prev, [k]: v }));
@@ -100,6 +104,8 @@ export function PropertyForm({ initial }: { initial: Property | null }) {
       sort_order: Number(f.sort_order) || 0,
       cover_image: cover,
       gallery,
+      pois: pois.filter((p) => p.distance.trim()),
+      amenities,
       description_es: f.description_es,
       features_es: f.features_es.split("\n"),
     };
@@ -249,6 +255,22 @@ export function PropertyForm({ initial }: { initial: Property | null }) {
             </select>
           </Field>
         </Grid>
+      </Section>
+
+      {/* Entorno */}
+      <Section
+        title="Entorno y distancias"
+        hint="Servicios cercanos que se muestran bajo el precio (playa, aeropuerto, golf…). Añade, edita o borra libremente."
+      >
+        <PoisEditor pois={pois} onChange={setPois} />
+      </Section>
+
+      {/* Extras filtrables */}
+      <Section
+        title="Extras"
+        hint="Aparecen como filtros en el buscador y como destacados en la ficha."
+      >
+        <AmenitiesEditor amenities={amenities} onChange={setAmenities} />
       </Section>
 
       {/* Contenido */}
