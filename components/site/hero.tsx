@@ -26,31 +26,6 @@ const SLIDE_MS = 6500;
  * parallax, spotlight, crossfade del slideshow y microinteracciones.
  */
 
-function Words({
-  text,
-  accent,
-  base = 0,
-}: {
-  text: string;
-  accent?: boolean;
-  base?: number;
-}) {
-  return (
-    <span className="inline">
-      {text.split(" ").map((w, i) => (
-        <span key={i} className="inline-block overflow-hidden align-bottom">
-          <span
-            className={`hero-word inline-block ${accent ? "italic text-gold-soft" : ""}`}
-            style={{ animationDelay: `${(base + i * 0.09).toFixed(2)}s` }}
-          >
-            {w}&nbsp;
-          </span>
-        </span>
-      ))}
-    </span>
-  );
-}
-
 export function Hero({
   locale,
   dict,
@@ -72,7 +47,6 @@ export function Hero({
     offset: ["start start", "end start"],
   });
   const imgY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
-  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "40%"]);
   const overlayOpacity = useTransform(scrollYProgress, [0, 1], [1, 0.4]);
 
   // Spotlight que sigue el ratón
@@ -105,18 +79,16 @@ export function Hero({
       className="relative flex min-h-[100svh] items-end overflow-hidden bg-[#07090b]"
     >
       <style>{`
-        @keyframes hero-word-in { from { transform: translateY(110%); } to { transform: translateY(0); } }
         @keyframes hero-fade-up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
         @keyframes hero-fade    { from { opacity: 0; } to { opacity: 1; } }
         @keyframes hero-line    { from { transform: scaleX(0); } to { transform: scaleX(1); } }
         @keyframes hero-settle  { from { transform: scale(1.14); filter: blur(10px); } to { transform: scale(1); filter: blur(0); } }
-        .hero-word   { transform: translateY(110%); animation: hero-word-in .9s cubic-bezier(.22,1,.36,1) forwards; }
         .hero-fadeup { opacity: 0; animation: hero-fade-up .7s cubic-bezier(.22,1,.36,1) forwards; }
         .hero-fadein { opacity: 0; animation: hero-fade 1s ease forwards; }
         .hero-line   { transform: scaleX(0); animation: hero-line 1.1s cubic-bezier(.22,1,.36,1) forwards; }
-        .hero-settle { animation: hero-settle 1.9s cubic-bezier(.22,1,.36,1) forwards; }
+        .hero-settle { animation: hero-settle 1.1s cubic-bezier(.22,1,.36,1) forwards; }
         @media (prefers-reduced-motion: reduce) {
-          .hero-word, .hero-fadeup, .hero-fadein, .hero-line, .hero-settle {
+          .hero-fadeup, .hero-fadein, .hero-line, .hero-settle {
             animation: none !important; opacity: 1 !important; transform: none !important; filter: none !important;
           }
         }
@@ -166,22 +138,20 @@ export function Hero({
         className="pointer-events-none absolute inset-0 hidden sm:block"
       />
 
-      {/* Contenido — entrada CSS con retardos escalonados */}
-      <motion.div
-        style={{ y: contentY }}
-        className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-24 pt-40 sm:px-8"
-      >
+      {/* Contenido — SIN wrapper animado: cualquier mutación de estilo de un
+          ancestro del H1 (elemento LCP) re-cronometra el LCP en la hidratación */}
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-24 pt-40 sm:px-8">
         <p className="hero-fadeup kicker mb-6" style={{ animationDelay: "0.2s" }}>
           {dict.hero.kicker}
         </p>
 
+        {/* Bloque de texto ÚNICO y estático: es el elemento LCP de la página.
+            Trocearlo en spans o animarlo retrasa el LCP medido. */}
         <h1 className="max-w-4xl font-display text-5xl font-light leading-[1.03] text-ink sm:text-7xl lg:text-8xl">
-          <Words text={dict.hero.title} base={0.25} />
-          <Words
-            text={dict.hero.titleAccent}
-            accent
-            base={0.25 + dict.hero.title.split(" ").length * 0.09}
-          />
+          {dict.hero.title}{" "}
+          <span className="italic font-normal text-gold-soft">
+            {dict.hero.titleAccent}
+          </span>
         </h1>
 
         {/* Barrido de línea dorada bajo el titular */}
@@ -243,7 +213,7 @@ export function Hero({
             ))}
           </div>
         )}
-      </motion.div>
+      </div>
 
       {/* Indicador de scroll */}
       <div

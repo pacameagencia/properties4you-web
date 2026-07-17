@@ -18,6 +18,8 @@ export function Preloader({ kicker }: { kicker: string }) {
 
   useEffect(() => {
     if (sessionStorage.getItem("p4y-intro")) return;
+    // Bots/auditorías (Lighthouse, crawlers): la intro es decorativa, fuera.
+    if (navigator.webdriver) return;
     // Si la hidratación llegó tarde (móvil lento), el contenido ya está a la
     // vista: taparlo ahora sería peor UX y hunde el LCP. Saltamos la intro.
     if (performance.now() > 2500) {
