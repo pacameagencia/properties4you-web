@@ -20,10 +20,13 @@ export const revalidate = 600;
 
 const ZONES = [
   "Los Montesinos",
-  "Dolores",
+  "San Miguel de Salinas",
+  "Daya Nueva",
   "La Finca Golf",
+  "VistaBella Golf",
   "Pilar de la Horadada",
   "Rojales",
+  "Dolores",
   "San Fulgencio",
 ];
 

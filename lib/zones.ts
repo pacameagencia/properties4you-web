@@ -54,6 +54,36 @@ type ZoneInfo = {
 
 /** Información curada del entorno por zona (mostrada en la ficha). */
 export const ZONE_INFO: Record<string, ZoneInfo> = {
+  "San Miguel de Salinas": {
+    chips: ["golf", "beach", "nature", "services"],
+    text: {
+      es: "Pueblo con encanto sobre las colinas de la Vega Baja, rodeado de campos de golf de primer nivel como Las Colinas y Villamartín. Las playas de Orihuela Costa quedan a un cuarto de hora y el pueblo conserva comercio local, restaurantes y una vibrante comunidad internacional.",
+      en: "A charming hillside town in the Vega Baja, surrounded by top golf courses such as Las Colinas and Villamartín. The beaches of Orihuela Costa are fifteen minutes away, and the town keeps its local shops, restaurants and a vibrant international community.",
+      de: "Ein charmantes Hügeldorf in der Vega Baja, umgeben von erstklassigen Golfplätzen wie Las Colinas und Villamartín. Die Strände der Orihuela Costa sind eine Viertelstunde entfernt, und der Ort bewahrt lokale Geschäfte, Restaurants und eine lebendige internationale Gemeinschaft.",
+      nl: "Een charmant heuveldorp in de Vega Baja, omringd door topgolfbanen zoals Las Colinas en Villamartín. De stranden van Orihuela Costa liggen op een kwartier, en het dorp behoudt lokale winkels, restaurants en een levendige internationale gemeenschap.",
+      fr: "Un village de charme sur les collines de la Vega Baja, entouré de golfs de premier plan comme Las Colinas et Villamartín. Les plages d'Orihuela Costa sont à un quart d'heure et le village conserve ses commerces, ses restaurants et une communauté internationale dynamique.",
+    },
+  },
+  "Daya Nueva": {
+    chips: ["services", "dining", "beach", "nature"],
+    text: {
+      es: "Pueblo sereno de la huerta de la Vega Baja, con todos los servicios a un paseo y un ambiente auténtico y acogedor. Las playas de Guardamar del Segura quedan a unos 15 minutos en coche y el aeropuerto de Alicante a media hora.",
+      en: "A serene town amid the Vega Baja orchards, with every amenity within walking distance and an authentic, welcoming atmosphere. The beaches of Guardamar del Segura are about 15 minutes by car and Alicante Airport half an hour away.",
+      de: "Ein ruhiges Dorf inmitten der Obstgärten der Vega Baja, mit allen Annehmlichkeiten zu Fuß erreichbar und einer authentischen, einladenden Atmosphäre. Die Strände von Guardamar del Segura sind etwa 15 Autominuten entfernt, der Flughafen Alicante eine halbe Stunde.",
+      nl: "Een sereen dorp te midden van de boomgaarden van de Vega Baja, met alle voorzieningen op loopafstand en een authentieke, gastvrije sfeer. De stranden van Guardamar del Segura liggen op zo'n 15 minuten rijden en de luchthaven van Alicante op een half uur.",
+      fr: "Un village paisible au cœur des vergers de la Vega Baja, avec tous les services accessibles à pied et une atmosphère authentique et accueillante. Les plages de Guardamar del Segura sont à environ 15 minutes en voiture et l'aéroport d'Alicante à une demi-heure.",
+    },
+  },
+  "VistaBella Golf": {
+    chips: ["golf", "dining", "services", "nature"],
+    text: {
+      es: "Urbanización residencial construida alrededor del campo de golf VistaBella, con restaurantes, club social y comercio dentro del propio resort. Un entorno tranquilo entre Orihuela y San Miguel de Salinas, a 25 minutos de las playas de la Costa Blanca sur.",
+      en: "A residential resort built around the VistaBella golf course, with restaurants, a social club and shops within the development itself. A peaceful setting between Orihuela and San Miguel de Salinas, 25 minutes from the southern Costa Blanca beaches.",
+      de: "Eine Wohnanlage rund um den Golfplatz VistaBella, mit Restaurants, Clubhaus und Geschäften innerhalb des Resorts. Eine ruhige Lage zwischen Orihuela und San Miguel de Salinas, 25 Minuten von den Stränden der südlichen Costa Blanca.",
+      nl: "Een woonresort gebouwd rond de golfbaan VistaBella, met restaurants, een sociëteit en winkels binnen het resort zelf. Een rustige omgeving tussen Orihuela en San Miguel de Salinas, op 25 minuten van de stranden van de zuidelijke Costa Blanca.",
+      fr: "Un resort résidentiel construit autour du golf VistaBella, avec restaurants, club-house et commerces au sein même du domaine. Un cadre paisible entre Orihuela et San Miguel de Salinas, à 25 minutes des plages de la Costa Blanca sud.",
+    },
+  },
   "Los Montesinos": {
     chips: ["beach", "golf", "dining", "services"],
     text: {
