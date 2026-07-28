@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { BellRing } from "lucide-react";
+import { BellRing, SlidersHorizontal, ChevronDown } from "lucide-react";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 import type { Property } from "@/lib/types";
@@ -47,6 +47,7 @@ export function PropertiesExplorer({
     return a ? a.split(",").filter((x) => (AMENITIES as readonly string[]).includes(x)) : [];
   });
   const [sort, setSort] = useState<Sort>("featured");
+  const [extrasOpen, setExtrasOpen] = useState(false);
 
   const zones = useMemo(
     () => [...new Set(properties.map((p) => p.zone).filter(Boolean))] as string[],
@@ -83,16 +84,8 @@ export function PropertiesExplorer({
     return list;
   }, [properties, zone, type, band, beds, amenities, sort]);
 
-  const chip = (active: boolean) =>
-    cn(
-      "rounded-full border px-4 py-2 text-[0.72rem] uppercase tracking-[0.14em] transition-colors",
-      active
-        ? "border-gold bg-gold/10 text-gold"
-        : "border-line text-muted hover:border-line-2 hover:text-ink",
-    );
-
-  const filterLabel =
-    "mr-2 w-20 shrink-0 text-[0.68rem] uppercase tracking-[0.2em] text-faint";
+  const selectCls =
+    "h-10 appearance-none rounded-xl border border-line bg-surface px-3.5 pr-8 text-sm text-muted outline-none transition-colors hover:text-ink focus:border-gold [background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2210%22 height=%226%22><path d=%22M1 1l4 4 4-4%22 stroke=%22%236b747c%22 fill=%22none%22 stroke-width=%221.5%22/></svg>')] [background-position:right_0.8rem_center] [background-repeat:no-repeat]";
 
   // CTA de alerta: compone la búsqueda actual y la manda por WhatsApp
   function requestAlert() {
@@ -112,80 +105,140 @@ export function PropertiesExplorer({
 
   return (
     <>
-      {/* Filtros */}
-      <div className="mb-10 flex flex-col gap-4 border-y border-line py-6">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className={filterLabel}>{dict.filters.zone}</span>
-          <button className={chip(!zone)} onClick={() => setZone("")}>
-            {dict.filters.all}
-          </button>
+      {/* Filtros — barra compacta de desplegables, como los portales clásicos */}
+      <div className="mb-10 flex flex-wrap items-center gap-2.5 border-y border-line py-4">
+        <SlidersHorizontal size={15} className="mr-1 shrink-0 text-faint" />
+
+        <select
+          value={zone}
+          onChange={(e) => setZone(e.target.value)}
+          aria-label={dict.filters.zone}
+          className={selectCls}
+        >
+          <option value="">{dict.filters.zone}</option>
           {zones.map((z) => (
-            <button key={z} className={chip(zone === z)} onClick={() => setZone(z)}>
+            <option key={z} value={z}>
               {z}
-            </button>
+            </option>
           ))}
-        </div>
+        </select>
 
-        <div className="flex flex-wrap items-center gap-2">
-          <span className={filterLabel}>{dict.filters.type}</span>
-          <button className={chip(!type)} onClick={() => setType("")}>
-            {dict.filters.all}
-          </button>
+        <select
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+          aria-label={dict.filters.type}
+          className={selectCls}
+        >
+          <option value="">{dict.filters.type}</option>
           {types.map((t) => (
-            <button key={t} className={chip(type === t)} onClick={() => setType(t)}>
+            <option key={t} value={t}>
               {dict.types[t] ?? t}
-            </button>
+            </option>
           ))}
-        </div>
+        </select>
 
-        <div className="flex flex-wrap items-center gap-2">
-          <span className={filterLabel}>€</span>
-          <button className={chip(band === -1)} onClick={() => setBand(-1)}>
-            {dict.filters.all}
-          </button>
+        <select
+          value={beds}
+          onChange={(e) => setBeds(Number(e.target.value))}
+          aria-label={dict.filters.bedrooms}
+          className={selectCls}
+        >
+          <option value={0}>{dict.filters.bedrooms}</option>
+          {[1, 2, 3].map((n) => (
+            <option key={n} value={n}>
+              {n}+
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={band}
+          onChange={(e) => setBand(Number(e.target.value))}
+          aria-label="€"
+          className={selectCls}
+        >
+          <option value={-1}>€ · {dict.filters.all}</option>
           {PRICE_BANDS.map((b, i) => (
-            <button key={b.label} className={chip(band === i)} onClick={() => setBand(i)}>
+            <option key={b.label} value={i}>
               {b.label}
-            </button>
+            </option>
           ))}
+        </select>
+
+        {/* Extras: botón discreto con panel desplegable */}
+        <div className="relative">
+          <button
+            onClick={() => setExtrasOpen((v) => !v)}
+            aria-expanded={extrasOpen}
+            className={cn(
+              "flex h-10 items-center gap-1.5 rounded-xl border px-3.5 text-sm transition-colors",
+              amenities.length
+                ? "border-gold/60 bg-gold/10 text-gold"
+                : "border-line bg-surface text-muted hover:text-ink",
+            )}
+          >
+            ✦ {dict.filters.extras}
+            {amenities.length > 0 && (
+              <span className="grid h-4 min-w-4 place-items-center rounded-full bg-gold px-1 text-[0.62rem] font-semibold text-bg">
+                {amenities.length}
+              </span>
+            )}
+            <ChevronDown
+              size={13}
+              className={cn("transition-transform", extrasOpen && "rotate-180")}
+            />
+          </button>
+          {extrasOpen && (
+            <>
+              <button
+                aria-hidden
+                tabIndex={-1}
+                onClick={() => setExtrasOpen(false)}
+                className="fixed inset-0 z-30 cursor-default"
+              />
+              <div className="absolute left-0 top-12 z-40 w-64 rounded-2xl border border-line bg-[#10151a] p-3 shadow-[0_18px_50px_-12px_rgba(0,0,0,0.7)]">
+                {AMENITIES.map((a) => {
+                  const active = amenities.includes(a);
+                  return (
+                    <button
+                      key={a}
+                      onClick={() =>
+                        setAmenities((prev) =>
+                          prev.includes(a)
+                            ? prev.filter((x) => x !== a)
+                            : [...prev, a],
+                        )
+                      }
+                      className={cn(
+                        "flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm transition-colors",
+                        active ? "text-gold" : "text-muted hover:text-ink",
+                      )}
+                    >
+                      {AMENITY_LABELS[a as Amenity][locale]}
+                      <span
+                        className={cn(
+                          "grid h-4 w-4 place-items-center rounded border text-[0.6rem]",
+                          active
+                            ? "border-gold bg-gold text-bg"
+                            : "border-line-2",
+                        )}
+                      >
+                        {active ? "✓" : ""}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </>
+          )}
         </div>
 
-        {/* Extras (vistas al mar, piscina privada, lista para entrar, 1ª línea golf) */}
-        <div className="flex flex-wrap items-center gap-2">
-          <span className={filterLabel}>✦</span>
-          {AMENITIES.map((a) => (
-            <button
-              key={a}
-              className={chip(amenities.includes(a))}
-              onClick={() =>
-                setAmenities((prev) =>
-                  prev.includes(a) ? prev.filter((x) => x !== a) : [...prev, a],
-                )
-              }
-            >
-              {AMENITY_LABELS[a as Amenity][locale]}
-            </button>
-          ))}
-        </div>
-
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className={filterLabel}>{dict.filters.bedrooms}</span>
-            <button className={chip(beds === 0)} onClick={() => setBeds(0)}>
-              {dict.filters.all}
-            </button>
-            {[1, 2, 3].map((n) => (
-              <button key={n} className={chip(beds === n)} onClick={() => setBeds(n)}>
-                {n}+
-              </button>
-            ))}
-          </div>
-
+        <div className="ms-auto">
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value as Sort)}
             aria-label={dict.filters.sort}
-            className="rounded-full border border-line bg-surface px-4 py-2 text-[0.72rem] uppercase tracking-[0.12em] text-muted outline-none focus:border-gold"
+            className={selectCls}
           >
             <option value="featured">{dict.filters.sort}</option>
             <option value="price_asc">{dict.filters.priceUp}</option>

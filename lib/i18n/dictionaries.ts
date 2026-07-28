@@ -50,6 +50,7 @@ export type Dictionary = {
     priceDown: string;
     sort: string;
     results: string;
+    extras: string;
   };
   stories: { reply: string; send: string; interested: string; tapHint: string };
   tools: { mortgage: string; downPayment: string; years: string; rate: string; monthly: string; disclaimer: string };
@@ -149,6 +150,7 @@ const es: Dictionary = {
     priceUp: "Precio: menor a mayor",
     priceDown: "Precio: mayor a menor",
     sort: "Ordenar",
+    extras: "Extras",
     results: "propiedades",
   },
   stories: {
@@ -272,6 +274,7 @@ const de: Dictionary = {
     priceUp: "Preis: aufsteigend",
     priceDown: "Preis: absteigend",
     sort: "Sortieren",
+    extras: "Extras",
     results: "Immobilien",
   },
   stories: {
@@ -395,6 +398,7 @@ const nl: Dictionary = {
     priceUp: "Prijs: laag naar hoog",
     priceDown: "Prijs: hoog naar laag",
     sort: "Sorteren",
+    extras: "Extra's",
     results: "woningen",
   },
   stories: {
@@ -518,6 +522,7 @@ const en: Dictionary = {
     priceUp: "Price: low to high",
     priceDown: "Price: high to low",
     sort: "Sort",
+    extras: "Features",
     results: "properties",
   },
   stories: {
@@ -642,6 +647,7 @@ const fr: Dictionary = {
     priceUp: "Prix : croissant",
     priceDown: "Prix : décroissant",
     sort: "Trier",
+    extras: "Options",
     results: "propriétés",
   },
   stories: {
