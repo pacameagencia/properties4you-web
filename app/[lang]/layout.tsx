@@ -49,6 +49,14 @@ export async function generateMetadata({
       type: "website",
       siteName: "Properties4You",
       title: "Properties4You · Costa Blanca",
+      images: [
+        {
+          url: "https://njlbbvkdkuavbayqcszp.supabase.co/storage/v1/object/public/properties/casas/mirador-del-sol/01.jpg",
+          width: 1600,
+          height: 1067,
+          alt: "Properties4You · Obra nueva en la Costa Blanca",
+        },
+      ],
       description:
         "Obra nueva exclusiva en la Costa Blanca. Villas y apartamentos junto al Mediterráneo.",
     },
