@@ -211,11 +211,13 @@ export default async function PropertyPage({
                 {property.name}
               </h1>
               <div className="text-right">
-                <span className="text-[0.68rem] uppercase tracking-[0.2em] text-faint">
-                  {property.price_from ? dict.property.from : ""}
-                </span>
-                <p className="font-display text-4xl text-gold">
-                  {formatPrice(property.price, locale)}
+                {property.price != null && property.price_from && (
+                  <span className="text-[0.68rem] uppercase tracking-[0.2em] text-faint">
+                    {dict.property.from}
+                  </span>
+                )}
+                <p className={property.price != null ? "font-display text-4xl text-gold" : "font-display text-3xl italic text-gold-soft"}>
+                  {property.price != null ? formatPrice(property.price, locale) : dict.card.onRequest}
                 </p>
               </div>
             </div>

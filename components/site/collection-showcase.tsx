@@ -65,8 +65,9 @@ export function CollectionShowcase({
                   </p>
                   <h3 className="font-display text-3xl text-ink">{p.name}</h3>
                   <p className="mt-1 text-sm text-muted">
-                    {p.price_from ? dict.card.from + " " : ""}
-                    {formatPrice(p.price, locale)}
+                    {p.price != null
+                      ? `${p.price_from ? dict.card.from + " " : ""}${formatPrice(p.price, locale)}`
+                      : dict.card.onRequest}
                   </p>
                 </div>
                 <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/25 bg-black/30 text-ink backdrop-blur transition-all duration-500 group-hover/card:bg-gold group-hover/card:text-bg">

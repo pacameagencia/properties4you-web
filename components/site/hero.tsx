@@ -214,23 +214,6 @@ export function Hero({
           </div>
         )}
       </div>
-
-      {/* Indicador de scroll */}
-      <div
-        className="hero-fadein absolute bottom-8 left-1/2 z-10 -translate-x-1/2 text-center"
-        style={{ animationDelay: `${(1.3 + titleWords * 0.09).toFixed(2)}s` }}
-      >
-        <div className="mx-auto h-10 w-px overflow-hidden bg-white/10">
-          <motion.div
-            animate={{ y: ["-100%", "100%"] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-            className="h-full w-full bg-gold"
-          />
-        </div>
-        <span className="mt-2 block text-[0.6rem] uppercase tracking-[0.3em] text-faint">
-          {dict.hero.scroll}
-        </span>
-      </div>
     </section>
   );
 }

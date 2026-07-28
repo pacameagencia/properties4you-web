@@ -132,10 +132,11 @@ export function PropertyCard({
           <div className="mt-6 flex items-end justify-between border-t border-line pt-5">
             <div>
               <p className="text-[0.62rem] uppercase tracking-[0.2em] text-faint">
-                {typeLabel} · {p.price_from ? dict.card.from : ""}
+                {typeLabel}
+                {p.price != null && p.price_from ? ` · ${dict.card.from}` : ""}
               </p>
-              <p className="font-display text-2xl text-ink">
-                {formatPrice(p.price, locale)}
+              <p className={p.price != null ? "font-display text-2xl text-ink" : "font-display text-lg italic text-gold-soft"}>
+                {p.price != null ? formatPrice(p.price, locale) : dict.card.onRequest}
               </p>
             </div>
             <span className="text-[0.72rem] uppercase tracking-[0.16em] text-gold transition-transform duration-500 group-hover:translate-x-1">

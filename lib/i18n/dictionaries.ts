@@ -16,7 +16,7 @@ export type Dictionary = {
   featured: { kicker: string; title: string; subtitle: string; viewAll: string; collection: string };
   destination: { kicker: string; title: string; body: string };
   cta: { title: string; body: string; button: string };
-  card: { from: string; view: string; forSale: string; reserved: string; sold: string };
+  card: { from: string; view: string; forSale: string; reserved: string; sold: string; onRequest: string };
   property: {
     back: string;
     description: string;
@@ -116,7 +116,7 @@ const es: Dictionary = {
     body: "Cuéntanos qué imaginas y te acompañamos, en tu idioma, en cada paso.",
     button: "Hablar con nosotros",
   },
-  card: { from: "Desde", view: "Ver propiedad", forSale: "En venta", reserved: "Reservada", sold: "Vendida" },
+  card: { from: "Desde", view: "Ver propiedad", forSale: "En venta", reserved: "Reservada", sold: "Vendida", onRequest: "Consultar precio" },
   property: {
     back: "Volver a propiedades",
     description: "Descripción",
@@ -240,7 +240,7 @@ const de: Dictionary = {
     body: "Sagen Sie uns, was Sie sich vorstellen – wir begleiten Sie in Ihrer Sprache.",
     button: "Kontakt aufnehmen",
   },
-  card: { from: "Ab", view: "Immobilie ansehen", forSale: "Zu verkaufen", reserved: "Reserviert", sold: "Verkauft" },
+  card: { from: "Ab", view: "Immobilie ansehen", forSale: "Zu verkaufen", reserved: "Reserviert", sold: "Verkauft", onRequest: "Preis auf Anfrage" },
   property: {
     back: "Zurück zu den Immobilien",
     description: "Beschreibung",
@@ -364,7 +364,7 @@ const nl: Dictionary = {
     body: "Vertel ons wat u voor ogen heeft en wij begeleiden u, in uw taal.",
     button: "Neem contact op",
   },
-  card: { from: "Vanaf", view: "Bekijk woning", forSale: "Te koop", reserved: "Gereserveerd", sold: "Verkocht" },
+  card: { from: "Vanaf", view: "Bekijk woning", forSale: "Te koop", reserved: "Gereserveerd", sold: "Verkocht", onRequest: "Prijs op aanvraag" },
   property: {
     back: "Terug naar woningen",
     description: "Beschrijving",
@@ -488,7 +488,7 @@ const en: Dictionary = {
     body: "Tell us what you have in mind and we'll guide you, in your language, every step of the way.",
     button: "Talk to us",
   },
-  card: { from: "From", view: "View property", forSale: "For sale", reserved: "Reserved", sold: "Sold" },
+  card: { from: "From", view: "View property", forSale: "For sale", reserved: "Reserved", sold: "Sold", onRequest: "Price on request" },
   property: {
     back: "Back to properties",
     description: "Description",
@@ -613,7 +613,7 @@ const fr: Dictionary = {
     body: "Dites-nous ce que vous imaginez et nous vous accompagnons, dans votre langue, à chaque étape.",
     button: "Parler avec nous",
   },
-  card: { from: "À partir de", view: "Voir la propriété", forSale: "À vendre", reserved: "Réservée", sold: "Vendue" },
+  card: { from: "À partir de", view: "Voir la propriété", forSale: "À vendre", reserved: "Réservée", sold: "Vendue", onRequest: "Prix sur demande" },
   property: {
     back: "Retour aux propriétés",
     description: "Description",
