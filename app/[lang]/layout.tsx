@@ -57,8 +57,7 @@ export async function generateMetadata({
           alt: "Properties4You · Obra nueva en la Costa Blanca",
         },
       ],
-      description:
-        "Obra nueva exclusiva en la Costa Blanca. Villas y apartamentos junto al Mediterráneo.",
+      description: d.meta.description,
     },
   };
 }

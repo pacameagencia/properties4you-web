@@ -59,7 +59,7 @@ export default async function HomePage({
     .slice(0, 5);
 
   const stats = [
-    { value: 320, suffix: "", label: dict.stats.sun },
+    { value: 300, suffix: "+", label: dict.stats.sun },
     { value: 18, suffix: "", label: dict.stats.developments },
     { value: 10, suffix: "", label: dict.stats.warranty },
     { text: "A–B", label: dict.stats.energy },

@@ -77,11 +77,11 @@ export type Dictionary = {
 const es: Dictionary = {
   nav: { home: "Inicio", properties: "Propiedades", about: "Nosotros", blog: "Guía" },
   hero: {
-    kicker: "Costa Blanca · España",
+    kicker: "Sueños posibles · Costa Blanca",
     title: "Tu hogar bajo la luz",
     titleAccent: "del Mediterráneo",
     subtitle:
-      "Villas y apartamentos de obra nueva en la Costa Blanca, presentados como merecen.",
+      "Una nueva forma de vivir junto al Mediterráneo: entornos tranquilos, a pocos minutos del mar y lejos del turismo masivo.",
     ctaProperties: "Ver propiedades",
     ctaAbout: "Conócenos",
     scroll: "Desliza",
@@ -93,10 +93,10 @@ const es: Dictionary = {
     energy: "Certificado energético",
   },
   firm: {
-    kicker: "La firma",
+    kicker: "Sueños posibles",
     title:
-      "No vendemos casas. Creamos el escenario donde comienza una nueva vida frente al Mediterráneo.",
-    body: "Cada propiedad de nuestra cartera se elige por su arquitectura, su luz y su ubicación. Obra nueva de alto nivel en los enclaves más codiciados de la Costa Blanca.",
+      "No vendemos solo viviendas. Hacemos posibles los sueños de quienes buscan una vida mejor en España.",
+    body: "Sol, tranquilidad, salud y bienestar: cada vivienda se elige por su entorno sereno, su luz y su cercanía al mar. Y en la mesa, la dieta mediterránea y un coste de vida que deja espacio para disfrutar cada día.",
   },
   featured: {
     kicker: "Obra nueva · En venta",
@@ -109,7 +109,7 @@ const es: Dictionary = {
   destination: {
     kicker: "El destino",
     title: "Vivir en la Costa Blanca",
-    body: "Una de las costas más luminosas de Europa, elegida cada año por miles de compradores que buscan calidad de vida, clima y mar.",
+    body: "Más de 300 días de sol al año, un clima privilegiado y las playas del Mediterráneo a un corto trayecto en coche. Lejos del turismo masivo: la combinación perfecta entre tranquilidad y comodidad.",
   },
   cta: {
     title: "¿Buscas tu lugar frente al mar?",
@@ -172,7 +172,7 @@ const es: Dictionary = {
   search: { title: "Encuentra tu propiedad", any: "Cualquiera", button: "Buscar" },
   media: { video: "Vídeo", plan: "Plano de la vivienda" },
   a11y: { close: "Cerrar", previous: "Anterior", next: "Siguiente", image: "Imagen", menu: "Menú" },
-  meta: { description: "Obra nueva exclusiva en la Costa Blanca. Villas y apartamentos junto al Mediterráneo, presentados en 5 idiomas." },
+  meta: { description: "Sueños posibles en la Costa Blanca: obra nueva en entornos tranquilos a minutos del mar, con más de 300 días de sol al año." },
   notFound: { title: "Página no encontrada", body: "La página que buscas no existe o ya no está disponible.", back: "Volver al inicio" },
   types: {
     villa: "Villa",
@@ -187,10 +187,10 @@ const es: Dictionary = {
   about: {
     kicker: "Nosotros",
     title: "Propiedades con estilo de vida",
-    body: "Donde el Mediterráneo se convierte en hogar. Seleccionamos obra nueva de alto nivel en la Costa Blanca y acompañamos a compradores de toda Europa.",
+    body: "Descubre una nueva forma de vivir en la Costa Blanca: viviendas en entornos tranquilos, a pocos minutos del mar, con más de 300 días de sol al año y una excelente calidad de vida. No vendemos solo viviendas; hacemos posibles los sueños de quienes buscan sol, tranquilidad, salud y una vida mejor en España.",
   },
   footer: {
-    tagline: "Propiedades con estilo de vida. Donde el Mediterráneo se convierte en hogar.",
+    tagline: "Sueños posibles. Sol, tranquilidad y una vida mejor junto al Mediterráneo.",
     nav: "Navegación",
     contact: "Contacto",
     rights: "Costa Blanca",
@@ -201,11 +201,11 @@ const es: Dictionary = {
 const de: Dictionary = {
   nav: { home: "Start", properties: "Immobilien", about: "Über uns", blog: "Ratgeber" },
   hero: {
-    kicker: "Costa Blanca · Spanien",
+    kicker: "Träume werden möglich · Costa Blanca",
     title: "Ihr Zuhause im Licht",
     titleAccent: "des Mittelmeers",
     subtitle:
-      "Neubau-Villen und -Apartments an der Costa Blanca, präsentiert, wie sie es verdienen.",
+      "Eine neue Art, am Mittelmeer zu leben: ruhige Lagen, wenige Minuten vom Meer und fernab des Massentourismus.",
     ctaProperties: "Immobilien ansehen",
     ctaAbout: "Über uns",
     scroll: "Scrollen",
@@ -217,10 +217,10 @@ const de: Dictionary = {
     energy: "Energieausweis",
   },
   firm: {
-    kicker: "Das Unternehmen",
+    kicker: "Träume werden möglich",
     title:
-      "Wir verkaufen keine Häuser. Wir schaffen die Kulisse für ein neues Leben am Mittelmeer.",
-    body: "Jede Immobilie unseres Portfolios wählen wir nach Architektur, Licht und Lage. Hochwertiger Neubau in den begehrtesten Lagen der Costa Blanca.",
+      "Wir verkaufen nicht nur Immobilien. Wir machen Träume möglich — für alle, die ein besseres Leben in Spanien suchen.",
+    body: "Sonne, Ruhe, Gesundheit und Wohlbefinden: Jede Immobilie wird nach ihrer ruhigen Lage, ihrem Licht und ihrer Nähe zum Meer ausgewählt. Und auf dem Tisch: die mediterrane Küche und Lebenshaltungskosten, die Raum lassen, jeden Tag zu genießen.",
   },
   featured: {
     kicker: "Neubau · Zu verkaufen",
@@ -233,7 +233,7 @@ const de: Dictionary = {
   destination: {
     kicker: "Das Reiseziel",
     title: "Leben an der Costa Blanca",
-    body: "Eine der sonnigsten Küsten Europas, jedes Jahr von Tausenden Käufern gewählt, die Lebensqualität, Klima und Meer suchen.",
+    body: "Über 300 Sonnentage im Jahr, ein privilegiertes Klima und die Mittelmeerstrände nur eine kurze Autofahrt entfernt. Fernab des Massentourismus: die perfekte Balance aus Ruhe und Komfort.",
   },
   cta: {
     title: "Suchen Sie Ihren Platz am Meer?",
@@ -296,7 +296,7 @@ const de: Dictionary = {
   search: { title: "Finden Sie Ihre Immobilie", any: "Beliebig", button: "Suchen" },
   media: { video: "Video", plan: "Grundriss" },
   a11y: { close: "Schließen", previous: "Zurück", next: "Weiter", image: "Bild", menu: "Menü" },
-  meta: { description: "Exklusiver Neubau an der Costa Blanca. Villen und Apartments am Mittelmeer, präsentiert in 5 Sprachen." },
+  meta: { description: "Träume werden möglich an der Costa Blanca: Neubau in ruhigen Lagen, Minuten vom Meer, mit über 300 Sonnentagen im Jahr." },
   notFound: { title: "Seite nicht gefunden", body: "Die gesuchte Seite existiert nicht oder ist nicht mehr verfügbar.", back: "Zur Startseite" },
   types: {
     villa: "Villa",
@@ -311,10 +311,10 @@ const de: Dictionary = {
   about: {
     kicker: "Über uns",
     title: "Immobilien mit Lebensstil",
-    body: "Wo das Mittelmeer zum Zuhause wird. Wir wählen hochwertigen Neubau an der Costa Blanca und begleiten Käufer aus ganz Europa.",
+    body: "Entdecken Sie eine neue Art, an der Costa Blanca zu leben: Immobilien in ruhigen Lagen, wenige Minuten vom Meer, mit über 300 Sonnentagen im Jahr und exzellenter Lebensqualität. Wir verkaufen nicht nur Immobilien — wir machen Träume möglich für alle, die Sonne, Ruhe, Gesundheit und ein besseres Leben in Spanien suchen.",
   },
   footer: {
-    tagline: "Immobilien mit Lebensstil. Wo das Mittelmeer zum Zuhause wird.",
+    tagline: "Träume werden möglich. Sonne, Ruhe und ein besseres Leben am Mittelmeer.",
     nav: "Navigation",
     contact: "Kontakt",
     rights: "Costa Blanca",
@@ -325,11 +325,11 @@ const de: Dictionary = {
 const nl: Dictionary = {
   nav: { home: "Home", properties: "Woningen", about: "Over ons", blog: "Gids" },
   hero: {
-    kicker: "Costa Blanca · Spanje",
+    kicker: "Dromen worden mogelijk · Costa Blanca",
     title: "Uw thuis in het licht",
     titleAccent: "van de Middellandse Zee",
     subtitle:
-      "Nieuwbouwvilla's en -appartementen aan de Costa Blanca, gepresenteerd zoals ze verdienen.",
+      "Een nieuwe manier van leven aan de Middellandse Zee: rustige omgevingen, op enkele minuten van de zee en ver van het massatoerisme.",
     ctaProperties: "Bekijk woningen",
     ctaAbout: "Over ons",
     scroll: "Scroll",
@@ -341,10 +341,10 @@ const nl: Dictionary = {
     energy: "Energiecertificaat",
   },
   firm: {
-    kicker: "Het bedrijf",
+    kicker: "Dromen worden mogelijk",
     title:
-      "Wij verkopen geen huizen. Wij creëren het decor waar een nieuw leven aan zee begint.",
-    body: "Elke woning in ons portfolio kiezen we op architectuur, licht en ligging. Hoogwaardige nieuwbouw op de meest gewilde plekken van de Costa Blanca.",
+      "Wij verkopen niet zomaar woningen. Wij maken dromen mogelijk voor wie een beter leven in Spanje zoekt.",
+    body: "Zon, rust, gezondheid en welzijn: elke woning wordt gekozen om haar serene omgeving, haar licht en haar nabijheid tot de zee. En op tafel: het mediterrane dieet en kosten van levensonderhoud die ruimte laten om elke dag te genieten.",
   },
   featured: {
     kicker: "Nieuwbouw · Te koop",
@@ -357,7 +357,7 @@ const nl: Dictionary = {
   destination: {
     kicker: "De bestemming",
     title: "Wonen aan de Costa Blanca",
-    body: "Een van de zonnigste kusten van Europa, elk jaar gekozen door duizenden kopers die levenskwaliteit, klimaat en zee zoeken.",
+    body: "Meer dan 300 zonnedagen per jaar, een bevoorrecht klimaat en de mediterrane stranden op een korte autorit. Ver van het massatoerisme: de perfecte balans tussen rust en comfort.",
   },
   cta: {
     title: "Zoekt u uw plek aan zee?",
@@ -420,7 +420,7 @@ const nl: Dictionary = {
   search: { title: "Vind uw woning", any: "Alle", button: "Zoeken" },
   media: { video: "Video", plan: "Plattegrond" },
   a11y: { close: "Sluiten", previous: "Vorige", next: "Volgende", image: "Afbeelding", menu: "Menu" },
-  meta: { description: "Exclusieve nieuwbouw aan de Costa Blanca. Villa's en appartementen aan de Middellandse Zee, gepresenteerd in 5 talen." },
+  meta: { description: "Dromen worden mogelijk aan de Costa Blanca: nieuwbouw in rustige omgevingen op minuten van de zee, met meer dan 300 zonnedagen per jaar." },
   notFound: { title: "Pagina niet gevonden", body: "De pagina die u zoekt bestaat niet of is niet meer beschikbaar.", back: "Terug naar home" },
   types: {
     villa: "Villa",
@@ -435,10 +435,10 @@ const nl: Dictionary = {
   about: {
     kicker: "Over ons",
     title: "Woningen met levensstijl",
-    body: "Waar de Middellandse Zee thuis wordt. Wij selecteren hoogwaardige nieuwbouw aan de Costa Blanca en begeleiden kopers uit heel Europa.",
+    body: "Ontdek een nieuwe manier van leven aan de Costa Blanca: woningen in rustige omgevingen, op enkele minuten van de zee, met meer dan 300 zonnedagen per jaar en een uitstekende levenskwaliteit. Wij verkopen niet zomaar woningen; wij maken dromen mogelijk voor wie zon, rust, gezondheid en een beter leven in Spanje zoekt.",
   },
   footer: {
-    tagline: "Woningen met levensstijl. Waar de Middellandse Zee thuis wordt.",
+    tagline: "Dromen worden mogelijk. Zon, rust en een beter leven aan de Middellandse Zee.",
     nav: "Navigatie",
     contact: "Contact",
     rights: "Costa Blanca",
@@ -449,11 +449,11 @@ const nl: Dictionary = {
 const en: Dictionary = {
   nav: { home: "Home", properties: "Properties", about: "About", blog: "Guide" },
   hero: {
-    kicker: "Costa Blanca · Spain",
+    kicker: "Dreams made possible · Costa Blanca",
     title: "Your home in the light",
     titleAccent: "of the Mediterranean",
     subtitle:
-      "New-build villas and apartments on the Costa Blanca, presented as they deserve.",
+      "A new way of living by the Mediterranean: peaceful settings, minutes from the sea and far from mass tourism.",
     ctaProperties: "View properties",
     ctaAbout: "About us",
     scroll: "Scroll",
@@ -465,10 +465,10 @@ const en: Dictionary = {
     energy: "Energy certificate",
   },
   firm: {
-    kicker: "The firm",
+    kicker: "Dreams made possible",
     title:
-      "We don't sell houses. We create the setting where a new life by the Mediterranean begins.",
-    body: "Every property in our portfolio is chosen for its architecture, its light and its location. High-end new-build in the most sought-after enclaves of the Costa Blanca.",
+      "We don't just sell homes. We make dreams possible for those seeking a better life in Spain.",
+    body: "Sun, tranquillity, health and wellbeing: every home is chosen for its serene setting, its light and its closeness to the sea. And at the table, the Mediterranean diet and a cost of living that leaves room to enjoy every day.",
   },
   featured: {
     kicker: "New-build · For sale",
@@ -481,7 +481,7 @@ const en: Dictionary = {
   destination: {
     kicker: "The destination",
     title: "Living on the Costa Blanca",
-    body: "One of the sunniest coasts in Europe, chosen every year by thousands of buyers seeking quality of life, climate and sea.",
+    body: "Over 300 days of sunshine a year, a privileged climate and the Mediterranean beaches a short drive away. Far from mass tourism: the perfect balance of peace and convenience.",
   },
   cta: {
     title: "Looking for your place by the sea?",
@@ -544,7 +544,7 @@ const en: Dictionary = {
   search: { title: "Find your property", any: "Any", button: "Search" },
   media: { video: "Video", plan: "Floor plan" },
   a11y: { close: "Close", previous: "Previous", next: "Next", image: "Image", menu: "Menu" },
-  meta: { description: "Exclusive new-build homes on the Costa Blanca. Villas and apartments by the Mediterranean, presented in 5 languages." },
+  meta: { description: "Dreams made possible on the Costa Blanca: new-build homes in peaceful settings minutes from the sea, with over 300 days of sun a year." },
   notFound: { title: "Page not found", body: "The page you are looking for does not exist or is no longer available.", back: "Back to home" },
   types: {
     villa: "Villa",
@@ -559,10 +559,10 @@ const en: Dictionary = {
   about: {
     kicker: "About",
     title: "Properties with a lifestyle",
-    body: "Where the Mediterranean becomes home. We select high-end new-build on the Costa Blanca and guide buyers from across Europe.",
+    body: "Discover a new way of living on the Costa Blanca: homes in peaceful settings, minutes from the sea, with over 300 days of sunshine a year and an excellent quality of life. We don't just sell homes; we make dreams possible for those seeking sun, tranquillity, health and a better life in Spain.",
   },
   footer: {
-    tagline: "Properties with a lifestyle. Where the Mediterranean becomes home.",
+    tagline: "Dreams made possible. Sun, tranquillity and a better life by the Mediterranean.",
     nav: "Navigation",
     contact: "Contact",
     rights: "Costa Blanca",
@@ -574,11 +574,11 @@ const en: Dictionary = {
 const fr: Dictionary = {
   nav: { home: "Accueil", properties: "Propriétés", about: "À propos", blog: "Guide" },
   hero: {
-    kicker: "Costa Blanca · Espagne",
+    kicker: "Des rêves rendus possibles · Costa Blanca",
     title: "Votre maison sous la lumière",
     titleAccent: "de la Méditerranée",
     subtitle:
-      "Villas et appartements neufs sur la Costa Blanca, présentés comme ils le méritent.",
+      "Une nouvelle façon de vivre au bord de la Méditerranée : des cadres paisibles, à quelques minutes de la mer et loin du tourisme de masse.",
     ctaProperties: "Voir les propriétés",
     ctaAbout: "Qui sommes-nous",
     scroll: "Défiler",
@@ -590,10 +590,10 @@ const fr: Dictionary = {
     energy: "Certificat énergétique",
   },
   firm: {
-    kicker: "La maison",
+    kicker: "Des rêves rendus possibles",
     title:
-      "Nous ne vendons pas des maisons. Nous créons le décor où commence une nouvelle vie face à la Méditerranée.",
-    body: "Chaque propriété de notre portefeuille est choisie pour son architecture, sa lumière et son emplacement. Du neuf haut de gamme dans les enclaves les plus recherchées de la Costa Blanca.",
+      "Nous ne vendons pas seulement des logements. Nous rendons possibles les rêves de ceux qui cherchent une vie meilleure en Espagne.",
+    body: "Soleil, tranquillité, santé et bien-être : chaque logement est choisi pour son cadre serein, sa lumière et sa proximité avec la mer. Et à table, le régime méditerranéen et un coût de la vie qui laisse le temps de profiter de chaque journée.",
   },
   featured: {
     kicker: "Neuf · À vendre",
@@ -606,7 +606,7 @@ const fr: Dictionary = {
   destination: {
     kicker: "La destination",
     title: "Vivre sur la Costa Blanca",
-    body: "L'une des côtes les plus lumineuses d'Europe, choisie chaque année par des milliers d'acheteurs en quête de qualité de vie, de climat et de mer.",
+    body: "Plus de 300 jours de soleil par an, un climat privilégié et les plages de la Méditerranée à un court trajet en voiture. Loin du tourisme de masse : l’équilibre parfait entre tranquillité et confort.",
   },
   cta: {
     title: "Vous cherchez votre place face à la mer ?",
@@ -669,7 +669,7 @@ const fr: Dictionary = {
   search: { title: "Trouvez votre propriété", any: "Tous", button: "Rechercher" },
   media: { video: "Vidéo", plan: "Plan du logement" },
   a11y: { close: "Fermer", previous: "Précédente", next: "Suivante", image: "Image", menu: "Menu" },
-  meta: { description: "Immobilier neuf exclusif sur la Costa Blanca. Villas et appartements au bord de la Méditerranée, présentés en 5 langues." },
+  meta: { description: "Des rêves rendus possibles sur la Costa Blanca : de l’immobilier neuf dans des cadres paisibles à quelques minutes de la mer, avec plus de 300 jours de soleil par an." },
   notFound: { title: "Page introuvable", body: "La page que vous cherchez n'existe pas ou n'est plus disponible.", back: "Retour à l'accueil" },
   types: {
     villa: "Villa",
@@ -684,10 +684,10 @@ const fr: Dictionary = {
   about: {
     kicker: "À propos",
     title: "Des propriétés avec un art de vivre",
-    body: "Là où la Méditerranée devient un foyer. Nous sélectionnons du neuf haut de gamme sur la Costa Blanca et accompagnons des acheteurs de toute l'Europe.",
+    body: "Découvrez une nouvelle façon de vivre sur la Costa Blanca : des logements dans des cadres paisibles, à quelques minutes de la mer, avec plus de 300 jours de soleil par an et une excellente qualité de vie. Nous ne vendons pas seulement des logements ; nous rendons possibles les rêves de ceux qui cherchent le soleil, la tranquillité, la santé et une vie meilleure en Espagne.",
   },
   footer: {
-    tagline: "Des propriétés avec un art de vivre. Là où la Méditerranée devient un foyer.",
+    tagline: "Des rêves rendus possibles. Soleil, tranquillité et une vie meilleure au bord de la Méditerranée.",
     nav: "Navigation",
     contact: "Contact",
     rights: "Costa Blanca",
