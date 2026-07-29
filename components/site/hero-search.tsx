@@ -47,13 +47,13 @@ export function HeroSearch({
   }
 
   return (
-    <section className="relative z-20 bg-bg">
+    <section className="relative z-20 bg-bg py-10 sm:py-14">
       <motion.form
         onSubmit={submit}
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        className="mx-auto -mt-14 grid w-[calc(100%-2.5rem)] max-w-5xl grid-cols-2 gap-3 rounded-2xl border border-line bg-[#10151a]/95 p-4 shadow-[0_24px_60px_-12px_rgba(0,0,0,0.6)] backdrop-blur-xl sm:grid-cols-4 lg:grid-cols-[1fr_1fr_1fr_1fr_auto]"
+        className="mx-auto grid w-[calc(100%-2.5rem)] max-w-5xl grid-cols-2 gap-3 rounded-2xl border border-line bg-[#10151a]/95 p-4 shadow-[0_24px_60px_-12px_rgba(0,0,0,0.6)] backdrop-blur-xl sm:grid-cols-4 lg:grid-cols-[1fr_1fr_1fr_1fr_auto]"
       >
         <label className="col-span-1">
           <span className="mb-1.5 block text-[0.62rem] uppercase tracking-[0.18em] text-faint">

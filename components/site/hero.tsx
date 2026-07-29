@@ -30,13 +30,26 @@ export function Hero({
   locale,
   dict,
   images,
+  videoUrl,
 }: {
   locale: Locale;
   dict: Dictionary;
   images: string[];
+  videoUrl?: string;
 }) {
   const ref = useRef<HTMLElement>(null);
   const [slide, setSlide] = useState(0);
+
+  // Vídeo de fondo: se monta tras hidratar (no compite con el LCP) y solo
+  // si el usuario no pide movimiento reducido; hasta que puede reproducirse,
+  // el slideshow de fotos hace de póster.
+  const [loadVideo, setLoadVideo] = useState(false);
+  const [videoReady, setVideoReady] = useState(false);
+  useEffect(() => {
+    if (!videoUrl) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    setLoadVideo(true);
+  }, [videoUrl]);
 
   const titleWords =
     dict.hero.title.split(" ").length + dict.hero.titleAccent.split(" ").length;
@@ -56,12 +69,12 @@ export function Hero({
   const sy = useSpring(my, { stiffness: 60, damping: 20 });
   const spotlight = useMotionTemplate`radial-gradient(560px circle at ${sx}% ${sy}%, rgba(201,164,100,0.14), transparent 65%)`;
 
-  // Slideshow crossfade
+  // Slideshow crossfade (en pausa cuando el vídeo ya cubre el fondo)
   useEffect(() => {
-    if (images.length < 2) return;
+    if (images.length < 2 || videoReady) return;
     const iv = setInterval(() => setSlide((s) => (s + 1) % images.length), SLIDE_MS);
     return () => clearInterval(iv);
-  }, [images.length]);
+  }, [images.length, videoReady]);
 
   function onMove(e: React.MouseEvent) {
     const r = ref.current?.getBoundingClientRect();
@@ -123,6 +136,23 @@ export function Hero({
               )}
             </motion.div>
           </AnimatePresence>
+
+          {/* Vídeo promocional del cliente sobre el slideshow; entra con fundido */}
+          {loadVideo && videoUrl && (
+            <video
+              src={videoUrl}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              aria-hidden
+              onCanPlay={() => setVideoReady(true)}
+              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ${
+                videoReady ? "opacity-100" : "opacity-0"
+              }`}
+            />
+          )}
         </div>
       </motion.div>
 
@@ -191,8 +221,8 @@ export function Hero({
           </Link>
         </div>
 
-        {/* Indicadores del slideshow */}
-        {images.length > 1 && (
+        {/* Indicadores del slideshow (sin sentido cuando manda el vídeo) */}
+        {images.length > 1 && !videoReady && (
           <div
             className="hero-fadein mt-10 flex gap-2"
             style={{ animationDelay: `${(1.0 + titleWords * 0.09).toFixed(2)}s` }}

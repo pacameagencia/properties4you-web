@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { BellRing, SlidersHorizontal, ChevronDown } from "lucide-react";
 import type { Locale } from "@/lib/i18n/config";
@@ -49,6 +49,27 @@ export function PropertiesExplorer({
   const [sort, setSort] = useState<Sort>("featured");
   const [extrasOpen, setExtrasOpen] = useState(false);
 
+  // La URL manda: App Router reutiliza este componente entre navegaciones al
+  // mismo route (p. ej. buscador de la home → /propiedades?zona=X cuando ya
+  // se visitó /propiedades), así que los initializers de useState no vuelven
+  // a ejecutarse. Sin esta sincronización, esa búsqueda no aplicaría nada.
+  useEffect(() => {
+    setZone(params.get("zona") ?? "");
+    setType(params.get("tipo") ?? "");
+    const raw = params.get("precio");
+    if (raw === null || raw === "") setBand(-1);
+    else {
+      const b = Number(raw);
+      setBand(Number.isInteger(b) && b >= 0 && b < PRICE_BANDS.length ? b : -1);
+    }
+    setBeds(Number(params.get("dorm")) || 0);
+    const a = params.get("extras");
+    setAmenities(
+      a ? a.split(",").filter((x) => (AMENITIES as readonly string[]).includes(x)) : [],
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- la cadena es la identidad real de la navegación
+  }, [params.toString()]);
+
   const zones = useMemo(
     () => [...new Set(properties.map((p) => p.zone).filter(Boolean))] as string[],
     [properties],
@@ -66,16 +87,22 @@ export function PropertiesExplorer({
       if (amenities.length && !amenities.every((a) => p.amenities?.includes(a)))
         return false;
       if (band >= 0) {
+        // Sin precio publicado ("a consultar") no pertenece a ninguna banda
+        if (p.price == null) return false;
         const b = PRICE_BANDS[band];
-        const price = p.price ?? 0;
-        if (price < b.min || price >= b.max) return false;
+        if (p.price < b.min || p.price >= b.max) return false;
       }
       return true;
     });
+    // Al ordenar por precio, las viviendas "a consultar" van siempre al final
     if (sort === "price_asc")
-      list = [...list].sort((a, b) => (a.price ?? 0) - (b.price ?? 0));
+      list = [...list].sort(
+        (a, b) => (a.price ?? Infinity) - (b.price ?? Infinity),
+      );
     else if (sort === "price_desc")
-      list = [...list].sort((a, b) => (b.price ?? 0) - (a.price ?? 0));
+      list = [...list].sort(
+        (a, b) => (b.price ?? -Infinity) - (a.price ?? -Infinity),
+      );
     else
       list = [...list].sort(
         (a, b) =>
@@ -144,7 +171,7 @@ export function PropertiesExplorer({
           className={selectCls}
         >
           <option value={0}>{dict.filters.bedrooms}</option>
-          {[1, 2, 3].map((n) => (
+          {[1, 2, 3, 4].map((n) => (
             <option key={n} value={n}>
               {n}+
             </option>

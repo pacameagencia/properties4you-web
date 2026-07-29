@@ -18,6 +18,10 @@ import { HeroSearch } from "@/components/site/hero-search";
 
 export const revalidate = 600;
 
+// Vídeo promocional del cliente (Supabase Storage, sin audio, faststart)
+const HERO_VIDEO =
+  "https://njlbbvkdkuavbayqcszp.supabase.co/storage/v1/object/public/properties/site/hero.mp4";
+
 const ZONES = [
   "Los Montesinos",
   "San Miguel de Salinas",
@@ -67,7 +71,7 @@ export default async function HomePage({
 
   return (
     <>
-      <Hero locale={locale} dict={dict} images={heroImages} />
+      <Hero locale={locale} dict={dict} images={heroImages} videoUrl={HERO_VIDEO} />
 
       {/* Buscador principal: la mayoría de visitantes empieza filtrando */}
       <HeroSearch
