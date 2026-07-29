@@ -135,7 +135,13 @@ export function PropertyCard({
                 {typeLabel}
                 {p.price != null && p.price_from ? ` · ${dict.card.from}` : ""}
               </p>
-              <p className={p.price != null ? "font-display text-2xl text-ink" : "font-display text-lg italic text-gold-soft"}>
+              <p
+                className={`mt-1.5 inline-block rounded-lg border border-gold/35 bg-gold/[0.08] px-3 py-1 ${
+                  p.price != null
+                    ? "font-display text-2xl text-ink"
+                    : "font-display text-lg italic text-gold-soft"
+                }`}
+              >
                 {p.price != null ? formatPrice(p.price, locale) : dict.card.onRequest}
               </p>
             </div>

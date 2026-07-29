@@ -183,6 +183,15 @@ export default async function PropertyPage({
           className="scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0a0d10] via-[#0a0d10]/30 to-[#0a0d10]/60" />
+        {/* Volver: fijo mientras se recorre la ficha (círculo en móvil, píldora en escritorio) */}
+        <Link
+          href={`/${locale}/propiedades`}
+          aria-label={dict.property.back}
+          className="fixed left-5 top-24 z-30 flex items-center gap-2 rounded-full border border-white/20 bg-black/50 p-3 text-[0.68rem] uppercase tracking-[0.16em] text-ink backdrop-blur-md transition-colors hover:border-gold hover:text-gold sm:left-8 sm:px-4 sm:py-2.5"
+        >
+          <ArrowLeft size={15} />
+          <span className="hidden sm:inline">{dict.property.back}</span>
+        </Link>
         <div className="absolute right-5 top-24 z-10 sm:right-8">
           <FavButton
             slug={property.slug}
@@ -210,7 +219,7 @@ export default async function PropertyPage({
               <h1 className="font-display text-5xl font-light text-ink sm:text-7xl">
                 {property.name}
               </h1>
-              <div className="text-right">
+              <div className="rounded-xl border border-gold/40 bg-black/40 px-5 py-3 text-right backdrop-blur-md">
                 {property.price != null && property.price_from && (
                   <span className="text-[0.68rem] uppercase tracking-[0.2em] text-faint">
                     {dict.property.from}

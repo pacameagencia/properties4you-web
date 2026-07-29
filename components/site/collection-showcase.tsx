@@ -64,7 +64,7 @@ export function CollectionShowcase({
                     ◆ {p.zone} · {p.province}
                   </p>
                   <h3 className="font-display text-3xl text-ink">{p.name}</h3>
-                  <p className="mt-1 text-sm text-muted">
+                  <p className="mt-2 inline-block rounded-lg border border-gold/35 bg-black/40 px-3 py-1 text-sm text-ink backdrop-blur">
                     {p.price != null
                       ? `${p.price_from ? dict.card.from + " " : ""}${formatPrice(p.price, locale)}`
                       : dict.card.onRequest}

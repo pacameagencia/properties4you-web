@@ -39,8 +39,13 @@
   --radius-xl: 1.25rem;
 }
 
-* {
-  border-color: var(--p4y-line);
+/* En @layer base para que las utilidades border-* de Tailwind (capa
+   utilities) puedan sobrescribirlo; sin capa, esta regla ganaba siempre
+   y anulaba todos los bordes dorados del sitio. */
+@layer base {
+  * {
+    border-color: var(--p4y-line);
+  }
 }
 
 html {

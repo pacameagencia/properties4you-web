@@ -40,12 +40,15 @@ export default async function PropertiesPage({
         <p className="kicker mb-5">{dict.featured.kicker}</p>
       </Reveal>
       <Reveal delay={100}>
-        <h1 className="font-display text-5xl font-light text-ink sm:text-7xl">
-          {dict.nav.properties}
+        <h1 className="max-w-3xl font-display text-5xl font-light leading-[1.05] text-ink sm:text-7xl">
+          {dict.finder.title}{" "}
+          <span className="italic font-normal text-gold-soft">
+            {dict.finder.titleAccent}
+          </span>
         </h1>
       </Reveal>
       <Reveal delay={200}>
-        <p className="mt-5 max-w-xl text-muted">{dict.featured.subtitle}</p>
+        <p className="mt-5 max-w-xl text-muted">{dict.finder.subtitle}</p>
       </Reveal>
 
       <div className="mt-16">

@@ -64,6 +64,7 @@ export type Dictionary = {
   testimonials: { kicker: string; title: string };
   blog: { title: string; kicker: string; readMore: string; back: string; empty: string };
   search: { title: string; any: string; button: string };
+  finder: { title: string; titleAccent: string; subtitle: string };
   media: { video: string; plan: string };
   a11y: { close: string; previous: string; next: string; image: string; menu: string };
   meta: { description: string };
@@ -170,6 +171,7 @@ const es: Dictionary = {
   testimonials: { kicker: "Compradores", title: "Quienes ya viven aquí" },
   blog: { title: "Guía del comprador", kicker: "Blog", readMore: "Leer artículo", back: "Volver a la guía", empty: "Próximamente artículos." },
   search: { title: "Encuentra tu propiedad", any: "Cualquiera", button: "Buscar" },
+  finder: { title: "Encuentra la casa", titleAccent: "de tus sueños", subtitle: "Afina la búsqueda con nuestros filtros: zona, tipo, precio y extras como piscina privada o vistas al mar." },
   media: { video: "Vídeo", plan: "Plano de la vivienda" },
   a11y: { close: "Cerrar", previous: "Anterior", next: "Siguiente", image: "Imagen", menu: "Menú" },
   meta: { description: "Sueños posibles en la Costa Blanca: obra nueva en entornos tranquilos a minutos del mar, con más de 300 días de sol al año." },
@@ -294,6 +296,7 @@ const de: Dictionary = {
   testimonials: { kicker: "Käufer", title: "Stimmen unserer Käufer" },
   blog: { title: "Käufer-Ratgeber", kicker: "Blog", readMore: "Artikel lesen", back: "Zurück zum Ratgeber", empty: "Artikel folgen in Kürze." },
   search: { title: "Finden Sie Ihre Immobilie", any: "Beliebig", button: "Suchen" },
+  finder: { title: "Finden Sie das Zuhause", titleAccent: "Ihrer Träume", subtitle: "Verfeinern Sie die Suche mit unseren Filtern: Lage, Typ, Preis und Extras wie Privatpool oder Meerblick." },
   media: { video: "Video", plan: "Grundriss" },
   a11y: { close: "Schließen", previous: "Zurück", next: "Weiter", image: "Bild", menu: "Menü" },
   meta: { description: "Träume werden möglich an der Costa Blanca: Neubau in ruhigen Lagen, Minuten vom Meer, mit über 300 Sonnentagen im Jahr." },
@@ -418,6 +421,7 @@ const nl: Dictionary = {
   testimonials: { kicker: "Kopers", title: "Wie hier al woont" },
   blog: { title: "Kopersgids", kicker: "Blog", readMore: "Artikel lezen", back: "Terug naar de gids", empty: "Binnenkort artikelen." },
   search: { title: "Vind uw woning", any: "Alle", button: "Zoeken" },
+  finder: { title: "Vind het huis", titleAccent: "van uw dromen", subtitle: "Verfijn uw zoekopdracht met onze filters: regio, type, prijs en extra's zoals een privézwembad of zeezicht." },
   media: { video: "Video", plan: "Plattegrond" },
   a11y: { close: "Sluiten", previous: "Vorige", next: "Volgende", image: "Afbeelding", menu: "Menu" },
   meta: { description: "Dromen worden mogelijk aan de Costa Blanca: nieuwbouw in rustige omgevingen op minuten van de zee, met meer dan 300 zonnedagen per jaar." },
@@ -542,6 +546,7 @@ const en: Dictionary = {
   testimonials: { kicker: "Buyers", title: "Those who already live here" },
   blog: { title: "Buyer's guide", kicker: "Blog", readMore: "Read article", back: "Back to the guide", empty: "Articles coming soon." },
   search: { title: "Find your property", any: "Any", button: "Search" },
+  finder: { title: "Find the home", titleAccent: "of your dreams", subtitle: "Fine-tune your search with our filters: area, type, price and extras such as a private pool or sea views." },
   media: { video: "Video", plan: "Floor plan" },
   a11y: { close: "Close", previous: "Previous", next: "Next", image: "Image", menu: "Menu" },
   meta: { description: "Dreams made possible on the Costa Blanca: new-build homes in peaceful settings minutes from the sea, with over 300 days of sun a year." },
@@ -667,6 +672,7 @@ const fr: Dictionary = {
   testimonials: { kicker: "Acheteurs", title: "Ceux qui vivent déjà ici" },
   blog: { title: "Guide de l'acheteur", kicker: "Blog", readMore: "Lire l'article", back: "Retour au guide", empty: "Articles à venir." },
   search: { title: "Trouvez votre propriété", any: "Tous", button: "Rechercher" },
+  finder: { title: "Trouvez la maison", titleAccent: "de vos rêves", subtitle: "Affinez votre recherche avec nos filtres : zone, type, prix et options comme piscine privée ou vue mer." },
   media: { video: "Vidéo", plan: "Plan du logement" },
   a11y: { close: "Fermer", previous: "Précédente", next: "Suivante", image: "Image", menu: "Menu" },
   meta: { description: "Des rêves rendus possibles sur la Costa Blanca : de l’immobilier neuf dans des cadres paisibles à quelques minutes de la mer, avec plus de 300 jours de soleil par an." },
