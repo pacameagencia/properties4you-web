@@ -441,7 +441,10 @@ export default async function PropertyPage({
                 {property.energy_rating && (
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted">{dict.property.energy}</span>
-                    <EnergyBadge rating={property.energy_rating} />
+                    <EnergyBadge
+                      rating={property.energy_rating}
+                      pendingLabel={dict.property.energyPending}
+                    />
                   </div>
                 )}
               </div>

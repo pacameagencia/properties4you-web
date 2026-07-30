@@ -34,6 +34,7 @@ export type Dictionary = {
     plot: string;
     type: string;
     energy: string;
+    energyPending: string;
     interested: string;
     interestedBody: string;
     contact: string;
@@ -135,6 +136,7 @@ const es: Dictionary = {
     plot: "Parcela",
     type: "Tipo",
     energy: "Calificación energética",
+    energyPending: "En trámite",
     interested: "¿Te interesa esta vivienda?",
     interestedBody:
       "Te acompaña un agente especializado de nuestra red, en tu idioma, durante todo el proceso.",
@@ -260,6 +262,7 @@ const de: Dictionary = {
     plot: "Grundstück",
     type: "Typ",
     energy: "Energieklasse",
+    energyPending: "In Bearbeitung",
     interested: "Interessiert an dieser Immobilie?",
     interestedBody:
       "Ein spezialisierter Agent unseres Netzwerks begleitet Sie während des gesamten Prozesses — in Ihrer Sprache.",
@@ -385,6 +388,7 @@ const nl: Dictionary = {
     plot: "Perceel",
     type: "Type",
     energy: "Energielabel",
+    energyPending: "In aanvraag",
     interested: "Interesse in deze woning?",
     interestedBody:
       "Een gespecialiseerde agent uit ons netwerk begeleidt u tijdens het hele proces, in uw taal.",
@@ -510,6 +514,7 @@ const en: Dictionary = {
     plot: "Plot",
     type: "Type",
     energy: "Energy rating",
+    energyPending: "Pending",
     interested: "Interested in this home?",
     interestedBody:
       "A specialist agent from our network will guide you through the whole process, in your language.",
@@ -636,6 +641,7 @@ const fr: Dictionary = {
     plot: "Terrain",
     type: "Type",
     energy: "Classe énergétique",
+    energyPending: "En cours",
     interested: "Cette propriété vous intéresse ?",
     interestedBody:
       "Un agent spécialisé de notre réseau vous accompagne, dans votre langue, tout au long du processus.",
