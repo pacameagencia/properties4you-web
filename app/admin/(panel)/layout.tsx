@@ -24,37 +24,41 @@ export default async function PanelLayout({
   return (
     <div className="min-h-screen bg-bg">
       <header className="sticky top-0 z-40 border-b border-line bg-bg/90 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
-          <div className="flex items-center gap-6">
-            <Link href="/admin" className="flex items-center gap-[2px]">
-              <span className="font-display text-lg text-ink">PROPERTIES</span>
-              <span className="font-display text-lg text-gold">4</span>
-              <span className="font-display text-lg text-ink">YOU</span>
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-5 py-4 sm:px-8">
+          <div className="flex min-w-0 items-center gap-6">
+            <Link href="/admin" className="flex shrink-0 items-center gap-[2px]">
+              <span className="font-display text-base text-ink sm:text-lg">PROPERTIES</span>
+              <span className="font-display text-base text-gold sm:text-lg">4</span>
+              <span className="font-display text-base text-ink sm:text-lg">YOU</span>
             </Link>
-            <span className="hidden text-xs uppercase tracking-widest text-faint sm:inline">
+            <span className="hidden text-xs uppercase tracking-widest text-faint md:inline">
               Panel de gestión
             </span>
           </div>
-          <div className="flex items-center gap-3">
+          {/* En móvil los botones quedan a solo-icono para no chocar con el logo */}
+          <div className="flex shrink-0 items-center gap-2 sm:gap-3">
             <Link
               href="/es"
               target="_blank"
-              className="flex items-center gap-2 rounded-full border border-line px-4 py-2 text-xs uppercase tracking-widest text-muted hover:text-ink"
+              aria-label="Ver web"
+              className="flex items-center gap-2 rounded-full border border-line p-2.5 text-xs uppercase tracking-widest text-muted hover:text-ink sm:px-4 sm:py-2"
             >
-              <Home size={14} /> Ver web
+              <Home size={14} /> <span className="hidden sm:inline">Ver web</span>
             </Link>
             <Link
               href="/admin/properties/new"
-              className="flex items-center gap-2 rounded-full bg-gold px-4 py-2 text-xs uppercase tracking-widest text-bg"
+              aria-label="Nueva propiedad"
+              className="flex items-center gap-2 rounded-full bg-gold p-2.5 text-xs uppercase tracking-widest text-bg sm:px-4 sm:py-2"
             >
-              <Plus size={14} /> Nueva
+              <Plus size={14} /> <span className="hidden sm:inline">Nueva</span>
             </Link>
             <form action={signOutAction}>
               <button
                 type="submit"
-                className="flex items-center gap-2 rounded-full border border-line px-4 py-2 text-xs uppercase tracking-widest text-muted hover:text-ink"
+                aria-label="Salir"
+                className="flex items-center gap-2 rounded-full border border-line p-2.5 text-xs uppercase tracking-widest text-muted hover:text-ink sm:px-4 sm:py-2"
               >
-                <LogOut size={14} /> Salir
+                <LogOut size={14} /> <span className="hidden sm:inline">Salir</span>
               </button>
             </form>
           </div>

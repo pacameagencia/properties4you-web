@@ -27,7 +27,7 @@ export function AdminTabs({ newLeads }: { newLeads: number }) {
           key={t.href}
           href={t.href}
           className={cn(
-            "flex items-center gap-2 whitespace-nowrap border-b-2 px-4 py-3 text-[0.78rem] uppercase tracking-[0.14em] transition-colors",
+            "flex items-center gap-2 whitespace-nowrap border-b-2 px-3 py-3 text-[0.78rem] uppercase tracking-[0.14em] transition-colors sm:px-4",
             isActive(t)
               ? "border-gold text-gold"
               : "border-transparent text-muted hover:text-ink",

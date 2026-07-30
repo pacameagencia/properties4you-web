@@ -44,15 +44,15 @@ export default async function AdminDashboard() {
           Aún no hay propiedades. Crea la primera.
         </div>
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-line">
+        <div className="overflow-x-auto rounded-2xl border border-line">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-line bg-surface text-left text-xs uppercase tracking-widest text-faint">
-                <th className="px-5 py-4 font-medium">Nombre</th>
+                <th className="px-3 py-4 font-medium sm:px-5">Nombre</th>
                 <th className="hidden px-5 py-4 font-medium sm:table-cell">Zona</th>
                 <th className="hidden px-5 py-4 font-medium md:table-cell">Estado</th>
-                <th className="px-5 py-4 font-medium">Precio</th>
-                <th className="px-5 py-4 text-right font-medium">Acciones</th>
+                <th className="px-3 py-4 font-medium sm:px-5">Precio</th>
+                <th className="px-3 py-4 text-right font-medium sm:px-5">Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -61,7 +61,7 @@ export default async function AdminDashboard() {
                   key={p.id}
                   className="border-b border-line last:border-0 hover:bg-surface/50"
                 >
-                  <td className="px-5 py-4">
+                  <td className="px-3 py-4 sm:px-5">
                     <Link
                       href={`/admin/properties/${p.id}`}
                       className="flex items-center gap-2 font-medium text-ink hover:text-gold"
@@ -85,8 +85,10 @@ export default async function AdminDashboard() {
                   <td className="hidden px-5 py-4 text-muted md:table-cell">
                     {STATUS_LABEL[p.status] ?? p.status}
                   </td>
-                  <td className="px-5 py-4 text-ink">{formatPrice(p.price)}</td>
-                  <td className="px-5 py-4">
+                  <td className="whitespace-nowrap px-3 py-4 text-ink sm:px-5">
+                    {formatPrice(p.price)}
+                  </td>
+                  <td className="px-3 py-4 sm:px-5">
                     <RowActions id={p.id} published={p.published} name={p.name} />
                   </td>
                 </tr>
