@@ -41,24 +41,24 @@ export default async function PanelLayout({
               href="/es"
               target="_blank"
               aria-label="Ver web"
-              className="flex items-center gap-2 rounded-full border border-line p-2.5 text-xs uppercase tracking-widest text-muted hover:text-ink sm:px-4 sm:py-2"
+              className="flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-full border border-line text-xs uppercase tracking-widest text-muted hover:text-ink sm:min-h-0 sm:min-w-0 sm:px-4 sm:py-2"
             >
-              <Home size={14} /> <span className="hidden sm:inline">Ver web</span>
+              <Home size={15} /> <span className="hidden sm:inline">Ver web</span>
             </Link>
             <Link
               href="/admin/properties/new"
               aria-label="Nueva propiedad"
-              className="flex items-center gap-2 rounded-full bg-gold p-2.5 text-xs uppercase tracking-widest text-bg sm:px-4 sm:py-2"
+              className="flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-full bg-gold text-xs uppercase tracking-widest text-bg sm:min-h-0 sm:min-w-0 sm:px-4 sm:py-2"
             >
-              <Plus size={14} /> <span className="hidden sm:inline">Nueva</span>
+              <Plus size={15} /> <span className="hidden sm:inline">Nueva</span>
             </Link>
             <form action={signOutAction}>
               <button
                 type="submit"
                 aria-label="Salir"
-                className="flex items-center gap-2 rounded-full border border-line p-2.5 text-xs uppercase tracking-widest text-muted hover:text-ink sm:px-4 sm:py-2"
+                className="flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-full border border-line text-xs uppercase tracking-widest text-muted hover:text-ink sm:min-h-0 sm:min-w-0 sm:px-4 sm:py-2"
               >
-                <LogOut size={14} /> <span className="hidden sm:inline">Salir</span>
+                <LogOut size={15} /> <span className="hidden sm:inline">Salir</span>
               </button>
             </form>
           </div>

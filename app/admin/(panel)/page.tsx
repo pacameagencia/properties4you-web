@@ -70,7 +70,7 @@ export default async function AdminDashboard() {
                       {p.name}
                       {p.featured && <span className="text-gold">◆</span>}
                       {!p.published && (
-                        <span className="rounded bg-white/5 px-1.5 py-0.5 text-[0.6rem] uppercase tracking-wider text-faint">
+                        <span className="rounded bg-white/5 px-1.5 py-0.5 text-[0.68rem] uppercase tracking-wider text-faint">
                           Oculta
                         </span>
                       )}
