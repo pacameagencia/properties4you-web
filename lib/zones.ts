@@ -144,4 +144,24 @@ export const ZONE_INFO: Record<string, ZoneInfo> = {
       fr: "Zone résidentielle près des dunes et pinèdes de La Marina, avec la plage à environ 10 minutes, une communauté internationale établie, des restaurants et les services du quotidien.",
     },
   },
+  Torrevieja: {
+    chips: ["beach", "dining", "services", "nature"],
+    text: {
+      es: "Ciudad costera viva todo el año, con paseo marítimo, puerto deportivo y kilómetros de playas urbanas. Sus dos lagunas de sal — la rosa y la verde — crean un microclima reconocido por la OMS entre los más saludables de Europa, y hay comercio, sanidad y ocio a cualquier hora.",
+      en: "A coastal city alive all year round, with a seafront promenade, a marina and kilometres of urban beaches. Its two salt lagoons — one pink, one green — create a microclimate ranked by the WHO among the healthiest in Europe, with shops, healthcare and leisure at any hour.",
+      de: "Eine Küstenstadt, die das ganze Jahr über lebt: Strandpromenade, Sporthafen und kilometerlange Stadtstrände. Ihre zwei Salzlagunen — die rosafarbene und die grüne — schaffen ein Mikroklima, das die WHO zu den gesündesten Europas zählt; Geschäfte, Gesundheitsversorgung und Freizeit zu jeder Stunde.",
+      nl: "Een kuststad die het hele jaar leeft, met een boulevard, een jachthaven en kilometers stadsstrand. De twee zoutmeren — het roze en het groene — zorgen voor een microklimaat dat de WHO tot de gezondste van Europa rekent, met winkels, zorg en vertier op elk uur.",
+      fr: "Ville côtière vivante toute l'année, avec promenade maritime, port de plaisance et des kilomètres de plages urbaines. Ses deux lagunes salées — la rose et la verte — créent un microclimat classé par l'OMS parmi les plus sains d'Europe, avec commerces, santé et loisirs à toute heure.",
+    },
+  },
+  "Ciudad Quesada": {
+    chips: ["golf", "beach", "dining", "services"],
+    text: {
+      es: "Urbanización consolidada sobre las colinas de Rojales, con el campo de golf La Marquesa en casa, comercio y restaurantes abiertos todo el año y una gran comunidad internacional. Las playas de Guardamar quedan a unos 10 minutos en coche.",
+      en: "An established urbanisation on the hills of Rojales, with La Marquesa golf course on the doorstep, shops and restaurants open all year and a large international community. The beaches of Guardamar are about 10 minutes away by car.",
+      de: "Etablierte Urbanisation auf den Hügeln von Rojales, mit dem Golfplatz La Marquesa vor der Tür, ganzjährig geöffneten Geschäften und Restaurants und einer großen internationalen Gemeinschaft. Die Strände von Guardamar sind etwa 10 Autominuten entfernt.",
+      nl: "Gevestigde urbanisatie op de heuvels van Rojales, met golfbaan La Marquesa om de hoek, winkels en restaurants die het hele jaar open zijn en een grote internationale gemeenschap. De stranden van Guardamar liggen op zo'n 10 minuten rijden.",
+      fr: "Urbanisation établie sur les collines de Rojales, avec le golf La Marquesa à deux pas, des commerces et restaurants ouverts toute l'année et une grande communauté internationale. Les plages de Guardamar sont à environ 10 minutes en voiture.",
+    },
+  },
 };

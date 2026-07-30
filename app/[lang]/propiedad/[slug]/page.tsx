@@ -58,6 +58,11 @@ export async function generateMetadata({
   };
 }
 
+/** URL de vídeo directo (mp4/webm), p. ej. alojado en Supabase Storage. */
+function isDirectVideo(url: string): boolean {
+  return /\.(mp4|webm)(\?|$)/i.test(url);
+}
+
 /** Convierte una URL de YouTube/Vimeo en URL embebible. */
 function embedUrl(url: string): string | null {
   const yt = url.match(
@@ -320,7 +325,20 @@ export default async function PropertyPage({
               </Reveal>
             )}
 
-            {video && (
+            {property.video_url && isDirectVideo(property.video_url) ? (
+              <Reveal>
+                <h2 className="kicker mb-6">{dict.media.video}</h2>
+                <div className="overflow-hidden rounded-2xl border border-line bg-black">
+                  <video
+                    src={property.video_url}
+                    controls
+                    playsInline
+                    preload="metadata"
+                    className="max-h-[70vh] w-full"
+                  />
+                </div>
+              </Reveal>
+            ) : video ? (
               <Reveal>
                 <h2 className="kicker mb-6">{dict.media.video}</h2>
                 <div className="aspect-video overflow-hidden rounded-2xl border border-line">
@@ -333,7 +351,7 @@ export default async function PropertyPage({
                   />
                 </div>
               </Reveal>
-            )}
+            ) : null}
 
             {property.floor_plan && (
               <Reveal>

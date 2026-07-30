@@ -25,6 +25,8 @@ const HERO_VIDEO =
 const ZONES = [
   "Los Montesinos",
   "San Miguel de Salinas",
+  "Ciudad Quesada",
+  "Torrevieja",
   "Daya Nueva",
   "La Finca Golf",
   "VistaBella Golf",
