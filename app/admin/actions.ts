@@ -4,7 +4,20 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { translateProperty } from "@/lib/translate";
+import { locales } from "@/lib/i18n/config";
 import type { GalleryImage, PropertyContent } from "@/lib/types";
+
+/* revalidatePath("/", "layout") no invalida las rutas [lang] en el build de
+   producción: hay que revalidar cada path concreto para que los cambios del
+   admin se vean al momento (y no tras la ventana ISR de 10 min). */
+function revalidateSite(slug?: string | null) {
+  for (const l of locales) {
+    revalidatePath(`/${l}`);
+    revalidatePath(`/${l}/propiedades`);
+    if (slug) revalidatePath(`/${l}/propiedad/${slug}`);
+  }
+  revalidatePath("/admin");
+}
 
 export type PropertyInput = {
   id?: string;
@@ -100,29 +113,33 @@ export async function saveProperty(input: PropertyInput) {
   }
   if (error) return { ok: false, error: error.message };
 
-  revalidatePath("/", "layout");
-  revalidatePath("/admin");
+  revalidateSite(input.slug);
   return { ok: true };
 }
 
 export async function deleteProperty(id: string) {
   const supabase = await requireAdmin();
+  const { data: prev } = await supabase
+    .from("properties")
+    .select("slug")
+    .eq("id", id)
+    .single();
   const { error } = await supabase.from("properties").delete().eq("id", id);
   if (error) return { ok: false, error: error.message };
-  revalidatePath("/", "layout");
-  revalidatePath("/admin");
+  revalidateSite(prev?.slug);
   return { ok: true };
 }
 
 export async function togglePublished(id: string, published: boolean) {
   const supabase = await requireAdmin();
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("properties")
     .update({ published })
-    .eq("id", id);
+    .eq("id", id)
+    .select("slug")
+    .single();
   if (error) return { ok: false, error: error.message };
-  revalidatePath("/", "layout");
-  revalidatePath("/admin");
+  revalidateSite(data?.slug);
   return { ok: true };
 }
 
@@ -169,6 +186,6 @@ export async function saveSettings(input: {
     })
     .eq("id", 1);
   if (error) return { ok: false, error: error.message };
-  revalidatePath("/", "layout");
+  revalidateSite();
   return { ok: true };
 }
