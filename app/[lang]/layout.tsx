@@ -35,7 +35,7 @@ export async function generateMetadata({
   const { lang } = await params;
   const d = getDictionary(isLocale(lang) ? lang : "es");
   return {
-    metadataBase: new URL("https://properties4you.netlify.app"),
+    metadataBase: new URL("https://properties4you.es"),
     title: {
       default: "Properties4You · Costa Blanca",
       template: "%s · Properties4You",
@@ -83,7 +83,7 @@ export default async function LangLayout({
     "@context": "https://schema.org",
     "@type": "RealEstateAgent",
     name: "Properties4You",
-    url: "https://properties4you.netlify.app",
+    url: "https://properties4you.es",
     areaServed: "Costa Blanca, Alicante, España",
     telephone: settings?.contact_phone || "+34 650 37 92 58",
     email: settings?.contact_email || "info@properties4you.es",

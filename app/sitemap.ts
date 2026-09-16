@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { locales } from "@/lib/i18n/config";
 import { getPublishedProperties, getPublishedPosts } from "@/lib/queries";
 
-const BASE = "https://properties4you.netlify.app";
+const BASE = "https://properties4you.es";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [properties, posts] = await Promise.all([
