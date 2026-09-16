@@ -1,0 +1,21 @@
+# Properties4You en el VPS de PACAME.
+#   cd /opt/properties4you && docker compose up -d --build   (compose.yml copiado aquí por deploy/vps-deploy.sh)
+# Caddy hace TLS y proxy: properties4you.es → 127.0.0.1:3200
+services:
+  web:
+    build:
+      context: ./src
+      dockerfile: deploy/Dockerfile
+      args:
+        NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL}
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+    image: properties4you-web:latest
+    container_name: properties4you
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "127.0.0.1:3200:3000"
+    mem_limit: 768m
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }

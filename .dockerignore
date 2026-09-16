@@ -1,0 +1,13 @@
+node_modules
+.next
+.git
+.netlify
+.vercel
+.env*
+!.env.example
+*.log
+scripts/
+.github/
+README.md
+AGENTS.md
+CLAUDE.md
