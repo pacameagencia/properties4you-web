@@ -4,6 +4,8 @@ import { ArrowLeft } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import type { Property } from "@/lib/types";
 import { PropertyForm } from "@/components/admin/property-form";
+import { TranslationWarning } from "@/components/admin/translation-warning";
+import { translationConfigStatus } from "@/lib/translate";
 
 export default async function EditPropertyPage({
   params,
@@ -29,6 +31,7 @@ export default async function EditPropertyPage({
         <ArrowLeft size={15} /> Volver
       </Link>
       <h1 className="mb-8 font-display text-4xl text-ink">{property.name}</h1>
+      <TranslationWarning problems={translationConfigStatus().problems} />
       <PropertyForm initial={property} />
     </>
   );

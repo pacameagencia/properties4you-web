@@ -1,8 +1,12 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { PropertyForm } from "@/components/admin/property-form";
+import { TranslationWarning } from "@/components/admin/translation-warning";
+import { translationConfigStatus } from "@/lib/translate";
 
 export default function NewPropertyPage() {
+  const translation = translationConfigStatus();
+
   return (
     <>
       <Link
@@ -12,6 +16,7 @@ export default function NewPropertyPage() {
         <ArrowLeft size={15} /> Volver
       </Link>
       <h1 className="mb-8 font-display text-4xl text-ink">Nueva propiedad</h1>
+      <TranslationWarning problems={translation.problems} />
       <PropertyForm initial={null} />
     </>
   );

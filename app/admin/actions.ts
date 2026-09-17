@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { translateProperty } from "@/lib/translate";
+import { translateProperty, TranslationError } from "@/lib/translate";
 import { locales } from "@/lib/i18n/config";
 import type { GalleryImage, PropertyContent } from "@/lib/types";
 
@@ -73,8 +73,23 @@ export async function saveProperty(input: PropertyInput) {
     features: input.features_es.map((f) => f.trim()).filter(Boolean),
   };
 
-  // Autotraducción ES -> DE/NL/EN (degrada a copia ES sin API key)
-  const translations = await translateProperty(esContent);
+  /* Autotraducción ES -> EN/DE/NL/FR.
+     Si falla, se aborta el guardado y se le dice al usuario por qué. Antes se
+     copiaba el español en los cuatro idiomas sin avisar y la web quedaba en
+     español fingiendo estar traducida. */
+  let translations;
+  try {
+    translations = await translateProperty(esContent);
+  } catch (e) {
+    if (e instanceof TranslationError) {
+      return { ok: false, error: e.message };
+    }
+    console.error("[saveProperty] error inesperado al traducir:", e);
+    return {
+      ok: false,
+      error: `Error inesperado al traducir: ${e instanceof Error ? e.message : String(e)}`,
+    };
+  }
 
   const row = {
     slug: input.slug,
