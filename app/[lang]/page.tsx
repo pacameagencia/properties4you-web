@@ -1,9 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Handshake } from "lucide-react";
 import { notFound } from "next/navigation";
 import type { Locale } from "@/lib/i18n/config";
 import { isLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
+import { alternatesFor } from "@/lib/seo";
+import { PARTNERS } from "@/lib/partners";
 import { getPublishedProperties } from "@/lib/queries";
 import { Reveal } from "@/components/site/reveal";
 import { Marquee } from "@/components/site/marquee";
@@ -13,7 +16,6 @@ import { CountUp } from "@/components/site/count-up";
 import { CollectionShowcase } from "@/components/site/collection-showcase";
 import { Magnetic } from "@/components/site/magnetic";
 import { OutlineMarquee } from "@/components/site/outline-marquee";
-import { TESTIMONIALS } from "@/lib/testimonials";
 import { HeroSearch } from "@/components/site/hero-search";
 
 export const revalidate = 600;
@@ -44,6 +46,15 @@ const MARQUEE_WORDS: Record<Locale, string[]> = {
   fr: ["Costa Blanca", "Méditerranée", "Immobilier Neuf"],
 };
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  return { alternates: alternatesFor(isLocale(lang) ? lang : "es", "") };
+}
+
 export default async function HomePage({
   params,
 }: {
@@ -53,6 +64,7 @@ export default async function HomePage({
   if (!isLocale(lang)) notFound();
   const locale = lang as Locale;
   const dict = getDictionary(locale);
+  const partners = PARTNERS[locale];
 
   const all = await getPublishedProperties();
   const featured = (all.filter((p) => p.featured).length
@@ -173,6 +185,46 @@ export default async function HomePage({
         </div>
       </section>
 
+      {/* COLABORA: el programa para agencias es el modelo de negocio principal,
+          así que va alto y con una sola acción clara */}
+      <section className="relative z-10 overflow-hidden border-y border-line bg-bg-2">
+        <div className="pointer-events-none absolute -left-24 top-1/2 h-[420px] w-[420px] -translate-y-1/2 rounded-full bg-gold/10 blur-[130px]" />
+        <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-5 py-24 sm:px-8 lg:grid-cols-[auto_1fr_auto]">
+          <Reveal>
+            <div className="flex items-end gap-4">
+              <span className="font-display text-[6rem] font-light leading-none text-gold sm:text-[7.5rem]">
+                {partners.commission}
+              </span>
+              <Handshake size={28} className="mb-5 text-gold/60" />
+            </div>
+          </Reveal>
+          <div>
+            <Reveal delay={100}>
+              <p className="kicker mb-4">{dict.partners.kicker}</p>
+            </Reveal>
+            <Reveal delay={180}>
+              <h2 className="max-w-xl font-display text-3xl font-light leading-tight text-ink sm:text-5xl">
+                {dict.partners.title}
+              </h2>
+            </Reveal>
+            <Reveal delay={260}>
+              <p className="mt-5 max-w-xl leading-relaxed text-muted">{dict.partners.body}</p>
+            </Reveal>
+          </div>
+          <Reveal delay={300}>
+            <Magnetic strength={0.4}>
+              <Link
+                href={`/${locale}/colabora`}
+                className="inline-flex items-center gap-3 rounded-full bg-gold px-8 py-4 text-[0.78rem] uppercase tracking-[0.18em] text-bg"
+              >
+                {dict.partners.cta}
+                <ArrowRight size={16} />
+              </Link>
+            </Magnetic>
+          </Reveal>
+        </div>
+      </section>
+
       {/* MARQUEE EDITORIAL OUTLINE */}
       <OutlineMarquee words={MARQUEE_WORDS[locale]} gold />
 
@@ -234,42 +286,10 @@ export default async function HomePage({
         </div>
       </section>
 
-      {/* TESTIMONIOS */}
-      <section className="relative z-10 border-t border-line bg-bg">
-        <div className="mx-auto max-w-7xl px-5 py-28 sm:px-8">
-          <Reveal>
-            <p className="kicker mb-4 text-center">{dict.testimonials.kicker}</p>
-          </Reveal>
-          <Reveal delay={100}>
-            <h2 className="text-center font-display text-4xl font-light text-ink sm:text-6xl">
-              {dict.testimonials.title}
-            </h2>
-          </Reveal>
-          <div className="mt-14 grid gap-6 md:grid-cols-3">
-            {TESTIMONIALS.map((t, i) => (
-              <Reveal key={t.name} delay={i * 130}>
-                <figure className="flex h-full flex-col rounded-2xl border border-line bg-surface p-7">
-                  <span className="font-display text-5xl leading-none text-gold/40">
-                    “
-                  </span>
-                  <blockquote className="mt-2 flex-1 leading-relaxed text-muted">
-                    {t.text[locale]}
-                  </blockquote>
-                  <figcaption className="mt-6 border-t border-line pt-4">
-                    <p className="font-display text-lg text-ink">{t.name}</p>
-                    <p className="text-xs uppercase tracking-widest text-faint">
-                      {t.origin[locale]}
-                    </p>
-                  </figcaption>
-                </figure>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Los testimonios eran ficticios: fuera hasta tener reales del cliente. */}
 
-      {/* CTA */}
-      <section className="relative z-10 bg-bg-2">
+      {/* CTA → formulario de contacto (correo), no al listado */}
+      <section className="relative z-10 border-t border-line bg-bg-2">
         <div className="mx-auto max-w-5xl px-5 py-28 text-center sm:px-8">
           <Reveal>
             <h2 className="font-display text-4xl font-light text-ink sm:text-6xl">
@@ -283,7 +303,7 @@ export default async function HomePage({
             <div className="mt-10 flex justify-center">
               <Magnetic strength={0.5}>
                 <Link
-                  href={`/${locale}/propiedades`}
+                  href={`/${locale}/nosotros#contacto`}
                   className="inline-flex items-center gap-3 rounded-full bg-gold px-8 py-4 text-[0.78rem] uppercase tracking-[0.18em] text-bg"
                 >
                   {dict.cta.button}

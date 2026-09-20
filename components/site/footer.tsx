@@ -58,6 +58,11 @@ export function Footer({
               </Link>
             </li>
             <li>
+              <Link href={`/${locale}/colabora`} className="text-muted hover:text-ink">
+                {dict.partners.nav}
+              </Link>
+            </li>
+            <li>
               <Link href={`/${locale}/nosotros`} className="text-muted hover:text-ink">
                 {dict.nav.about}
               </Link>
@@ -88,11 +93,24 @@ export function Footer({
       </div>
 
       <div className="relative border-t border-line">
-        <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-2 px-5 py-6 text-xs text-faint sm:flex-row sm:items-center sm:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-4 px-5 py-6 text-xs text-faint sm:flex-row sm:items-center sm:px-8">
           <span>
             ©{new Date().getFullYear()} Properties4You · {dict.footer.rights}
           </span>
-          <span>{dict.footer.disclaimer}</span>
+          {/* LSSI: identificación del prestador y RGPD: información del
+              tratamiento, accesibles desde cualquier página. */}
+          <nav className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            <Link href={`/${locale}/legal/aviso-legal`} className="underline-offset-4 hover:text-ink hover:underline">
+              {dict.legal.notice}
+            </Link>
+            <Link href={`/${locale}/legal/privacidad`} className="underline-offset-4 hover:text-ink hover:underline">
+              {dict.legal.privacy}
+            </Link>
+            <Link href={`/${locale}/legal/cookies`} className="underline-offset-4 hover:text-ink hover:underline">
+              {dict.legal.cookies}
+            </Link>
+          </nav>
+          <span className="hidden lg:inline">{dict.footer.disclaimer}</span>
         </div>
       </div>
     </footer>

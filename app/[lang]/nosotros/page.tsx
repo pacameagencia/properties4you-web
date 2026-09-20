@@ -5,7 +5,9 @@ import { MapPin, Phone, Mail } from "lucide-react";
 import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getSettings } from "@/lib/queries";
+import { alternatesFor } from "@/lib/seo";
 import { Reveal } from "@/components/site/reveal";
+import { ContactForm } from "@/components/site/contact-form";
 
 export const revalidate = 600;
 
@@ -15,8 +17,9 @@ export async function generateMetadata({
   params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
   const { lang } = await params;
-  const dict = getDictionary(isLocale(lang) ? lang : "es");
-  return { title: dict.nav.about };
+  const locale = isLocale(lang) ? lang : "es";
+  const dict = getDictionary(locale);
+  return { title: dict.nav.about, alternates: alternatesFor(locale, "/nosotros") };
 }
 
 export default async function AboutPage({
@@ -77,6 +80,13 @@ export default async function AboutPage({
               <span className="kicker">{dict.property.location}</span>
               <span className="text-sm text-ink">{address}</span>
             </div>
+          </div>
+        </Reveal>
+
+        {/* Contacto por correo: aquí aterriza "Hablar con nosotros" de la portada */}
+        <Reveal delay={120}>
+          <div className="mt-14">
+            <ContactForm dict={dict} locale={locale} kind="contacto" contactEmail={email} />
           </div>
         </Reveal>
 

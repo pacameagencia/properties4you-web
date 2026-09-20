@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { BellRing, SlidersHorizontal, ChevronDown } from "lucide-react";
+import { SlidersHorizontal, ChevronDown } from "lucide-react";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 import type { Property } from "@/lib/types";
@@ -25,12 +25,10 @@ export function PropertiesExplorer({
   properties,
   locale,
   dict,
-  whatsapp,
 }: {
   properties: Property[];
   locale: Locale;
   dict: Dictionary;
-  whatsapp: string;
 }) {
   const params = useSearchParams();
   const [zone, setZone] = useState<string>(params.get("zona") ?? "");
@@ -114,21 +112,8 @@ export function PropertiesExplorer({
   const selectCls =
     "h-10 appearance-none rounded-xl border border-line bg-surface px-3.5 pr-8 text-sm text-muted outline-none transition-colors hover:text-ink focus:border-gold [background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2210%22 height=%226%22><path d=%22M1 1l4 4 4-4%22 stroke=%22%236b747c%22 fill=%22none%22 stroke-width=%221.5%22/></svg>')] [background-position:right_0.8rem_center] [background-repeat:no-repeat]";
 
-  // CTA de alerta: compone la búsqueda actual y la manda por WhatsApp
-  function requestAlert() {
-    const parts = [
-      dict.alertCta,
-      zone && `· ${dict.filters.zone}: ${zone}`,
-      type && `· ${dict.filters.type}: ${dict.types[type] ?? type}`,
-      beds > 0 && `· ${dict.filters.bedrooms}: ${beds}+`,
-      band >= 0 && `· ${PRICE_BANDS[band].label}`,
-    ].filter(Boolean);
-    window.open(
-      `https://wa.me/${whatsapp}?text=${encodeURIComponent(parts.join("\n"))}`,
-      "_blank",
-      "noopener",
-    );
-  }
+  // El botón "Avísame…" mandaba la búsqueda por WhatsApp al número personal;
+  // el cliente lo quitó. Si algún día vuelve, será una suscripción por correo.
 
   return (
     <>
@@ -278,12 +263,6 @@ export function PropertiesExplorer({
         <p className="text-sm text-faint">
           {filtered.length} {dict.filters.results}
         </p>
-        <button
-          onClick={requestAlert}
-          className="flex items-center gap-2 rounded-full border border-gold/40 px-4 py-2 text-[0.7rem] uppercase tracking-[0.14em] text-gold transition-colors hover:bg-gold/10"
-        >
-          <BellRing size={14} /> {dict.alertCta}
-        </button>
       </div>
 
       {filtered.length === 0 ? (

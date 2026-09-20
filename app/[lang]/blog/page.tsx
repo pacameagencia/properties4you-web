@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getPublishedPosts, type Post } from "@/lib/queries";
+import { alternatesFor } from "@/lib/seo";
 import { Reveal } from "@/components/site/reveal";
 
 export const revalidate = 600;
@@ -18,8 +19,9 @@ export async function generateMetadata({
   params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
   const { lang } = await params;
-  const dict = getDictionary(isLocale(lang) ? lang : "es");
-  return { title: dict.blog.title };
+  const locale = isLocale(lang) ? lang : "es";
+  const dict = getDictionary(locale);
+  return { title: dict.blog.title, alternates: alternatesFor(locale, "/blog") };
 }
 
 export default async function BlogPage({

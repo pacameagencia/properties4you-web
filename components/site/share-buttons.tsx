@@ -24,9 +24,12 @@ function WhatsAppIcon() {
 export function ShareButtons({
   dict,
   title,
+  pageUrl,
 }: {
   dict: Dictionary;
   title: string;
+  /** URL canónica absoluta de la ficha (para el enlace de Facebook en SSR). */
+  pageUrl: string;
 }) {
   const [copied, setCopied] = useState(false);
 
@@ -76,16 +79,13 @@ export function ShareButtons({
       >
         <WhatsAppIcon /> WhatsApp
       </a>
+      {/* Enlace real, no window.open: en escritorio algunos bloqueadores de
+          ventanas emergentes cortaban la apertura. Facebook exige sesión
+          iniciada para mostrar el cuadro de compartir. */}
       <a
-        href="#"
-        onClick={(e) => {
-          e.preventDefault();
-          window.open(
-            `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url())}`,
-            "_blank",
-            "noopener",
-          );
-        }}
+        href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pageUrl)}`}
+        target="_blank"
+        rel="noopener noreferrer"
         className={btn}
       >
         <FacebookIcon /> Facebook

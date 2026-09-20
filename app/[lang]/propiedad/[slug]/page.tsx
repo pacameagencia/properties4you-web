@@ -17,6 +17,7 @@ import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getPropertyBySlug, getPublishedProperties, getSettings } from "@/lib/queries";
 import { formatPrice, localizedContent } from "@/lib/utils";
+import { alternatesFor, SITE_URL } from "@/lib/seo";
 import { ZONE_INFO, CHIP_LABELS } from "@/lib/zones";
 import { poiLabel, poiEmoji, AMENITY_LABELS, type Amenity } from "@/lib/pois";
 import { PropertyMedia } from "@/components/site/property-media";
@@ -29,6 +30,7 @@ import { VisitForm } from "@/components/site/visit-form";
 import { ShareButtons } from "@/components/site/share-buttons";
 import { QuickContact } from "@/components/site/quick-contact";
 import { FavButton } from "@/components/site/fav-button";
+import { MapEmbed } from "@/components/site/map-embed";
 
 export const revalidate = 600;
 
@@ -50,9 +52,12 @@ export async function generateMetadata({
   return {
     title: `${p.name} · ${p.zone}`,
     description: content.description?.slice(0, 160) || undefined,
+    alternates: alternatesFor(locale, `/propiedad/${slug}`),
     openGraph: {
       title: `${p.name} · ${p.zone}`,
       description: content.description?.slice(0, 160) || undefined,
+      // og:url absoluta: sin ella el rascador de Facebook no sabe qué página compartir.
+      url: `${SITE_URL}/${locale}/propiedad/${slug}`,
       images: p.cover_image ? [{ url: p.cover_image }] : undefined,
     },
   };
@@ -266,7 +271,11 @@ export default async function PropertyPage({
 
       {/* COMPARTIR */}
       <div className="mx-auto max-w-7xl px-5 pt-8 sm:px-8">
-        <ShareButtons dict={dict} title={`${property.name} · ${property.zone}`} />
+        <ShareButtons
+          dict={dict}
+          title={`${property.name} · ${property.zone}`}
+          pageUrl={`${SITE_URL}/${locale}/propiedad/${property.slug}`}
+        />
       </div>
 
       {/* CONTENIDO */}
@@ -317,7 +326,7 @@ export default async function PropertyPage({
                   name={property.name}
                   zone={property.zone}
                   dict={dict}
-                  whatsapp={whatsapp}
+                  contactEmail={email}
                   viewAllLabel={dict.property.viewGallery}
                   propertyId={property.id}
                   locale={locale}
@@ -369,12 +378,11 @@ export default async function PropertyPage({
             <Reveal>
               <h2 className="kicker mb-6">{dict.property.location}</h2>
               <div className="overflow-hidden rounded-2xl border border-line">
-                <iframe
-                  src={`https://www.google.com/maps?q=${mapQuery}&z=13&output=embed`}
-                  title={`${dict.property.location} · ${property.name}`}
-                  className="h-[320px] w-full grayscale-[35%] contrast-[1.05]"
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
+                {/* Google Maps pone cookies: se carga solo con consentimiento */}
+                <MapEmbed
+                  query={mapQuery}
+                  label={`${property.zone} · ${property.province}`}
+                  dict={dict}
                 />
                 <div className="flex flex-wrap items-center justify-between gap-3 bg-surface p-5">
                   <span className="flex items-center gap-3 text-ink">
@@ -462,7 +470,7 @@ export default async function PropertyPage({
             <VisitForm
               dict={dict}
               locale={locale}
-              whatsapp={whatsapp}
+              contactEmail={email}
               propertyId={property.id}
               propertyName={`${property.name} (${property.reference ?? property.slug})`}
             />
