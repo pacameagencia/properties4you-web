@@ -46,6 +46,12 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
 ANTHROPIC_API_KEY=
 ANTHROPIC_MODEL=
+# Formularios por correo (lib/mail.ts): buzón Hostinger del cliente
+SMTP_HOST=smtp.hostinger.com
+SMTP_PORT=465
+SMTP_USER=info@properties4you.es
+SMTP_PASS_B64=            # contraseña en base64 (lleva caracteres que un .env no maneja bien)
+CONTACT_TO=info@properties4you.es
 ```
 
 Las dos `NEXT_PUBLIC_*` se hornean en el build (compose las pasa como `build.args`

@@ -61,8 +61,6 @@ export type Dictionary = {
   related: { title: string };
   zoneInfo: { title: string };
   favs: { title: string; empty: string; save: string; saved: string; browse: string };
-  alertCta: string;
-  testimonials: { kicker: string; title: string };
   blog: { title: string; kicker: string; readMore: string; back: string; empty: string };
   search: { title: string; any: string; button: string };
   finder: { title: string; titleAccent: string; subtitle: string };
@@ -74,6 +72,36 @@ export type Dictionary = {
   status: Record<string, string>;
   about: { kicker: string; title: string; body: string };
   footer: { tagline: string; nav: string; contact: string; rights: string; disclaimer: string };
+  /** Enlaces legales del pie y consentimiento de los formularios (RGPD / LSSI). */
+  legal: {
+    notice: string;
+    privacy: string;
+    cookies: string;
+    consent: string;
+    consentLink: string;
+    consentRequired: string;
+  };
+  /** Aviso de cookies y carga diferida del mapa de Google. */
+  cookies: { title: string; body: string; accept: string; essential: string; more: string; loadMap: string; loadMapHint: string };
+  /** Formularios que envían correo (visita, contacto, colaboración). */
+  forms: {
+    email: string;
+    sending: string;
+    sent: string;
+    error: string;
+    dateLabel: string;
+    contactTitle: string;
+    contactBody: string;
+    send: string;
+    agency: string;
+    country: string;
+    website: string;
+    partnerCta: string;
+  };
+  /** Distintivo de la tarjeta: en qué fase está la promoción. */
+  phase: { keyReady: string; inDevelopment: string };
+  /** Programa de colaboración con agencias (nav + bloque de portada). */
+  partners: { nav: string; kicker: string; title: string; body: string; cta: string };
 };
 
 const es: Dictionary = {
@@ -169,8 +197,6 @@ const es: Dictionary = {
   related: { title: "También te puede interesar" },
   zoneInfo: { title: "El entorno" },
   favs: { title: "Favoritos", empty: "Aún no has guardado propiedades.", save: "Guardar", saved: "Guardada", browse: "Explorar propiedades" },
-  alertCta: "Avísame cuando haya propiedades como esta búsqueda",
-  testimonials: { kicker: "Compradores", title: "Quienes ya viven aquí" },
   blog: { title: "Guía del comprador", kicker: "Blog", readMore: "Leer artículo", back: "Volver a la guía", empty: "Próximamente artículos." },
   search: { title: "Encuentra tu propiedad", any: "Cualquiera", button: "Buscar" },
   finder: { title: "Encuentra la casa", titleAccent: "de tus sueños", subtitle: "Afina la búsqueda con nuestros filtros: zona, tipo, precio y extras como piscina privada o vistas al mar." },
@@ -199,6 +225,45 @@ const es: Dictionary = {
     contact: "Contacto",
     rights: "Costa Blanca",
     disclaimer: "Precios orientativos · Disponibilidad a través de tu agencia",
+  },
+  legal: {
+    notice: "Aviso legal",
+    privacy: "Privacidad",
+    cookies: "Cookies",
+    consent: "He leído y acepto que Properties4You trate mis datos para responder a esta solicitud.",
+    consentLink: "Política de privacidad",
+    consentRequired: "Marca la casilla para poder enviar tu solicitud.",
+  },
+  cookies: {
+    title: "Cookies y privacidad",
+    body: "Usamos almacenamiento técnico para recordar tus favoritos y tu idioma. El mapa de Google y los vídeos de terceros solo se cargan si lo aceptas.",
+    accept: "Aceptar todo",
+    essential: "Solo lo necesario",
+    more: "Política de cookies",
+    loadMap: "Cargar mapa de Google",
+    loadMapHint: "Al cargarlo aceptas las cookies de Google Maps.",
+  },
+  forms: {
+    email: "Tu email",
+    sending: "Enviando…",
+    sent: "Mensaje enviado. Te respondemos por email lo antes posible.",
+    error: "No se ha podido enviar. Escríbenos directamente a",
+    dateLabel: "Fecha preferida para la visita (opcional)",
+    contactTitle: "Escríbenos",
+    contactBody: "Cuéntanos qué buscas y te contestamos por correo, en tu idioma.",
+    send: "Enviar",
+    agency: "Nombre de tu agencia",
+    country: "País",
+    website: "Web de la agencia (opcional)",
+    partnerCta: "Quiero colaborar",
+  },
+  phase: { keyReady: "Llave en mano", inDevelopment: "En construcción" },
+  partners: {
+    nav: "Colabora",
+    kicker: "Para agencias inmobiliarias",
+    title: "Colabora con nosotros y cobra el 5 % por cada venta",
+    body: "Si tienes clientes que buscan casa en la Costa Blanca, nosotros ponemos la cartera, las visitas y el acompañamiento en su idioma. Tú cobras una comisión del 5 % por cada operación cerrada.",
+    cta: "Ver el programa de colaboración",
   },
 };
 
@@ -295,8 +360,6 @@ const de: Dictionary = {
   related: { title: "Das könnte Sie auch interessieren" },
   zoneInfo: { title: "Die Umgebung" },
   favs: { title: "Favoriten", empty: "Sie haben noch keine Immobilien gespeichert.", save: "Speichern", saved: "Gespeichert", browse: "Immobilien entdecken" },
-  alertCta: "Benachrichtigen Sie mich bei neuen passenden Immobilien",
-  testimonials: { kicker: "Käufer", title: "Stimmen unserer Käufer" },
   blog: { title: "Käufer-Ratgeber", kicker: "Blog", readMore: "Artikel lesen", back: "Zurück zum Ratgeber", empty: "Artikel folgen in Kürze." },
   search: { title: "Finden Sie Ihre Immobilie", any: "Beliebig", button: "Suchen" },
   finder: { title: "Finden Sie das Zuhause", titleAccent: "Ihrer Träume", subtitle: "Verfeinern Sie die Suche mit unseren Filtern: Lage, Typ, Preis und Extras wie Privatpool oder Meerblick." },
@@ -325,6 +388,45 @@ const de: Dictionary = {
     contact: "Kontakt",
     rights: "Costa Blanca",
     disclaimer: "Richtpreise · Verfügbarkeit über Ihre Agentur",
+  },
+  legal: {
+    notice: "Impressum",
+    privacy: "Datenschutz",
+    cookies: "Cookies",
+    consent: "Ich habe die Hinweise gelesen und willige ein, dass Properties4You meine Daten zur Beantwortung dieser Anfrage verarbeitet.",
+    consentLink: "Datenschutzerklärung",
+    consentRequired: "Bitte kreuzen Sie das Kästchen an, um die Anfrage zu senden.",
+  },
+  cookies: {
+    title: "Cookies und Datenschutz",
+    body: "Wir nutzen technischen Speicher, um Ihre Favoriten und Ihre Sprache zu merken. Google Maps und Videos von Drittanbietern werden nur geladen, wenn Sie zustimmen.",
+    accept: "Alle akzeptieren",
+    essential: "Nur das Nötige",
+    more: "Cookie-Richtlinie",
+    loadMap: "Google-Karte laden",
+    loadMapHint: "Mit dem Laden akzeptieren Sie die Cookies von Google Maps.",
+  },
+  forms: {
+    email: "Ihre E-Mail",
+    sending: "Wird gesendet…",
+    sent: "Nachricht gesendet. Wir antworten so schnell wie möglich per E-Mail.",
+    error: "Die Nachricht konnte nicht gesendet werden. Schreiben Sie uns direkt an",
+    dateLabel: "Wunschtermin für die Besichtigung (optional)",
+    contactTitle: "Schreiben Sie uns",
+    contactBody: "Sagen Sie uns, was Sie suchen, und wir antworten per E-Mail in Ihrer Sprache.",
+    send: "Senden",
+    agency: "Name Ihrer Agentur",
+    country: "Land",
+    website: "Website der Agentur (optional)",
+    partnerCta: "Ich möchte Partner werden",
+  },
+  phase: { keyReady: "Bezugsfertig", inDevelopment: "Im Bau" },
+  partners: {
+    nav: "Partner werden",
+    kicker: "Für Immobilienagenturen",
+    title: "Werden Sie Partner und verdienen Sie 5 % an jedem Verkauf",
+    body: "Wenn Sie Kunden haben, die ein Haus an der Costa Blanca suchen, stellen wir das Portfolio, die Besichtigungen und die Betreuung in deren Sprache. Sie erhalten 5 % Provision für jeden abgeschlossenen Verkauf.",
+    cta: "Zum Partnerprogramm",
   },
 };
 
@@ -421,8 +523,6 @@ const nl: Dictionary = {
   related: { title: "Dit vindt u misschien ook interessant" },
   zoneInfo: { title: "De omgeving" },
   favs: { title: "Favorieten", empty: "U heeft nog geen woningen opgeslagen.", save: "Opslaan", saved: "Opgeslagen", browse: "Woningen bekijken" },
-  alertCta: "Waarschuw mij bij nieuwe woningen zoals deze zoekopdracht",
-  testimonials: { kicker: "Kopers", title: "Wie hier al woont" },
   blog: { title: "Kopersgids", kicker: "Blog", readMore: "Artikel lezen", back: "Terug naar de gids", empty: "Binnenkort artikelen." },
   search: { title: "Vind uw woning", any: "Alle", button: "Zoeken" },
   finder: { title: "Vind het huis", titleAccent: "van uw dromen", subtitle: "Verfijn uw zoekopdracht met onze filters: regio, type, prijs en extra's zoals een privézwembad of zeezicht." },
@@ -451,6 +551,45 @@ const nl: Dictionary = {
     contact: "Contact",
     rights: "Costa Blanca",
     disclaimer: "Richtprijzen · Beschikbaarheid via uw agentschap",
+  },
+  legal: {
+    notice: "Juridische mededeling",
+    privacy: "Privacy",
+    cookies: "Cookies",
+    consent: "Ik heb de informatie gelezen en ga ermee akkoord dat Properties4You mijn gegevens verwerkt om deze aanvraag te beantwoorden.",
+    consentLink: "Privacybeleid",
+    consentRequired: "Vink het vakje aan om uw aanvraag te versturen.",
+  },
+  cookies: {
+    title: "Cookies en privacy",
+    body: "We gebruiken technische opslag om uw favorieten en taal te onthouden. Google Maps en video's van derden laden alleen als u dat accepteert.",
+    accept: "Alles accepteren",
+    essential: "Alleen noodzakelijk",
+    more: "Cookiebeleid",
+    loadMap: "Google-kaart laden",
+    loadMapHint: "Door de kaart te laden accepteert u de cookies van Google Maps.",
+  },
+  forms: {
+    email: "Uw e-mail",
+    sending: "Versturen…",
+    sent: "Bericht verstuurd. We antwoorden zo snel mogelijk per e-mail.",
+    error: "Het bericht kon niet worden verstuurd. Mail ons rechtstreeks op",
+    dateLabel: "Gewenste datum voor de bezichtiging (optioneel)",
+    contactTitle: "Schrijf ons",
+    contactBody: "Vertel ons wat u zoekt en we antwoorden per e-mail, in uw taal.",
+    send: "Versturen",
+    agency: "Naam van uw kantoor",
+    country: "Land",
+    website: "Website van het kantoor (optioneel)",
+    partnerCta: "Ik wil samenwerken",
+  },
+  phase: { keyReady: "Instapklaar", inDevelopment: "In aanbouw" },
+  partners: {
+    nav: "Samenwerken",
+    kicker: "Voor makelaars",
+    title: "Werk met ons samen en verdien 5 % op elke verkoop",
+    body: "Heeft u klanten die een woning zoeken aan de Costa Blanca? Wij zorgen voor het aanbod, de bezichtigingen en de begeleiding in hun taal. U ontvangt 5 % commissie op elke afgeronde verkoop.",
+    cta: "Bekijk het partnerprogramma",
   },
 };
 
@@ -547,8 +686,6 @@ const en: Dictionary = {
   related: { title: "You may also like" },
   zoneInfo: { title: "The area" },
   favs: { title: "Favourites", empty: "You haven't saved any properties yet.", save: "Save", saved: "Saved", browse: "Browse properties" },
-  alertCta: "Alert me about new properties like this search",
-  testimonials: { kicker: "Buyers", title: "Those who already live here" },
   blog: { title: "Buyer's guide", kicker: "Blog", readMore: "Read article", back: "Back to the guide", empty: "Articles coming soon." },
   search: { title: "Find your property", any: "Any", button: "Search" },
   finder: { title: "Find the home", titleAccent: "of your dreams", subtitle: "Fine-tune your search with our filters: area, type, price and extras such as a private pool or sea views." },
@@ -577,6 +714,45 @@ const en: Dictionary = {
     contact: "Contact",
     rights: "Costa Blanca",
     disclaimer: "Indicative prices · Availability through your agency",
+  },
+  legal: {
+    notice: "Legal notice",
+    privacy: "Privacy",
+    cookies: "Cookies",
+    consent: "I have read and agree that Properties4You may process my data to respond to this enquiry.",
+    consentLink: "Privacy policy",
+    consentRequired: "Please tick the box so we can send your request.",
+  },
+  cookies: {
+    title: "Cookies and privacy",
+    body: "We use technical storage to remember your favourites and language. Google Maps and third-party videos only load if you accept.",
+    accept: "Accept all",
+    essential: "Essentials only",
+    more: "Cookie policy",
+    loadMap: "Load Google map",
+    loadMapHint: "Loading it means accepting Google Maps cookies.",
+  },
+  forms: {
+    email: "Your email",
+    sending: "Sending…",
+    sent: "Message sent. We will reply by email as soon as possible.",
+    error: "The message could not be sent. Please email us directly at",
+    dateLabel: "Preferred viewing date (optional)",
+    contactTitle: "Write to us",
+    contactBody: "Tell us what you are looking for and we will reply by email, in your language.",
+    send: "Send",
+    agency: "Your agency name",
+    country: "Country",
+    website: "Agency website (optional)",
+    partnerCta: "I want to partner",
+  },
+  phase: { keyReady: "Key ready", inDevelopment: "In development" },
+  partners: {
+    nav: "Partner with us",
+    kicker: "For estate agencies",
+    title: "Partner with us and earn 5% on every sale",
+    body: "If you have clients looking for a home on the Costa Blanca, we provide the portfolio, the viewings and the support in their language. You earn a 5% commission on every completed sale.",
+    cta: "See the partner programme",
   },
 };
 
@@ -674,8 +850,6 @@ const fr: Dictionary = {
   related: { title: "Cela pourrait aussi vous intéresser" },
   zoneInfo: { title: "Le quartier" },
   favs: { title: "Favoris", empty: "Vous n'avez pas encore enregistré de propriétés.", save: "Enregistrer", saved: "Enregistrée", browse: "Explorer les propriétés" },
-  alertCta: "Prévenez-moi des nouvelles propriétés comme cette recherche",
-  testimonials: { kicker: "Acheteurs", title: "Ceux qui vivent déjà ici" },
   blog: { title: "Guide de l'acheteur", kicker: "Blog", readMore: "Lire l'article", back: "Retour au guide", empty: "Articles à venir." },
   search: { title: "Trouvez votre propriété", any: "Tous", button: "Rechercher" },
   finder: { title: "Trouvez la maison", titleAccent: "de vos rêves", subtitle: "Affinez votre recherche avec nos filtres : zone, type, prix et options comme piscine privée ou vue mer." },
@@ -704,6 +878,45 @@ const fr: Dictionary = {
     contact: "Contact",
     rights: "Costa Blanca",
     disclaimer: "Prix indicatifs · Disponibilité via votre agence",
+  },
+  legal: {
+    notice: "Mentions légales",
+    privacy: "Confidentialité",
+    cookies: "Cookies",
+    consent: "J'ai lu et j'accepte que Properties4You traite mes données pour répondre à cette demande.",
+    consentLink: "Politique de confidentialité",
+    consentRequired: "Cochez la case pour pouvoir envoyer votre demande.",
+  },
+  cookies: {
+    title: "Cookies et confidentialité",
+    body: "Nous utilisons un stockage technique pour mémoriser vos favoris et votre langue. Google Maps et les vidéos tierces ne se chargent que si vous l'acceptez.",
+    accept: "Tout accepter",
+    essential: "Essentiel uniquement",
+    more: "Politique de cookies",
+    loadMap: "Charger la carte Google",
+    loadMapHint: "En la chargeant, vous acceptez les cookies de Google Maps.",
+  },
+  forms: {
+    email: "Votre e-mail",
+    sending: "Envoi…",
+    sent: "Message envoyé. Nous vous répondons par e-mail dès que possible.",
+    error: "Le message n'a pas pu être envoyé. Écrivez-nous directement à",
+    dateLabel: "Date souhaitée pour la visite (facultatif)",
+    contactTitle: "Écrivez-nous",
+    contactBody: "Dites-nous ce que vous cherchez et nous vous répondons par e-mail, dans votre langue.",
+    send: "Envoyer",
+    agency: "Nom de votre agence",
+    country: "Pays",
+    website: "Site web de l'agence (facultatif)",
+    partnerCta: "Je veux collaborer",
+  },
+  phase: { keyReady: "Clés en main", inDevelopment: "En construction" },
+  partners: {
+    nav: "Collaborer",
+    kicker: "Pour les agences immobilières",
+    title: "Collaborez avec nous et touchez 5 % sur chaque vente",
+    body: "Si vous avez des clients qui cherchent une maison sur la Costa Blanca, nous apportons le portefeuille, les visites et l'accompagnement dans leur langue. Vous percevez une commission de 5 % sur chaque vente conclue.",
+    cta: "Voir le programme de collaboration",
   },
 };
 

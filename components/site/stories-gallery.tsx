@@ -7,7 +7,9 @@ import { X, Send, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { GalleryImage } from "@/lib/types";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
+import type { Locale } from "@/lib/i18n/config";
 import { saveLead } from "@/lib/leads";
+import { sendEnquiry } from "@/app/actions/enquiry";
 
 const STORY_MS = 5000;
 const REACTIONS = ["🔥", "😍", "🏡"];
@@ -17,7 +19,7 @@ export function StoriesGallery({
   name,
   zone,
   dict,
-  whatsapp,
+  contactEmail,
   viewAllLabel,
   propertyId,
   locale,
@@ -26,15 +28,18 @@ export function StoriesGallery({
   name: string;
   zone: string | null;
   dict: Dictionary;
-  whatsapp: string; // dígitos, ej. 34650379258
+  /** Buzón de la agencia: se muestra si el envío por correo falla. */
+  contactEmail: string;
   viewAllLabel: string;
   propertyId?: string;
-  locale?: string;
+  locale: Locale;
 }) {
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [message, setMessage] = useState("");
+  const [email, setEmail] = useState("");
+  const [sendState, setSendState] = useState<"idle" | "sending" | "sent" | "error" | "reacted">("idle");
   const inputFocused = useRef(false);
 
   const count = images.length;
@@ -43,6 +48,7 @@ export function StoriesGallery({
     setOpen(false);
     setPaused(false);
     setMessage("");
+    setSendState("idle");
   }, []);
 
   const go = useCallback(
@@ -77,23 +83,41 @@ export function StoriesGallery({
     };
   }, [open, go, close]);
 
-  const waLink = (text: string) =>
-    `https://wa.me/${whatsapp}?text=${encodeURIComponent(
-      `${text}\n\n· ${name}${zone ? ` (${zone})` : ""}\n${typeof window !== "undefined" ? window.location.href : ""}`,
-    )}`;
-
-  function sendMessage() {
-    const text = message.trim() || dict.stories.interested;
-    // lead a la bandeja del admin (best-effort) + WhatsApp
+  // Reacción: queda como lead en el panel (sin datos personales, no hace
+  // falta email) y se confirma en pantalla. Antes abría WhatsApp.
+  function react(r: string) {
     void saveLead({
       property_id: propertyId ?? null,
       property_name: name,
-      message: text,
+      message: `${r} ${dict.stories.interested}`,
       locale,
       source: "stories",
     });
-    window.open(waLink(text), "_blank", "noopener");
-    setMessage("");
+    setSendState("reacted");
+  }
+
+  // Mensaje: correo al buzón de la agencia (y lead en el panel).
+  async function sendMessage() {
+    if (sendState === "sending") return;
+    const text = message.trim() || dict.stories.interested;
+    if (!email.trim()) {
+      setSendState("error");
+      return;
+    }
+    setSendState("sending");
+    const r = await sendEnquiry({
+      kind: "contacto",
+      name: email.split("@")[0] || "web",
+      email,
+      message: text,
+      propertyId: propertyId ?? "",
+      propertyName: `${name}${zone ? ` (${zone})` : ""}`,
+      propertyUrl: typeof window !== "undefined" ? window.location.href : "",
+      locale,
+      consent: true,
+    });
+    setSendState(r.ok ? "sent" : "error");
+    if (r.ok) setMessage("");
   }
 
   if (!count) return null;
@@ -272,28 +296,28 @@ export function StoriesGallery({
                 <ChevronRight size={20} />
               </button>
 
-              {/* Pie: reacciones + mensaje → WhatsApp */}
+              {/* Pie: reacciones + mensaje → correo a la agencia */}
               <div
                 data-noswipe
                 className="absolute inset-x-0 bottom-0 z-20 flex flex-col gap-3 p-4 pb-5"
               >
                 <div className="flex justify-center gap-3">
                   {REACTIONS.map((r) => (
-                    <a
+                    <button
                       key={r}
-                      href={waLink(`${r} ${dict.stories.interested}`)}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      type="button"
+                      onClick={() => react(r)}
                       className="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-xl backdrop-blur transition-transform hover:scale-125"
                     >
                       {r}
-                    </a>
+                    </button>
                   ))}
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
                   <input
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     onFocus={() => {
                       inputFocused.current = true;
                       setPaused(true);
@@ -302,20 +326,52 @@ export function StoriesGallery({
                       inputFocused.current = false;
                       setPaused(false);
                     }}
-                    onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                    placeholder={dict.stories.reply}
-                    className="h-12 flex-1 rounded-full border border-white/25 bg-black/40 px-5 text-sm text-white placeholder:text-white/50 outline-none backdrop-blur focus:border-gold"
+                    placeholder={dict.forms.email}
+                    aria-label={dict.forms.email}
+                    autoComplete="email"
+                    className="h-12 rounded-full border border-white/25 bg-black/40 px-5 text-sm text-white placeholder:text-white/50 outline-none backdrop-blur focus:border-gold sm:w-[42%]"
                   />
-                  <button
-                    onClick={sendMessage}
-                    aria-label={dict.stories.send}
-                    className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-[#25D366] text-white transition-transform hover:scale-105"
-                  >
-                    <Send size={19} />
-                  </button>
+                  <div className="flex flex-1 items-center gap-2">
+                    <input
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      onFocus={() => {
+                        inputFocused.current = true;
+                        setPaused(true);
+                      }}
+                      onBlur={() => {
+                        inputFocused.current = false;
+                        setPaused(false);
+                      }}
+                      onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+                      placeholder={dict.stories.reply}
+                      aria-label={dict.stories.reply}
+                      className="h-12 flex-1 rounded-full border border-white/25 bg-black/40 px-5 text-sm text-white placeholder:text-white/50 outline-none backdrop-blur focus:border-gold"
+                    />
+                    <button
+                      type="button"
+                      onClick={sendMessage}
+                      disabled={sendState === "sending"}
+                      aria-label={dict.stories.send}
+                      className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-gold text-bg transition-transform hover:scale-105 disabled:opacity-50"
+                    >
+                      <Send size={19} />
+                    </button>
+                  </div>
                 </div>
-                <p className="text-center text-[0.6rem] uppercase tracking-[0.22em] text-white/40">
-                  {dict.stories.tapHint}
+                <p
+                  className="text-center text-[0.6rem] uppercase tracking-[0.22em] text-white/40"
+                  role="status"
+                >
+                  {sendState === "sent"
+                    ? `✓ ${dict.forms.sent}`
+                    : sendState === "reacted"
+                      ? `✓ ${dict.stories.interested}`
+                      : sendState === "sending"
+                        ? dict.forms.sending
+                        : sendState === "error"
+                          ? `${dict.forms.error} ${contactEmail}`
+                          : dict.stories.tapHint}
                 </p>
               </div>
             </motion.div>

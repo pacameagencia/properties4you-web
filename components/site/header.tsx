@@ -34,6 +34,7 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
     { href: `/${locale}`, label: dict.nav.home },
     { href: `/${locale}/propiedades`, label: dict.nav.properties },
     { href: `/${locale}/blog`, label: dict.nav.blog },
+    { href: `/${locale}/colabora`, label: dict.partners.nav },
     { href: `/${locale}/nosotros`, label: dict.nav.about },
   ];
 
@@ -66,7 +67,7 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden items-center gap-9 md:flex">
+        <nav className="hidden items-center gap-7 whitespace-nowrap lg:flex xl:gap-9">
           {links.map((l) => (
             <Link
               key={l.href}
@@ -106,7 +107,7 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
 
         <button
           onClick={() => setOpen((v) => !v)}
-          className="text-ink md:hidden"
+          className="text-ink lg:hidden"
           aria-label={dict.a11y.menu}
         >
           {open ? <X size={22} /> : <Menu size={22} />}
@@ -116,8 +117,8 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
       {/* Mobile menu */}
       <div
         className={cn(
-          "overflow-hidden border-line bg-[#0a0d10] transition-[max-height] duration-500 md:hidden",
-          open ? "max-h-96 border-t" : "max-h-0",
+          "overflow-hidden border-line bg-[#0a0d10] transition-[max-height] duration-500 lg:hidden",
+          open ? "max-h-[32rem] border-t" : "max-h-0",
         )}
       >
         <nav className="flex flex-col gap-1 px-6 py-5">

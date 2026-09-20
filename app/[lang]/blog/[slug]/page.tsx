@@ -5,6 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getPostBySlug, getPublishedPosts, type Post } from "@/lib/queries";
+import { alternatesFor } from "@/lib/seo";
 
 export const revalidate = 600;
 
@@ -27,7 +28,7 @@ export async function generateMetadata({
   const post = await getPostBySlug(slug);
   if (!post) return { title: "Blog" };
   const c = postContent(post, locale);
-  return { title: c.title, description: c.excerpt };
+  return { title: c.title, description: c.excerpt, alternates: alternatesFor(locale, `/blog/${slug}`) };
 }
 
 /** Render mínimo de markdown ligero: ## títulos, **negrita**, listas y párrafos. */

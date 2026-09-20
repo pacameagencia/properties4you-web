@@ -3,7 +3,8 @@ import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
-import { getPublishedProperties, getSettings } from "@/lib/queries";
+import { getPublishedProperties } from "@/lib/queries";
+import { alternatesFor } from "@/lib/seo";
 import { PropertiesExplorer } from "@/components/site/properties-explorer";
 import { Reveal } from "@/components/site/reveal";
 
@@ -15,8 +16,9 @@ export async function generateMetadata({
   params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
   const { lang } = await params;
-  const dict = getDictionary(isLocale(lang) ? lang : "es");
-  return { title: dict.nav.properties };
+  const locale = isLocale(lang) ? lang : "es";
+  const dict = getDictionary(locale);
+  return { title: dict.nav.properties, alternates: alternatesFor(locale, "/propiedades") };
 }
 
 export default async function PropertiesPage({
@@ -28,11 +30,7 @@ export default async function PropertiesPage({
   if (!isLocale(lang)) notFound();
   const locale = lang as Locale;
   const dict = getDictionary(locale);
-  const [properties, settings] = await Promise.all([
-    getPublishedProperties(),
-    getSettings(),
-  ]);
-  const whatsapp = (settings?.contact_phone || "+34 650 37 92 58").replace(/\D/g, "");
+  const properties = await getPublishedProperties();
 
   return (
     <section className="mx-auto max-w-7xl px-5 pb-28 pt-36 sm:px-8">
@@ -53,12 +51,7 @@ export default async function PropertiesPage({
 
       <div className="mt-16">
         <Suspense fallback={null}>
-          <PropertiesExplorer
-          properties={properties}
-          locale={locale}
-          dict={dict}
-          whatsapp={whatsapp}
-        />
+          <PropertiesExplorer properties={properties} locale={locale} dict={dict} />
         </Suspense>
       </div>
     </section>

@@ -10,6 +10,7 @@ import { Preloader } from "@/components/site/preloader";
 import { LangSetter } from "@/components/site/lang-setter";
 import { Cursor } from "@/components/site/cursor";
 import { ScrollProgress } from "@/components/site/scroll-progress";
+import { CookieBanner } from "@/components/site/cookie-banner";
 import "../globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -41,10 +42,10 @@ export async function generateMetadata({
       template: "%s · Properties4You",
     },
     description: d.meta.description,
-    alternates: {
-      languages: Object.fromEntries(locales.map((l) => [l, `/${l}`])),
-      canonical: `/${lang}`,
-    },
+    // Aquí NO va `alternates`: Next hereda la metadata del layout en todas las
+    // páginas hijas (merge superficial), y declararlo aquí hacía que las 110
+    // URLs del sitemap se proclamasen canónicas de la portada. Cada página llama
+    // a `alternatesFor()` de lib/seo.ts con su propia ruta.
     openGraph: {
       type: "website",
       siteName: "Properties4You",
@@ -110,6 +111,7 @@ export default async function LangLayout({
         <Header locale={lang} dict={dict} />
         <main className="relative z-10">{children}</main>
         <Footer locale={lang} dict={dict} settings={settings} />
+        <CookieBanner locale={lang} dict={dict} />
       </body>
     </html>
   );
