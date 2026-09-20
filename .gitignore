@@ -47,4 +47,3 @@ scripts/import-beta.mjs
 
 # Local Netlify folder
 .netlify
-scripts/ingest-casas.mjs

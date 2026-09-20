@@ -58,6 +58,31 @@ npm run dev      # http://localhost:3000
 npm run build
 ```
 
+## Ingesta de promociones en lote
+
+Para cargar varias promociones de golpe (fotos + ficha en 5 idiomas), en vez de
+meterlas una a una por el panel:
+
+```bash
+export P4Y_SUPABASE_URL="https://<ref>.supabase.co"
+export P4Y_SERVICE_KEY="<service_role>"        # nunca en el código: el repo es público
+npm i -D sharp                                  # opcional, redimensiona las fotos
+
+node scripts/ingest-casas.mjs <carpeta> --dry-run   # valida sin subir nada
+node scripts/ingest-casas.mjs <carpeta>             # sube
+node scripts/ingest-casas.mjs <carpeta> --solo=slug # una sola ficha
+```
+
+La carpeta lleva un `casas.json` (array de fichas — hay una de ejemplo comentada
+al final del script) y una subcarpeta de fotos por cada `slug`.
+
+Valida las fichas **antes** de subir un solo byte, con las mismas reglas que
+`scripts/audit-data.mjs` comprueba después: o entra la tanda entera, o no entra
+nada. Es idempotente, así que reingestar un slug reemplaza sus fotos y su ficha.
+
+Las fichas salen vivas en producción sin desplegar (Supabase + ISR). Lo único
+que pide deploy es una **zona nueva**: hay que añadirla a `lib/zones.ts`.
+
 ## Panel admin
 
 `/admin` → login con email + contraseña (usuario en `app_admins`). Desde ahí se
