@@ -54,6 +54,16 @@ type ZoneInfo = {
 
 /** Información curada del entorno por zona (mostrada en la ficha). */
 export const ZONE_INFO: Record<string, ZoneInfo> = {
+  Pinoso: {
+    chips: ["nature", "services", "dining", "schools"],
+    text: {
+      es: "Pueblo del interior de Alicante, en la comarca del Vinalopó Medio y a un paso de la Región de Murcia, rodeado de viñedos de Monastrell, almendros y sierra. Cuenta con 8.000 habitantes, comercio, centro de salud, colegios y una cocina propia (gazpachos, arroz con conejo), con Elda a media hora y Alicante y su aeropuerto a unos 50 minutos. Aquí la vida es en parcela rústica: fincas de más de 10.000 m² con casa, piscina y silencio.",
+      en: "An inland town in the Alicante province, in the Vinalopó Medio district right by the Murcia border, surrounded by Monastrell vineyards, almond groves and hills. Home to 8,000 people, with shops, a health centre, schools and a cuisine of its own (gazpachos, rice with rabbit), Elda is half an hour away and Alicante and its airport about 50 minutes. Life here is on rural plots: estates of over 10,000 m² with a house, a pool and quiet.",
+      de: "Ein Ort im Hinterland von Alicante, in der Comarca Vinalopó Medio direkt an der Grenze zur Region Murcia, umgeben von Monastrell-Weinbergen, Mandelhainen und Bergen. 8.000 Einwohner, Geschäfte, Gesundheitszentrum, Schulen und eine eigene Küche (Gazpachos, Reis mit Kaninchen); Elda ist eine halbe Stunde entfernt, Alicante mit Flughafen etwa 50 Minuten. Gelebt wird hier auf ländlichen Grundstücken: Fincas über 10.000 m² mit Haus, Pool und Ruhe.",
+      nl: "Een dorp in het binnenland van Alicante, in de streek Vinalopó Medio vlak bij de grens met Murcia, omgeven door Monastrell-wijngaarden, amandelbomen en bergen. Het telt 8.000 inwoners, met winkels, een gezondheidscentrum, scholen en een eigen keuken (gazpachos, rijst met konijn); Elda ligt op een half uur en Alicante met de luchthaven op zo'n 50 minuten. Wonen doet men hier op landelijke percelen: finca's van meer dan 10.000 m² met woning, zwembad en rust.",
+      fr: "Village de l'arrière-pays d'Alicante, dans la comarque du Vinalopó Medio à deux pas de la région de Murcie, entouré de vignes de Monastrell, d'amandiers et de reliefs. Il compte 8 000 habitants, des commerces, un centre de santé, des écoles et une cuisine bien à lui (gazpachos, riz au lapin) ; Elda est à une demi-heure et Alicante et son aéroport à environ 50 minutes. Ici, on vit sur un terrain rustique : des propriétés de plus de 10 000 m² avec maison, piscine et calme.",
+    },
+  },
   "San Miguel de Salinas": {
     chips: ["golf", "beach", "nature", "services"],
     text: {
