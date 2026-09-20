@@ -10,7 +10,7 @@ const LANGS = ["es", "en", "de", "nl", "fr"];
 const ZONES_INFO = [
   "Los Montesinos", "San Miguel de Salinas", "Daya Nueva", "La Finca Golf",
   "VistaBella Golf", "Pilar de la Horadada", "Rojales", "Dolores",
-  "San Fulgencio", "Torrevieja", "Ciudad Quesada",
+  "San Fulgencio", "Torrevieja", "Ciudad Quesada", "Pinoso",
 ];
 
 const { data, error } = await supabase
