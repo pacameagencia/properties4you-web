@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CookiePreferences } from "./cookie-preferences";
 import { MapPin, Phone, Mail } from "lucide-react";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
@@ -109,6 +110,7 @@ export function Footer({
             <Link href={`/${locale}/legal/cookies`} className="underline-offset-4 hover:text-ink hover:underline">
               {dict.legal.cookies}
             </Link>
+            <CookiePreferences label={dict.cookies.preferences} />
           </nav>
           <span className="hidden lg:inline">{dict.footer.disclaimer}</span>
         </div>

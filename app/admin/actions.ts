@@ -3,9 +3,12 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { settingsSchema } from "@/lib/settings-validation";
 import { translateProperty } from "@/lib/translate";
 import { locales } from "@/lib/i18n/config";
-import type { GalleryImage, PropertyContent } from "@/lib/types";
+import type { PropertyContent, Translations } from "@/lib/types";
+import { propertyInputSchema, resolvePropertyTranslations, type PropertyInput } from "@/lib/property-validation";
+export type { PropertyInput } from "@/lib/property-validation";
 
 /* revalidatePath("/", "layout") no invalida las rutas [lang] en el build de
    producción: hay que revalidar cada path concreto para que los cambios del
@@ -14,41 +17,12 @@ function revalidateSite(slug?: string | null) {
   for (const l of locales) {
     revalidatePath(`/${l}`);
     revalidatePath(`/${l}/propiedades`);
+    revalidatePath(`/${l}/favoritos`);
     if (slug) revalidatePath(`/${l}/propiedad/${slug}`);
   }
   revalidatePath("/admin");
+  revalidatePath("/sitemap.xml");
 }
-
-export type PropertyInput = {
-  id?: string;
-  slug: string;
-  reference: string | null;
-  name: string;
-  status: string;
-  published: boolean;
-  featured: boolean;
-  sort_order: number;
-  type: string;
-  zone: string | null;
-  province: string | null;
-  price: number | null;
-  price_from: boolean;
-  bedrooms: number | null;
-  bathrooms: number | null;
-  area_m2: number | null;
-  plot_m2: number | null;
-  energy_rating: string | null;
-  maps_url: string | null;
-  virtual_tour_url: string | null;
-  cover_image: string | null;
-  gallery: GalleryImage[];
-  pois: import("@/lib/pois").Poi[];
-  amenities: string[];
-  floor_plan: string | null;
-  video_url: string | null;
-  description_es: string;
-  features_es: string[];
-};
 
 async function requireAdmin() {
   const supabase = await createClient();
@@ -65,56 +39,38 @@ async function requireAdmin() {
   return supabase;
 }
 
-export async function saveProperty(input: PropertyInput) {
+export async function saveProperty(raw: PropertyInput) {
   const supabase = await requireAdmin();
-
-  const esContent: PropertyContent = {
-    description: input.description_es.trim(),
-    features: input.features_es.map((f) => f.trim()).filter(Boolean),
-  };
-
-  // Autotraducción ES -> DE/NL/EN (degrada a copia ES sin API key)
-  const translations = await translateProperty(esContent);
-
-  const row = {
-    slug: input.slug,
-    reference: input.reference,
-    name: input.name,
-    status: input.status,
-    published: input.published,
-    featured: input.featured,
-    sort_order: input.sort_order,
-    type: input.type,
-    zone: input.zone,
-    province: input.province,
-    price: input.price,
-    price_from: input.price_from,
-    bedrooms: input.bedrooms,
-    bathrooms: input.bathrooms,
-    area_m2: input.area_m2,
-    plot_m2: input.plot_m2,
-    energy_rating: input.energy_rating,
-    maps_url: input.maps_url,
-    virtual_tour_url: input.virtual_tour_url,
-    cover_image: input.cover_image,
-    gallery: input.gallery,
-    pois: input.pois,
-    amenities: input.amenities,
-    floor_plan: input.floor_plan,
-    video_url: input.video_url,
-    translations,
-  };
-
-  let error;
+  const parsed = propertyInputSchema.safeParse(raw);
+  if (!parsed.success) return { ok: false, error: parsed.error.issues[0].message };
+  const input = parsed.data;
+  let previous: { slug: string; translations: Translations; updated_at: string } | null = null;
   if (input.id) {
-    ({ error } = await supabase.from("properties").update(row).eq("id", input.id));
-  } else {
-    ({ error } = await supabase.from("properties").insert(row));
+    const { data, error } = await supabase.from("properties").select("slug, translations, updated_at").eq("id", input.id).maybeSingle();
+    if (error || !data) return { ok: false, error: "No se pudo cargar la propiedad. Recarga la página e inténtalo de nuevo." };
+    previous = data;
+    if (previous.updated_at !== input.expected_updated_at) return { ok: false, error: "Esta ficha cambió en otra sesión. Conserva tus cambios y recarga la versión actual antes de guardar." };
   }
-  if (error) return { ok: false, error: error.message };
-
+  const es: PropertyContent = { description: input.description_es, features: input.features_es.filter(Boolean) };
+  const { translations, warning } = input.manual_translations
+    ? {translations: {es, ...input.manual_translations}, warning: undefined}
+    : await resolvePropertyTranslations(es, previous?.translations, translateProperty);
+  if (warning && previous && locales.some((locale) => locale !== "es" && previous?.translations[locale]?.description)) return { ok: false, error: "No se pudo actualizar la traducción. La ficha conserva sus idiomas. Vuelve a intentarlo o activa «Editar traducciones manualmente»." };
+  if (input.published && locales.some((locale) => !translations[locale]?.description?.trim())) {
+    return { ok: false, error: "No se ha podido completar la traducción. Desmarca Publicada para guardar un borrador en español sin perder el contenido." };
+  }
+  const { id, expected_updated_at, description_es, features_es, manual_translations, ...fields } = input;
+  void description_es; void features_es; void manual_translations;
+  const row = { ...fields, translations };
+  const query = id
+    ? supabase.from("properties").update(row).eq("id", id).eq("updated_at", expected_updated_at!)
+    : supabase.from("properties").insert(row);
+  const { data, error } = await query.select("id").maybeSingle();
+  if (error) return { ok: false, error: error.code === "23505" ? "Ya existe una propiedad con esta URL. Cambia el campo Slug." : "No se pudo guardar. Revisa tu conexión y vuelve a intentarlo." };
+  if (!data) return { ok: false, error: "La ficha cambió en otra sesión. Recarga la versión actual antes de guardar." };
+  if (previous?.slug && previous.slug !== input.slug) revalidateSite(previous.slug);
   revalidateSite(input.slug);
-  return { ok: true };
+  return { ok: true, warning };
 }
 
 export async function deleteProperty(id: string) {
@@ -132,6 +88,12 @@ export async function deleteProperty(id: string) {
 
 export async function togglePublished(id: string, published: boolean) {
   const supabase = await requireAdmin();
+  if (published) {
+    const { data: property, error: readError } = await supabase.from("properties").select("name, cover_image, translations").eq("id", id).maybeSingle();
+    if (readError || !property) return { ok: false, error: "No se pudo cargar la propiedad." };
+    if (!property.name.trim() || !property.cover_image || locales.some((locale) => !property.translations?.[locale]?.description?.trim()))
+      return { ok: false, error: "Completa la portada y las descripciones en los cinco idiomas antes de publicar." };
+  }
   const { data, error } = await supabase
     .from("properties")
     .update({ published })
@@ -177,6 +139,9 @@ export async function saveSettings(input: {
   address: string;
 }) {
   const supabase = await requireAdmin();
+  const parsed = settingsSchema.safeParse(input);
+  if (!parsed.success) return { ok: false, error: parsed.error.issues[0].message };
+  input = parsed.data;
   const { error } = await supabase
     .from("site_settings")
     .update({
@@ -186,6 +151,7 @@ export async function saveSettings(input: {
     })
     .eq("id", 1);
   if (error) return { ok: false, error: error.message };
+  for (const locale of locales) revalidatePath(`/${locale}`, "layout");
   revalidateSite();
   return { ok: true };
 }

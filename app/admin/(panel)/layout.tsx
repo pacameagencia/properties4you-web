@@ -15,6 +15,14 @@ export default async function PanelLayout({
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect("/admin/login");
+  const { data: admin } = await supabase.from("app_admins").select("user_id").eq("user_id", user.id).maybeSingle();
+  if (!admin) return (
+    <main className="mx-auto max-w-xl px-5 py-20">
+      <h1 className="font-display text-3xl">Acceso restringido</h1>
+      <p className="mt-4 text-muted">Esta cuenta no tiene permiso para gestionar las viviendas. Contacta con el responsable de la web.</p>
+      <form noValidate action={signOutAction} className="mt-6"><button className="rounded-full bg-gold px-6 py-3 text-bg">Cerrar sesión</button></form>
+    </main>
+  );
 
   const { count: newLeads } = await supabase
     .from("leads")
@@ -52,7 +60,7 @@ export default async function PanelLayout({
             >
               <Plus size={15} /> <span className="hidden sm:inline">Nueva</span>
             </Link>
-            <form action={signOutAction}>
+            <form noValidate action={signOutAction}>
               <button
                 type="submit"
                 aria-label="Salir"

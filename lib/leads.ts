@@ -14,15 +14,11 @@ export type NewLead = {
   source: "visita" | "stories" | "contacto";
 };
 
-/**
- * Registra un lead en la bandeja del admin. Nunca bloquea el flujo del
- * usuario: si falla (red, RLS), se ignora silenciosamente y WhatsApp
- * se abre igual.
- */
-export async function saveLead(lead: NewLead): Promise<void> {
+/** Registra una reacción y confirma únicamente si Supabase la acepta. */
+export async function saveLead(lead: NewLead): Promise<boolean> {
   try {
     const supabase = createClient();
-    await supabase.from("leads").insert({
+    const { error } = await supabase.from("leads").insert({
       property_id: lead.property_id ?? null,
       property_name: lead.property_name ?? null,
       name: lead.name?.trim() || null,
@@ -33,7 +29,8 @@ export async function saveLead(lead: NewLead): Promise<void> {
       locale: lead.locale ?? null,
       source: lead.source,
     });
+    return !error;
   } catch {
-    // best-effort: el contacto por WhatsApp sigue su curso
+    return false;
   }
 }

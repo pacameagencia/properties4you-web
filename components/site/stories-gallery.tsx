@@ -9,6 +9,7 @@ import type { GalleryImage } from "@/lib/types";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 import type { Locale } from "@/lib/i18n/config";
 import { saveLead } from "@/lib/leads";
+import { ConsentField } from "./enquiry-fields";
 import { sendEnquiry } from "@/app/actions/enquiry";
 
 const STORY_MS = 5000;
@@ -39,8 +40,10 @@ export function StoriesGallery({
   const [paused, setPaused] = useState(false);
   const [message, setMessage] = useState("");
   const [email, setEmail] = useState("");
+  const [consent, setConsent] = useState(false);
   const [sendState, setSendState] = useState<"idle" | "sending" | "sent" | "error" | "reacted">("idle");
   const inputFocused = useRef(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
 
   const count = images.length;
 
@@ -48,6 +51,7 @@ export function StoriesGallery({
     setOpen(false);
     setPaused(false);
     setMessage("");
+    setConsent(false);
     setSendState("idle");
   }, []);
 
@@ -69,9 +73,17 @@ export function StoriesGallery({
   // Teclado + scroll lock
   useEffect(() => {
     if (!open) return;
+    const previousFocus = document.activeElement as HTMLElement | null;
+    dialogRef.current?.querySelector<HTMLElement>("button[data-noswipe]")?.focus();
     const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Tab") {
+        const controls = Array.from(dialogRef.current?.querySelectorAll<HTMLElement>('button:not(:disabled), input:not(:disabled), a[href]') ?? []).filter((node) => node.getClientRects().length > 0);
+        const first = controls[0], last = controls.at(-1);
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last?.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first?.focus(); }
+      }
       if (e.key === "Escape") close();
-      if (inputFocused.current) return;
+      if (inputFocused.current || (e.target as HTMLElement)?.closest("input, textarea")) return;
       if (e.key === "ArrowRight") go(1);
       if (e.key === "ArrowLeft") go(-1);
     };
@@ -80,34 +92,37 @@ export function StoriesGallery({
     return () => {
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
+      previousFocus?.focus();
     };
   }, [open, go, close]);
 
   // Reacción: queda como lead en el panel (sin datos personales, no hace
   // falta email) y se confirma en pantalla. Antes abría WhatsApp.
-  function react(r: string) {
-    void saveLead({
+  async function react(r: string) {
+    if (sendState === "sending") return;
+    setSendState("sending");
+    const saved = await saveLead({
       property_id: propertyId ?? null,
       property_name: name,
       message: `${r} ${dict.stories.interested}`,
       locale,
       source: "stories",
     });
-    setSendState("reacted");
+    setSendState(saved ? "reacted" : "error");
   }
 
   // Mensaje: correo al buzón de la agencia (y lead en el panel).
   async function sendMessage() {
-    if (sendState === "sending") return;
+    if (!consent || sendState === "sending" || sendState === "sent") return;
     const text = message.trim() || dict.stories.interested;
-    if (!email.trim()) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
       setSendState("error");
       return;
     }
     setSendState("sending");
     const r = await sendEnquiry({
       kind: "contacto",
-      name: email.split("@")[0] || "web",
+      name: (email.split("@")[0] || "web").padEnd(2, "."),
       email,
       message: text,
       propertyId: propertyId ?? "",
@@ -115,7 +130,7 @@ export function StoriesGallery({
       propertyUrl: typeof window !== "undefined" ? window.location.href : "",
       locale,
       consent: true,
-    });
+    }).catch(() => ({ ok: false as const }));
     setSendState(r.ok ? "sent" : "error");
     if (r.ok) setMessage("");
   }
@@ -166,6 +181,10 @@ export function StoriesGallery({
           <AnimatePresence>
             {open && (
           <motion.div
+            ref={dialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label={name}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -237,7 +256,7 @@ export function StoriesGallery({
                         className="h-full bg-white"
                         style={{
                           animation: `story-fill ${STORY_MS}ms linear forwards`,
-                          animationPlayState: paused ? "paused" : "running",
+                          animationPlayState: paused || email || message || consent || sendState !== "idle" ? "paused" : "running",
                         }}
                       />
                     )}
@@ -307,6 +326,7 @@ export function StoriesGallery({
                       key={r}
                       type="button"
                       onClick={() => react(r)}
+                      disabled={sendState === "sending"}
                       className="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-xl backdrop-blur transition-transform hover:scale-125"
                     >
                       {r}
@@ -316,6 +336,7 @@ export function StoriesGallery({
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
                   <input
                     type="email"
+                    maxLength={200}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     onFocus={() => {
@@ -333,6 +354,7 @@ export function StoriesGallery({
                   />
                   <div className="flex flex-1 items-center gap-2">
                     <input
+                      maxLength={2000}
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       onFocus={() => {
@@ -351,7 +373,7 @@ export function StoriesGallery({
                     <button
                       type="button"
                       onClick={sendMessage}
-                      disabled={sendState === "sending"}
+                      disabled={!consent || sendState === "sending" || sendState === "sent"}
                       aria-label={dict.stories.send}
                       className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-gold text-bg transition-transform hover:scale-105 disabled:opacity-50"
                     >
@@ -359,6 +381,7 @@ export function StoriesGallery({
                     </button>
                   </div>
                 </div>
+                <ConsentField id="stories-consent" checked={consent} onChange={setConsent} dict={dict} locale={locale} />
                 <p
                   className="text-center text-[0.6rem] uppercase tracking-[0.22em] text-white/40"
                   role="status"

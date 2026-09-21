@@ -78,7 +78,7 @@ export default async function HomePage({
 
   const stats = [
     { value: 300, suffix: "+", label: dict.stats.sun },
-    { value: 18, suffix: "", label: dict.stats.developments },
+    { value: all.length, suffix: "", label: dict.stats.developments },
     { value: 10, suffix: "", label: dict.stats.warranty },
     { text: "A–B", label: dict.stats.energy },
   ];

@@ -108,6 +108,7 @@ body {
 .reveal.in { opacity: 1; transform: none; }
 
 /* Scrollbar */
+:root { scrollbar-color: var(--p4y-surface-2) var(--p4y-bg); scrollbar-width: auto; }
 ::-webkit-scrollbar { width: 10px; }
 ::-webkit-scrollbar-track { background: var(--p4y-bg); }
 ::-webkit-scrollbar-thumb { background: var(--p4y-surface-2); border-radius: 999px; }

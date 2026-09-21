@@ -87,7 +87,7 @@ export function SendStatus({
     const invalid = result && !result.ok && result.error === "invalid";
     return (
       <p className="mt-3 text-center text-xs text-[#e0a0a0]" role="alert">
-        {invalid ? dict.legal.consentRequired : dict.forms.error}{" "}
+        {invalid ? dict.forms.invalid : dict.forms.error}{" "}
         {!invalid && (
           <a href={`mailto:${contactEmail}`} className="underline underline-offset-2">
             {contactEmail}

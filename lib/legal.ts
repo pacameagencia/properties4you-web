@@ -179,13 +179,14 @@ const es: Record<LegalSlug, LegalDoc> = {
         h: "Contenido de terceros incrustado",
         p: [
           "En las fichas de propiedad se muestra un mapa de Google Maps y, cuando la promoción tiene vídeo, un reproductor. Estos servicios son de terceros y pueden instalar cookies o tecnologías similares en tu navegador cuando cargan. El mapa no se carga hasta que lo aceptas expresamente, desde el aviso de cookies o con el botón «Cargar mapa» de la ficha.",
-          "Los vídeos de YouTube se incrustan en modo de privacidad reforzada (youtube-nocookie.com), que evita las cookies de seguimiento hasta que reproduces el vídeo.",
+          "Los vídeos externos se cargan tras aceptar el contenido de terceros. Para YouTube usamos el dominio youtube-nocookie.com; esto no sustituye tu elección de consentimiento.",
           "Para conocer el detalle de esos tratamientos, consulta las políticas de privacidad de Google y de los proveedores correspondientes.",
         ],
       },
       {
         h: "Cómo gestionarlas",
         p: [
+          "Puedes cambiar o retirar tu permiso desde «Configurar cookies», en el pie de cualquier página. Se detiene la carga de mapas y vídeos externos al retirar el permiso.",
           "Puedes bloquear o eliminar cookies y almacenamiento local desde la configuración de tu navegador. Bloquear el almacenamiento técnico puede impedir que se recuerden tus favoritos o tu idioma.",
         ],
       },
@@ -326,13 +327,14 @@ const en: Record<LegalSlug, LegalDoc> = {
         h: "Embedded third-party content",
         p: [
           "Property pages show a Google Maps map and, where the development has one, a video player. These are third-party services and may set cookies or similar technologies in your browser when they load. The map does not load until you expressly accept it, either in the cookie notice or with the “Load map” button on the property page.",
-          "YouTube videos are embedded in privacy-enhanced mode (youtube-nocookie.com), which avoids tracking cookies until you play the video.",
+          "External videos load after you accept third-party content. YouTube uses youtube-nocookie.com; this does not replace your consent choice.",
           "For details of that processing, see the privacy policies of Google and the relevant providers.",
         ],
       },
       {
         h: "How to manage them",
         p: [
+          "You can change or withdraw permission through Cookie settings in every page footer. Withdrawing permission stops loading external maps and videos.",
           "You can block or delete cookies and local storage from your browser settings. Blocking technical storage may prevent your favourites or language from being remembered.",
         ],
       },
@@ -473,13 +475,14 @@ const de: Record<LegalSlug, LegalDoc> = {
         h: "Eingebettete Inhalte Dritter",
         p: [
           "Auf den Objektseiten wird eine Google-Maps-Karte und, sofern vorhanden, ein Videoplayer eingebunden. Diese Dienste Dritter können beim Laden Cookies oder ähnliche Technologien setzen. Die Karte wird erst geladen, wenn Sie dem ausdrücklich zustimmen, über den Cookie-Hinweis oder die Schaltfläche „Karte laden“ auf der Objektseite.",
-          "YouTube-Videos werden im erweiterten Datenschutzmodus (youtube-nocookie.com) eingebunden, der Tracking-Cookies bis zum Abspielen vermeidet.",
+          "Externe Videos werden erst nach Ihrer Zustimmung geladen. YouTube nutzt youtube-nocookie.com; dies ersetzt Ihre Einwilligungsentscheidung nicht.",
           "Einzelheiten entnehmen Sie den Datenschutzerklärungen von Google und der jeweiligen Anbieter.",
         ],
       },
       {
         h: "Verwaltung",
         p: [
+          "Sie können die Erlaubnis über die Cookie-Einstellungen im Seitenfuß ändern oder widerrufen. Danach werden externe Karten und Videos nicht mehr geladen.",
           "Cookies und lokalen Speicher können Sie in den Einstellungen Ihres Browsers blockieren oder löschen. Das Blockieren des technischen Speichers kann dazu führen, dass Merkliste und Sprache nicht erhalten bleiben.",
         ],
       },
@@ -620,13 +623,14 @@ const nl: Record<LegalSlug, LegalDoc> = {
         h: "Ingesloten inhoud van derden",
         p: [
           "Op de woningpagina's wordt een Google Maps-kaart getoond en, als het project er een heeft, een videospeler. Deze diensten van derden kunnen bij het laden cookies of vergelijkbare technologie plaatsen. De kaart laadt pas nadat u dat uitdrukkelijk accepteert, via de cookiemelding of met de knop 'Kaart laden' op de woningpagina.",
-          "YouTube-video's worden ingesloten in de privacyvriendelijke modus (youtube-nocookie.com), die trackingcookies vermijdt totdat u de video afspeelt.",
+          "Externe video’s worden pas geladen nadat je inhoud van derden toestaat. YouTube gebruikt youtube-nocookie.com; dit vervangt je toestemmingskeuze niet.",
           "Raadpleeg voor details het privacybeleid van Google en de betreffende aanbieders.",
         ],
       },
       {
         h: "Beheer",
         p: [
+          "Je kunt toestemming wijzigen of intrekken via Cookie-instellingen onderaan elke pagina. Externe kaarten en video’s worden daarna niet meer geladen.",
           "U kunt cookies en lokale opslag blokkeren of verwijderen via de instellingen van uw browser. Het blokkeren van technische opslag kan verhinderen dat uw favorieten of taal worden onthouden.",
         ],
       },
@@ -767,13 +771,14 @@ const fr: Record<LegalSlug, LegalDoc> = {
         h: "Contenus tiers intégrés",
         p: [
           "Les fiches de biens affichent une carte Google Maps et, lorsque le programme en dispose, un lecteur vidéo. Ces services tiers peuvent déposer des cookies ou technologies similaires lors de leur chargement. La carte ne se charge qu'après votre acceptation expresse, via le bandeau de cookies ou le bouton « Charger la carte » de la fiche.",
-          "Les vidéos YouTube sont intégrées en mode de confidentialité renforcée (youtube-nocookie.com), qui évite les cookies de suivi tant que la vidéo n'est pas lancée.",
+          "Les vidéos externes se chargent après votre accord pour les contenus tiers. YouTube utilise youtube-nocookie.com ; cela ne remplace pas votre choix de consentement.",
           "Pour le détail de ces traitements, consultez les politiques de confidentialité de Google et des prestataires concernés.",
         ],
       },
       {
         h: "Gestion",
         p: [
+          "Vous pouvez modifier ou retirer votre accord dans les paramètres des cookies en bas de chaque page. Les cartes et vidéos externes ne sont alors plus chargées.",
           "Vous pouvez bloquer ou supprimer les cookies et le stockage local depuis les réglages de votre navigateur. Bloquer le stockage technique peut empêcher la mémorisation de vos favoris ou de votre langue.",
         ],
       },
