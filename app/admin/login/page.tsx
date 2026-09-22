@@ -13,22 +13,28 @@ export default function LoginPage() {
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) {
-      setError("Credenciales incorrectas.");
-      setLoading(false);
+    if (loading) return;
+    if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()) || !password) {
+      setError("Introduce un email válido y tu contraseña.");
       return;
     }
-    router.push("/admin");
-    router.refresh();
+    setLoading(true);
+    setError(null);
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+      if (error) { setError("No se ha podido iniciar sesión. Revisa el email y la contraseña e inténtalo de nuevo."); return; }
+      router.push("/admin");
+      router.refresh();
+    } catch { setError("No se ha podido conectar. Comprueba la conexión y vuelve a intentarlo."); }
+    finally { setLoading(false); }
   }
 
   return (
     <div className="grid min-h-screen place-items-center bg-bg px-5">
       <form
+        noValidate
+        aria-busy={loading}
         onSubmit={onSubmit}
         className="w-full max-w-sm rounded-2xl border border-line bg-surface p-8"
       >
@@ -39,10 +45,14 @@ export default function LoginPage() {
         </div>
         <p className="kicker mb-6 text-center">Panel de gestión</p>
 
-        <label className="mb-2 block text-xs uppercase tracking-widest text-faint">
+        <label htmlFor="admin-email" className="mb-2 block text-xs uppercase tracking-widest text-faint">
           Email
         </label>
         <input
+          id="admin-email"
+          name="email"
+          autoComplete="username"
+          aria-describedby={error ? "login-error" : undefined}
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -50,10 +60,14 @@ export default function LoginPage() {
           className="mb-4 w-full rounded-lg border border-line bg-bg px-4 py-3 text-ink outline-none focus:border-gold"
         />
 
-        <label className="mb-2 block text-xs uppercase tracking-widest text-faint">
+        <label htmlFor="admin-password" className="mb-2 block text-xs uppercase tracking-widest text-faint">
           Contraseña
         </label>
         <input
+          id="admin-password"
+          name="password"
+          autoComplete="current-password"
+          aria-describedby={error ? "login-error" : undefined}
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -61,7 +75,7 @@ export default function LoginPage() {
           className="mb-6 w-full rounded-lg border border-line bg-bg px-4 py-3 text-ink outline-none focus:border-gold"
         />
 
-        {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
+        {error && <p id="login-error" role="alert" className="mb-4 text-sm text-red-400">{error}</p>}
 
         <button
           type="submit"

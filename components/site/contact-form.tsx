@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Mail, Handshake } from "lucide-react";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 import type { Locale } from "@/lib/i18n/config";
+import { enquirySchema } from "@/lib/enquiry-validation";
 import { sendEnquiry, type EnquiryResult } from "@/app/actions/enquiry";
 import {
   ConsentField,
@@ -34,6 +35,8 @@ export function ContactForm({
   title?: string;
   body?: string;
 }) {
+  const formRef = useRef<HTMLFormElement>(null);
+  const [invalidField, setInvalidField] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -51,9 +54,8 @@ export function ContactForm({
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (!consent || state === "sending") return;
-    setState("sending");
-    const r = await sendEnquiry({
+    if (!consent || (state === "sending" || state === "sent")) return;
+    const input = {
       kind,
       name,
       email,
@@ -64,9 +66,21 @@ export function ContactForm({
       website: partner ? website : "",
       propertyUrl: typeof window !== "undefined" ? window.location.href : "",
       locale,
-      consent: true,
+      consent: true as const,
       company,
-    });
+    };
+    const checked = enquirySchema.safeParse(input);
+    if (!checked.success) {
+      const field = String(checked.error.issues[0].path[0]);
+      setInvalidField(field);
+      setResult({ok: false, error: "invalid"});
+      setState("error");
+      formRef.current?.querySelector<HTMLElement>(`[name="${field}"]`)?.focus();
+      return;
+    }
+    setInvalidField("");
+    setState("sending");
+    const r: EnquiryResult = await sendEnquiry(checked.data).catch(() => ({ ok: false as const, error: "mail" as const }));
     setResult(r);
     setState(r.ok ? "sent" : "error");
   }
@@ -75,6 +89,9 @@ export function ContactForm({
 
   return (
     <form
+      ref={formRef}
+      noValidate
+      aria-busy={state === "sending"}
       id="contacto"
       onSubmit={submit}
       className="relative scroll-mt-28 rounded-2xl border border-line bg-surface p-6 sm:p-8"
@@ -94,6 +111,10 @@ export function ContactForm({
             </label>
             <input
               id={`${prefix}-agency`}
+            name="agency"
+            aria-invalid={invalidField === "agency"}
+            aria-describedby={invalidField === "agency" ? "partner-validation" : undefined}
+              maxLength={160}
               value={agency}
               onChange={(e) => setAgency(e.target.value)}
               autoComplete="organization"
@@ -108,6 +129,11 @@ export function ContactForm({
           </label>
           <input
             id={`${prefix}-name`}
+            name="name"
+            aria-invalid={invalidField === "name"}
+            aria-describedby={invalidField === "name" ? "partner-validation" : undefined}
+            minLength={2}
+            maxLength={120}
             value={name}
             onChange={(e) => setName(e.target.value)}
             autoComplete="name"
@@ -121,7 +147,11 @@ export function ContactForm({
           </label>
           <input
             id={`${prefix}-email`}
+            name="email"
+            aria-invalid={invalidField === "email"}
+            aria-describedby={invalidField === "email" ? "partner-validation" : undefined}
             type="email"
+            maxLength={200}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             autoComplete="email"
@@ -135,7 +165,11 @@ export function ContactForm({
           </label>
           <input
             id={`${prefix}-phone`}
+            name="phone"
+            aria-invalid={invalidField === "phone"}
+            aria-describedby={invalidField === "phone" ? "partner-validation" : undefined}
             type="tel"
+            maxLength={40}
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             autoComplete="tel"
@@ -150,6 +184,10 @@ export function ContactForm({
               </label>
               <input
                 id={`${prefix}-country`}
+            name="country"
+            aria-invalid={invalidField === "country"}
+            aria-describedby={invalidField === "country" ? "partner-validation" : undefined}
+                maxLength={80}
                 value={country}
                 onChange={(e) => setCountry(e.target.value)}
                 autoComplete="country-name"
@@ -163,7 +201,11 @@ export function ContactForm({
               </label>
               <input
                 id={`${prefix}-website`}
+            name="website"
+            aria-invalid={invalidField === "website"}
+            aria-describedby={invalidField === "website" ? "partner-validation" : undefined}
                 type="url"
+                maxLength={200}
                 value={website}
                 onChange={(e) => setWebsite(e.target.value)}
                 placeholder="https://"
@@ -180,11 +222,15 @@ export function ContactForm({
           </label>
           <textarea
             id={`${prefix}-message`}
+            name="message"
+            aria-invalid={invalidField === "message"}
+            aria-describedby={invalidField === "message" ? "partner-validation" : undefined}
+            maxLength={partner ? 1500 : 2000}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             rows={4}
             required={!partner}
-            className={inputCls}
+            className={`${inputCls} resize-none field-sizing-content`}
           />
         </div>
       </div>
@@ -201,7 +247,7 @@ export function ContactForm({
       {!consent && state === "idle" && (
         <p className="mt-2 text-[0.68rem] text-faint">{dict.legal.consentRequired}</p>
       )}
-      <SendStatus state={state} result={result} dict={dict} contactEmail={contactEmail} />
+      <div id="partner-validation"><SendStatus state={state} result={result} dict={dict} contactEmail={contactEmail} /></div>
     </form>
   );
 }

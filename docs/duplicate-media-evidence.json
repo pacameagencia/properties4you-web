@@ -1,0 +1,111 @@
+{
+  "checked_at": "2026-09-21",
+  "source": "https://njlbbvkdkuavbayqcszp.supabase.co/storage/v1/object/public/properties/",
+  "groups": [
+    {
+      "same_bytes": true,
+      "images": [
+        {
+          "file": "alba-salinas-2/07.webp",
+          "sha256": "18c6801a24f5b9c4695a3beaeb8a30a1130c573739f5468fb2d5f73136e7bb7e",
+          "bytes": 87156
+        },
+        {
+          "file": "apartamentos-saito/00.webp",
+          "sha256": "18c6801a24f5b9c4695a3beaeb8a30a1130c573739f5468fb2d5f73136e7bb7e",
+          "bytes": 87156
+        },
+        {
+          "file": "esence-i/06.webp",
+          "sha256": "18c6801a24f5b9c4695a3beaeb8a30a1130c573739f5468fb2d5f73136e7bb7e",
+          "bytes": 87156
+        }
+      ]
+    },
+    {
+      "same_bytes": true,
+      "images": [
+        {
+          "file": "apartamentos-saito/07.webp",
+          "sha256": "b8de3032eb92302a1d1ae57484830212f75a68fe3db560d0c2d40030fe15de8a",
+          "bytes": 81688
+        },
+        {
+          "file": "esence-i/00.webp",
+          "sha256": "b8de3032eb92302a1d1ae57484830212f75a68fe3db560d0c2d40030fe15de8a",
+          "bytes": 81688
+        },
+        {
+          "file": "esence-iii/06.webp",
+          "sha256": "b8de3032eb92302a1d1ae57484830212f75a68fe3db560d0c2d40030fe15de8a",
+          "bytes": 81688
+        }
+      ]
+    },
+    {
+      "same_bytes": true,
+      "images": [
+        {
+          "file": "esence-i/07.webp",
+          "sha256": "846dcf95eee4a80cb8bb6e9595fffa548f904b05c0da6785fa74cdbd9323b547",
+          "bytes": 179232
+        },
+        {
+          "file": "esence-iii/00.webp",
+          "sha256": "846dcf95eee4a80cb8bb6e9595fffa548f904b05c0da6785fa74cdbd9323b547",
+          "bytes": 179232
+        },
+        {
+          "file": "villas-catalina/06.webp",
+          "sha256": "846dcf95eee4a80cb8bb6e9595fffa548f904b05c0da6785fa74cdbd9323b547",
+          "bytes": 179232
+        }
+      ]
+    },
+    {
+      "same_bytes": true,
+      "images": [
+        {
+          "file": "alba-salinas-2/00.webp",
+          "sha256": "6322542b7dfb12aefc3fa18a299ffc3121a0596e7e78b57d9baa50d709c37713",
+          "bytes": 44326
+        },
+        {
+          "file": "apartamentos-saito/06.webp",
+          "sha256": "6322542b7dfb12aefc3fa18a299ffc3121a0596e7e78b57d9baa50d709c37713",
+          "bytes": 44326
+        }
+      ]
+    },
+    {
+      "same_bytes": true,
+      "images": [
+        {
+          "file": "alba-salinas-2/06.webp",
+          "sha256": "d0b91752c6618a00c93b1eb6ae5ad939bb712d08b2c8f3d67e6b4875da1aa5fd",
+          "bytes": 118086
+        },
+        {
+          "file": "thiar-village-v/00.webp",
+          "sha256": "d0b91752c6618a00c93b1eb6ae5ad939bb712d08b2c8f3d67e6b4875da1aa5fd",
+          "bytes": 118086
+        }
+      ]
+    },
+    {
+      "same_bytes": true,
+      "images": [
+        {
+          "file": "thiar-village-v/06.webp",
+          "sha256": "6233fbc9eda15031167e55e5a0cc101c1fdbd665d8e29d7d2cf1c9c641d5dbed",
+          "bytes": 70544
+        },
+        {
+          "file": "villas-catalina/00.webp",
+          "sha256": "6233fbc9eda15031167e55e5a0cc101c1fdbd665d8e29d7d2cf1c9c641d5dbed",
+          "bytes": 70544
+        }
+      ]
+    }
+  ]
+}

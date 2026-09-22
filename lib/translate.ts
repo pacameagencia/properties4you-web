@@ -1,4 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { z } from "zod";
 import type { Locale } from "./i18n/config";
 import type { PropertyContent, Translations } from "./types";
 
@@ -15,8 +16,8 @@ const LANG_NAME: Record<Locale, string> = {
 const MODEL = process.env.ANTHROPIC_MODEL || "claude-opus-4-8";
 
 /**
- * Traduce el contenido español de una propiedad a DE/NL/EN.
- * Si no hay API key, devuelve solo el español (degradación elegante).
+ * Traduce a EN/DE/NL/FR. Los fallos se comunican al editor; nunca se
+ * presenta una copia del español como si fuera una traducción.
  */
 export async function translateProperty(
   es: PropertyContent,
@@ -24,12 +25,10 @@ export async function translateProperty(
   const result: Translations = { es };
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey || (!es.description && !(es.features && es.features.length))) {
-    for (const t of TARGETS) result[t] = es;
-    return result;
-  }
+  if (!es.description && !es.features?.length) return result;
+  if (!apiKey) throw new Error("Traducción no configurada");
 
-  const client = new Anthropic({ apiKey });
+  const client = new Anthropic({ apiKey, timeout: 25_000, maxRetries: 0 });
 
   await Promise.all(
     TARGETS.map(async (target) => {
@@ -55,13 +54,14 @@ export async function translateProperty(
           .join("")
           .trim();
         const json = text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1);
-        const parsed = JSON.parse(json) as PropertyContent;
+        const parsed = z.object({ description: z.string(), features: z.array(z.string()) }).parse(JSON.parse(json));
+        if ((es.description && !parsed.description.trim()) || parsed.features.length !== (es.features?.length ?? 0)) throw new Error("Traducción incompleta");
         result[target] = {
           description: parsed.description ?? es.description,
           features: parsed.features ?? es.features,
         };
       } catch {
-        result[target] = es; // fallback: copia el español
+        throw new Error(`No se pudo traducir a ${target}`);
       }
     }),
   );

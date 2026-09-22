@@ -1,3 +1,4 @@
+import { ConsentVideo } from "@/components/site/consent-video";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -98,7 +99,6 @@ export default async function PropertyPage({
 
   const phone = settings?.contact_phone || "+34 650 37 92 58";
   const email = settings?.contact_email || "info@properties4you.es";
-  const whatsapp = phone.replace(/\D/g, "");
 
   const content = localizedContent(property, locale);
   const idx = all.findIndex((p) => p.slug === slug);
@@ -351,13 +351,7 @@ export default async function PropertyPage({
               <Reveal>
                 <h2 className="kicker mb-6">{dict.media.video}</h2>
                 <div className="aspect-video overflow-hidden rounded-2xl border border-line">
-                  <iframe
-                    src={video}
-                    title={property.name}
-                    className="h-full w-full"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
+                  <ConsentVideo src={video} title={property.name} dict={dict} />
                 </div>
               </Reveal>
             ) : null}
@@ -425,7 +419,7 @@ export default async function PropertyPage({
             <div className="rounded-2xl border border-line bg-surface p-7">
               <div className="mb-6 flex items-center justify-between border-b border-line pb-5">
                 <span className="text-[0.72rem] uppercase tracking-[0.16em] text-gold">
-                  {dict.status[property.status]}
+                  {property.status !== "en_venta" ? dict.status[property.status] : property.amenities?.includes("ready_now") ? dict.phase.keyReady : dict.phase.inDevelopment}
                 </span>
                 {property.reference && (
                   <span className="text-xs text-faint">
@@ -544,13 +538,11 @@ export default async function PropertyPage({
         </section>
       )}
 
-      {/* CONTACTO RÁPIDO: barra móvil + flotante WhatsApp */}
+      {/* CONTACTO RÁPIDO: correo de la agencia */}
       <QuickContact
         dict={dict}
-        whatsapp={whatsapp}
         phone={phone}
         email={email}
-        context={`${dict.stories.interested}: ${property.name} (${property.reference ?? ""})`}
       />
     </article>
   );

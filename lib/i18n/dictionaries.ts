@@ -82,13 +82,14 @@ export type Dictionary = {
     consentRequired: string;
   };
   /** Aviso de cookies y carga diferida del mapa de Google. */
-  cookies: { title: string; body: string; accept: string; essential: string; more: string; loadMap: string; loadMapHint: string };
+  cookies: { title: string; body: string; accept: string; essential: string; more: string; loadMap: string; loadMapHint: string; preferences: string; loadVideo: string; externalHint: string };
   /** Formularios que envían correo (visita, contacto, colaboración). */
   forms: {
     email: string;
     sending: string;
     sent: string;
     error: string;
+    invalid: string;
     dateLabel: string;
     contactTitle: string;
     contactBody: string;
@@ -241,9 +242,13 @@ const es: Dictionary = {
     essential: "Solo lo necesario",
     more: "Política de cookies",
     loadMap: "Cargar mapa de Google",
-    loadMapHint: "Al cargarlo aceptas las cookies de Google Maps.",
+    loadMapHint: "Al cargarlo permites mapas y vídeos externos. Puedes retirar el permiso en «Configurar cookies».",
+    preferences: "Configurar cookies",
+    loadVideo: "Cargar vídeo",
+    externalHint: "Al cargarlo permites mapas y vídeos externos. Puedes retirar el permiso en «Configurar cookies».",
   },
   forms: {
+    invalid: "Revisa el campo marcado y acepta la política de privacidad.",
     email: "Tu email",
     sending: "Enviando…",
     sent: "Mensaje enviado. Te respondemos por email lo antes posible.",
@@ -404,9 +409,13 @@ const de: Dictionary = {
     essential: "Nur das Nötige",
     more: "Cookie-Richtlinie",
     loadMap: "Google-Karte laden",
-    loadMapHint: "Mit dem Laden akzeptieren Sie die Cookies von Google Maps.",
+    loadMapHint: "Das Laden erlaubt externe Karten und Videos. Sie können die Erlaubnis in den Cookie-Einstellungen widerrufen.",
+    preferences: "Cookie-Einstellungen",
+    loadVideo: "Video laden",
+    externalHint: "Das Laden erlaubt externe Karten und Videos. Sie können die Erlaubnis in den Cookie-Einstellungen widerrufen.",
   },
   forms: {
+    invalid: "Prüfen Sie das markierte Feld und stimmen Sie der Datenschutzerklärung zu.",
     email: "Ihre E-Mail",
     sending: "Wird gesendet…",
     sent: "Nachricht gesendet. Wir antworten so schnell wie möglich per E-Mail.",
@@ -567,9 +576,13 @@ const nl: Dictionary = {
     essential: "Alleen noodzakelijk",
     more: "Cookiebeleid",
     loadMap: "Google-kaart laden",
-    loadMapHint: "Door de kaart te laden accepteert u de cookies van Google Maps.",
+    loadMapHint: "Hiermee sta je externe kaarten en video’s toe. Je kunt dit intrekken via de cookie-instellingen.",
+    preferences: "Cookie-instellingen",
+    loadVideo: "Video laden",
+    externalHint: "Hiermee sta je externe kaarten en video’s toe. Je kunt dit intrekken via de cookie-instellingen.",
   },
   forms: {
+    invalid: "Controleer het gemarkeerde veld en ga akkoord met het privacybeleid.",
     email: "Uw e-mail",
     sending: "Versturen…",
     sent: "Bericht verstuurd. We antwoorden zo snel mogelijk per e-mail.",
@@ -730,9 +743,13 @@ const en: Dictionary = {
     essential: "Essentials only",
     more: "Cookie policy",
     loadMap: "Load Google map",
-    loadMapHint: "Loading it means accepting Google Maps cookies.",
+    loadMapHint: "Loading allows external maps and videos. You can withdraw permission in Cookie settings.",
+    preferences: "Cookie settings",
+    loadVideo: "Load video",
+    externalHint: "Loading allows external maps and videos. You can withdraw permission in Cookie settings.",
   },
   forms: {
+    invalid: "Check the highlighted field and accept the privacy policy.",
     email: "Your email",
     sending: "Sending…",
     sent: "Message sent. We will reply by email as soon as possible.",
@@ -894,9 +911,13 @@ const fr: Dictionary = {
     essential: "Essentiel uniquement",
     more: "Politique de cookies",
     loadMap: "Charger la carte Google",
-    loadMapHint: "En la chargeant, vous acceptez les cookies de Google Maps.",
+    loadMapHint: "Le chargement autorise les cartes et vidéos externes. Vous pouvez retirer cette autorisation dans les paramètres des cookies.",
+    preferences: "Paramètres des cookies",
+    loadVideo: "Charger la vidéo",
+    externalHint: "Le chargement autorise les cartes et vidéos externes. Vous pouvez retirer cette autorisation dans les paramètres des cookies.",
   },
   forms: {
+    invalid: "Vérifiez le champ signalé et acceptez la politique de confidentialité.",
     email: "Votre e-mail",
     sending: "Envoi…",
     sent: "Message envoyé. Nous vous répondons par e-mail dès que possible.",

@@ -25,9 +25,10 @@ export function readConsent(): Consent | null {
   }
 }
 
-export function writeConsent(v: Consent): void {
+export function writeConsent(v: Consent | null): void {
   try {
-    localStorage.setItem(KEY, v);
+    if (v === null) localStorage.removeItem(KEY);
+    else localStorage.setItem(KEY, v);
   } catch {
     /* sin almacenamiento: el aviso volverá a salir la próxima vez */
   }
@@ -40,9 +41,11 @@ export function useConsent(): Consent | null | undefined {
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- lectura de localStorage tras hidratar
     setConsent(readConsent());
-    const onChange = (e: Event) => setConsent((e as CustomEvent<Consent>).detail);
+    const onChange = (e: Event) => setConsent((e as CustomEvent<Consent | null>).detail);
+    const onStorage = (event: StorageEvent) => { if (event.key === KEY || event.key === null) setConsent(readConsent()); };
     window.addEventListener(EVENT, onChange);
-    return () => window.removeEventListener(EVENT, onChange);
+    window.addEventListener("storage", onStorage);
+    return () => { window.removeEventListener(EVENT, onChange); window.removeEventListener("storage", onStorage); };
   }, []);
   return consent;
 }

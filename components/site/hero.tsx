@@ -48,7 +48,8 @@ export function Hero({
   useEffect(() => {
     if (!videoUrl) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    setLoadVideo(true);
+    const frame = requestAnimationFrame(() => setLoadVideo(true));
+    return () => cancelAnimationFrame(frame);
   }, [videoUrl]);
 
   const titleWords =

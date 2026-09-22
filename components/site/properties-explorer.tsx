@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { SlidersHorizontal, ChevronDown } from "lucide-react";
 import type { Locale } from "@/lib/i18n/config";
@@ -31,6 +31,11 @@ export function PropertiesExplorer({
   dict: Dictionary;
 }) {
   const params = useSearchParams();
+  return <ExplorerFilters key={params.toString()} properties={properties} locale={locale} dict={dict} />;
+}
+
+function ExplorerFilters({properties, locale, dict}: {properties: Property[]; locale: Locale; dict: Dictionary}) {
+  const params = useSearchParams();
   const [zone, setZone] = useState<string>(params.get("zona") ?? "");
   const [type, setType] = useState<string>(params.get("tipo") ?? "");
   const [band, setBand] = useState<number>(() => {
@@ -46,27 +51,6 @@ export function PropertiesExplorer({
   });
   const [sort, setSort] = useState<Sort>("featured");
   const [extrasOpen, setExtrasOpen] = useState(false);
-
-  // La URL manda: App Router reutiliza este componente entre navegaciones al
-  // mismo route (p. ej. buscador de la home → /propiedades?zona=X cuando ya
-  // se visitó /propiedades), así que los initializers de useState no vuelven
-  // a ejecutarse. Sin esta sincronización, esa búsqueda no aplicaría nada.
-  useEffect(() => {
-    setZone(params.get("zona") ?? "");
-    setType(params.get("tipo") ?? "");
-    const raw = params.get("precio");
-    if (raw === null || raw === "") setBand(-1);
-    else {
-      const b = Number(raw);
-      setBand(Number.isInteger(b) && b >= 0 && b < PRICE_BANDS.length ? b : -1);
-    }
-    setBeds(Number(params.get("dorm")) || 0);
-    const a = params.get("extras");
-    setAmenities(
-      a ? a.split(",").filter((x) => (AMENITIES as readonly string[]).includes(x)) : [],
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- la cadena es la identidad real de la navegación
-  }, [params.toString()]);
 
   const zones = useMemo(
     () => [...new Set(properties.map((p) => p.zone).filter(Boolean))] as string[],

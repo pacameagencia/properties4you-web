@@ -66,15 +66,9 @@ export function ShareButtons({
         {dict.share.title}
       </span>
       <a
-        href="#"
-        onClick={(e) => {
-          e.preventDefault();
-          window.open(
-            `https://wa.me/?text=${encodeURIComponent(`${title}\n${url()}`)}`,
-            "_blank",
-            "noopener",
-          );
-        }}
+        href={`https://wa.me/?text=${encodeURIComponent(`${title}\n${pageUrl}`)}`}
+        target="_blank"
+        rel="noopener noreferrer"
         className={btn}
       >
         <WhatsAppIcon /> WhatsApp
@@ -90,11 +84,11 @@ export function ShareButtons({
       >
         <FacebookIcon /> Facebook
       </a>
-      <button onClick={copy} className={btn}>
+      <button type="button" onClick={copy} className={btn}>
         {copied ? <Check size={14} className="text-gold" /> : <Link2 size={14} />}
         {copied ? dict.share.copied : dict.share.copy}
       </button>
-      <button onClick={nativeShare} className={`${btn} sm:hidden`}>
+      <button type="button" aria-label={dict.share.title} onClick={nativeShare} className={`${btn} sm:hidden`}>
         <Share2 size={14} />
       </button>
     </div>

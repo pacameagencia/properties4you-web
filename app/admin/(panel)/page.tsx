@@ -11,19 +11,23 @@ const STATUS_LABEL: Record<string, string> = {
   vendido: "Vendida",
 };
 
-export default async function AdminDashboard() {
+export default async function AdminDashboard({ searchParams }: { searchParams: Promise<{ saved?: string }> }) {
+  const { saved } = await searchParams;
   const supabase = await createClient();
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("properties")
     .select("*")
     .order("sort_order", { ascending: false })
     .order("created_at", { ascending: false });
+  if (error) return <p role="alert" className="rounded-xl border border-red-400/30 p-5 text-red-300">No se han podido cargar las propiedades. Recarga la página o comprueba tu sesión.</p>;
   const properties = (data ?? []) as Property[];
 
   const published = properties.filter((p) => p.published).length;
 
   return (
     <>
+      {saved === "property" && <p role="status" className="mb-6 rounded-xl border border-gold/40 bg-gold/10 px-5 py-4 text-sm text-gold">Propiedad guardada correctamente.</p>}
+      {saved === "translation-pending" && <p role="status" className="mb-6 rounded-xl border border-gold/40 bg-gold/10 px-5 py-4 text-sm text-gold">Borrador guardado en español. La traducción automática no está disponible; completa los idiomas antes de publicarlo.</p>}
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="font-display text-4xl text-ink">Propiedades</h1>

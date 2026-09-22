@@ -1,6 +1,6 @@
 # Properties4You · Costa Blanca
 
-Web inmobiliaria de obra nueva en la Costa Blanca. Catálogo multiidioma (ES/DE/NL/EN)
+Web inmobiliaria de obra nueva en la Costa Blanca. Catálogo multiidioma (ES/DE/NL/EN/FR)
 con panel de administración para que el cliente suba y gestione sus propiedades.
 
 ## Stack
@@ -9,14 +9,14 @@ con panel de administración para que el cliente suba y gestione sus propiedades
 - **TailwindCSS v4** — sistema de diseño oscuro/premium (Cormorant Garamond + Inter)
 - **Supabase** — Postgres + RLS + Auth + Storage (proyecto `njlbbvkdkuavbayqcszp`)
 - **Framer Motion / Lenis** — scroll suave y reveals
-- **Anthropic (Opus)** — autotraducción ES → DE/NL/EN al guardar
-- **Vercel** — despliegue
+- **Anthropic (Opus)** — autotraducción ES → DE/NL/EN/FR al cambiar contenido; también edición manual
+- **VPS + Docker/Caddy** — dominio principal; ver [deploy/README.md](deploy/README.md). El repositorio conserva integraciones de Netlify/Vercel.
 
 ## Estructura
 
 ```
 app/
-  [lang]/                 → web pública (es | de | nl | en)
+  [lang]/                 → web pública (es | de | nl | en | fr)
     page.tsx              → home (hero, destacadas, destino, CTA)
     propiedades/          → catálogo con filtros
     propiedad/[slug]/     → ficha completa + galería + mapa
@@ -27,7 +27,7 @@ app/
   actions.ts              → server actions (guardar, borrar, publicar, autotraducir)
 lib/
   supabase/               → clientes browser / server / admin
-  i18n/                   → config + diccionarios de UI (4 idiomas)
+  i18n/                   → config + diccionarios de UI (5 idiomas)
   queries.ts, types.ts, utils.ts, translate.ts
 components/site · components/admin
 middleware.ts             → refresco de sesión + enrutado de idioma + guard admin
@@ -36,7 +36,7 @@ middleware.ts             → refresco de sesión + enrutado de idioma + guard a
 ## Modelo de datos
 
 Tabla `properties` con campos estructurados (precio, dormitorios, baños, m², tipo,
-certificado energético, ubicación) + `translations` JSONB (`{es,de,nl,en}` con
+certificado energético, ubicación) + `translations` JSONB (`{es,de,nl,en,fr}` con
 `description` y `features`) + `gallery` JSONB. RLS: lectura pública de publicadas,
 escritura solo para `app_admins`. Bucket `properties` (público) para imágenes.
 
@@ -46,15 +46,18 @@ escritura solo para `app_admins`. Bucket `properties` (público) para imágenes.
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=      # solo scripts server-side
-ANTHROPIC_API_KEY=              # autotraducción (sin key: copia el español)
+ANTHROPIC_API_KEY=              # autotraducción; sin key se informa del fallo, nunca se simula una traducción
 ANTHROPIC_MODEL=claude-opus-4-8
 ```
 
 ## Desarrollo
 
 ```bash
-npm install
+npm ci
 npm run dev      # http://localhost:3000
+npm test
+npm run lint
+npx tsc --noEmit
 npm run build
 ```
 
@@ -87,7 +90,14 @@ que pide deploy es una **zona nueva**: hay que añadirla a `lib/zones.ts`.
 
 `/admin` → login con email + contraseña (usuario en `app_admins`). Desde ahí se
 crea/edita cada propiedad con todos los campos de la ficha, se suben imágenes
-(portada + galería) y al guardar se traduce automáticamente a los 4 idiomas.
+(portada + galería) y se elige entre traducción automática o edición manual de los
+cuatro idiomas adicionales. Las fichas nuevas empiezan como borradores. Para
+publicar se exige portada y descripción en los cinco idiomas. Cambiar precio o
+fotos conserva las traducciones existentes. El panel avisa de conflictos de edición,
+subidas fallidas y cambios sin guardar.
+
+Consulta [la revisión del cliente](docs/revision-cliente-2026-09-21.md) para ver
+qué está comprobado, qué correcciones contiene esta rama y qué falta validar en producción.
 
 ---
 

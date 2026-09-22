@@ -1,6 +1,7 @@
 "use server";
 
-import { z } from "zod";
+import { enquirySchema, leadMessage, type EnquiryInput } from "@/lib/enquiry-validation";
+export type { EnquiryInput } from "@/lib/enquiry-validation";
 import { createClient } from "@supabase/supabase-js";
 import { sendEnquiryMail, type Enquiry } from "@/lib/mail";
 
@@ -14,31 +15,8 @@ import { sendEnquiryMail, type Enquiry } from "@/lib/mail";
  * solicitud queda igualmente en el panel y el usuario ve el error con el
  * correo al que escribir. Nunca se pierde un contacto en silencio.
  */
-const schema = z.object({
-  kind: z.enum(["visita", "contacto", "colabora"]),
-  name: z.string().trim().min(2).max(120),
-  email: z.string().trim().email().max(200),
-  phone: z.string().trim().max(40).optional().or(z.literal("")),
-  message: z.string().trim().max(3000).optional().or(z.literal("")),
-  preferredDate: z
-    .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/)
-    .optional()
-    .or(z.literal("")),
-  propertyId: z.string().uuid().optional().or(z.literal("")),
-  propertyName: z.string().trim().max(200).optional().or(z.literal("")),
-  propertyUrl: z.string().trim().url().max(500).optional().or(z.literal("")),
-  agency: z.string().trim().max(160).optional().or(z.literal("")),
-  country: z.string().trim().max(80).optional().or(z.literal("")),
-  website: z.string().trim().max(200).optional().or(z.literal("")),
-  locale: z.enum(["es", "en", "de", "nl", "fr"]),
-  consent: z.literal(true),
-  /** Honeypot: los humanos no lo ven; si viene relleno es un bot. */
-  company: z.string().max(0).optional().or(z.literal("")),
-});
 
-export type EnquiryInput = z.input<typeof schema>;
-export type EnquiryResult = { ok: true } | { ok: false; error: "invalid" | "mail" };
+export type EnquiryResult = { ok: true } | { ok: false; error: "invalid" | "mail" | "storage" };
 
 /** `leads.source` admite visita | stories | contacto: la colaboración entra como contacto. */
 const SOURCE: Record<Enquiry["kind"], "visita" | "contacto"> = {
@@ -48,30 +26,23 @@ const SOURCE: Record<Enquiry["kind"], "visita" | "contacto"> = {
 };
 
 export async function sendEnquiry(raw: EnquiryInput): Promise<EnquiryResult> {
-  const parsed = schema.safeParse(raw);
+  const parsed = enquirySchema.safeParse(raw);
   if (!parsed.success) return { ok: false, error: "invalid" };
   const d = parsed.data;
 
   const nz = (v: string | undefined) => (v ? v : null);
   const propertyName =
     d.kind === "colabora" ? "Colabora con nosotros" : nz(d.propertyName);
-  const message = [
-    d.kind === "colabora" && d.agency && `Agencia: ${d.agency}`,
-    d.kind === "colabora" && d.country && `País: ${d.country}`,
-    d.kind === "colabora" && d.website && `Web: ${d.website}`,
-    nz(d.message),
-  ]
-    .filter(Boolean)
-    .join("\n");
+  const message = leadMessage(d);
 
-  // 1) Lead a la bandeja del admin (best-effort: no bloquea el correo).
+  // 1) Comprobar la escritura: Supabase devuelve errores sin lanzar excepciones.
   try {
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
       { auth: { persistSession: false } },
     );
-    await supabase.from("leads").insert({
+    const { error } = await supabase.from("leads").insert({
       property_id: nz(d.propertyId),
       property_name: propertyName,
       name: d.name,
@@ -82,8 +53,13 @@ export async function sendEnquiry(raw: EnquiryInput): Promise<EnquiryResult> {
       locale: d.locale,
       source: SOURCE[d.kind],
     });
+    if (error) {
+      console.error("[enquiry] lead rechazado:", error.code);
+      return { ok: false, error: "storage" };
+    }
   } catch (err) {
-    console.error("[enquiry] no se pudo guardar el lead:", err);
+    console.error("[enquiry] no se pudo guardar el lead:", err instanceof Error ? err.name : "error");
+    return { ok: false, error: "storage" };
   }
 
   // 2) Correo al buzón de la agencia.

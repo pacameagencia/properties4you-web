@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { CalendarDays } from "lucide-react";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 import type { Locale } from "@/lib/i18n/config";
+import { enquirySchema } from "@/lib/enquiry-validation";
 import { sendEnquiry, type EnquiryResult } from "@/app/actions/enquiry";
 import {
   ConsentField,
@@ -36,6 +37,8 @@ export function VisitForm({
   propertyName: string;
   contactEmail: string;
 }) {
+  const formRef = useRef<HTMLFormElement>(null);
+  const [invalidField, setInvalidField] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -50,10 +53,9 @@ export function VisitForm({
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (!consent || state === "sending") return;
-    setState("sending");
-    const r = await sendEnquiry({
-      kind: "visita",
+    if (!consent || (state === "sending" || state === "sent")) return;
+    const input = {
+      kind: "visita" as const,
       name,
       email,
       phone,
@@ -63,15 +65,30 @@ export function VisitForm({
       propertyName,
       propertyUrl: typeof window !== "undefined" ? window.location.href : "",
       locale,
-      consent: true,
+      consent: true as const,
       company,
-    });
+    };
+    const checked = enquirySchema.safeParse(input);
+    if (!checked.success) {
+      const field = String(checked.error.issues[0].path[0]);
+      setInvalidField(field);
+      setResult({ok: false, error: "invalid"});
+      setState("error");
+      formRef.current?.querySelector<HTMLElement>(`[name="${field}"]`)?.focus();
+      return;
+    }
+    setInvalidField("");
+    setState("sending");
+    const r: EnquiryResult = await sendEnquiry(checked.data).catch(() => ({ ok: false as const, error: "mail" as const }));
     setResult(r);
     setState(r.ok ? "sent" : "error");
   }
 
   return (
     <form
+      ref={formRef}
+      noValidate
+      aria-busy={state === "sending"}
       id="visita"
       onSubmit={submit}
       className="relative scroll-mt-28 rounded-2xl border border-line bg-surface p-6"
@@ -88,6 +105,11 @@ export function VisitForm({
           </label>
           <input
             id="visit-name"
+            name="name"
+            aria-invalid={invalidField === "name"}
+            aria-describedby={invalidField === "name" ? "visit-validation" : undefined}
+            minLength={2}
+            maxLength={120}
             value={name}
             onChange={(e) => setName(e.target.value)}
             autoComplete="name"
@@ -101,7 +123,11 @@ export function VisitForm({
           </label>
           <input
             id="visit-email"
+            name="email"
+            aria-invalid={invalidField === "email"}
+            aria-describedby={invalidField === "email" ? "visit-validation" : undefined}
             type="email"
+            maxLength={200}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             autoComplete="email"
@@ -115,7 +141,11 @@ export function VisitForm({
           </label>
           <input
             id="visit-phone"
+            name="phone"
+            aria-invalid={invalidField === "phone"}
+            aria-describedby={invalidField === "phone" ? "visit-validation" : undefined}
             type="tel"
+            maxLength={40}
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             autoComplete="tel"
@@ -128,6 +158,9 @@ export function VisitForm({
           </label>
           <input
             id="visit-date"
+            name="preferredDate"
+            aria-invalid={invalidField === "preferredDate"}
+            aria-describedby={invalidField === "preferredDate" ? "visit-validation" : undefined}
             type="date"
             value={date}
             min={today}
@@ -141,10 +174,14 @@ export function VisitForm({
           </label>
           <textarea
             id="visit-message"
+            name="message"
+            aria-invalid={invalidField === "message"}
+            aria-describedby={invalidField === "message" ? "visit-validation" : undefined}
+            maxLength={2000}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             rows={3}
-            className={inputCls}
+            className={`${inputCls} resize-none field-sizing-content`}
           />
         </div>
       </div>
@@ -161,7 +198,7 @@ export function VisitForm({
       {!consent && state === "idle" && (
         <p className="mt-2 text-center text-[0.68rem] text-faint">{dict.legal.consentRequired}</p>
       )}
-      <SendStatus state={state} result={result} dict={dict} contactEmail={contactEmail} />
+      <div id="visit-validation"><SendStatus state={state} result={result} dict={dict} contactEmail={contactEmail} /></div>
     </form>
   );
 }

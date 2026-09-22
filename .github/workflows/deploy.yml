@@ -1,11 +1,9 @@
-name: Deploy a Netlify
+name: Deploy legacy Netlify copy (manual)
 
 # Compila en GitHub Actions (gratis en repos públicos) y publica en Netlify
 # con deploy directo, que NO consume créditos de build de Netlify.
 
 on:
-  push:
-    branches: [master]
   workflow_dispatch:
 
 concurrency:
