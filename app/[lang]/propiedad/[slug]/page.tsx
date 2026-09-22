@@ -16,7 +16,7 @@ import {
 import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getPropertyBySlug, getPublishedProperties, getSettings } from "@/lib/queries";
-import { formatPrice, localizedContent } from "@/lib/utils";
+import { formatPrice, formatAreaWithUnit, localizedContent } from "@/lib/utils";
 import { alternatesFor, SITE_URL } from "@/lib/seo";
 import { ZONE_INFO, CHIP_LABELS } from "@/lib/zones";
 import { poiLabel, poiEmoji, AMENITY_LABELS, type Amenity } from "@/lib/pois";
@@ -135,12 +135,12 @@ export default async function PropertyPage({
     property.area_m2 != null && {
       icon: Maximize,
       label: dict.property.area,
-      value: `${property.area_m2} m²`,
+      value: formatAreaWithUnit(property.area_m2, locale),
     },
     property.plot_m2 != null && {
       icon: Trees,
       label: dict.property.plot,
-      value: `${property.plot_m2} m²`,
+      value: formatAreaWithUnit(property.plot_m2, locale),
     },
     { icon: Home, label: dict.property.type, value: typeLabel },
   ].filter(Boolean) as { icon: typeof Home; label: string; value: React.ReactNode }[];

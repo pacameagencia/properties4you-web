@@ -13,7 +13,7 @@ import { BedDouble, Bath, Maximize, ArrowUpRight } from "lucide-react";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 import type { Property } from "@/lib/types";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice, formatAreaWithUnit } from "@/lib/utils";
 import { PropertyMedia } from "./property-media";
 import { FavButton } from "./fav-button";
 
@@ -131,7 +131,8 @@ export function PropertyCard({
             )}
             {p.area_m2 != null && (
               <span className="flex items-center gap-1.5">
-                <Maximize size={15} className="text-faint" /> {p.area_m2} m²
+                <Maximize size={15} className="text-faint" />{" "}
+                {formatAreaWithUnit(p.area_m2, locale)}
               </span>
             )}
           </div>
