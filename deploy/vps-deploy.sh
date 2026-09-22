@@ -26,29 +26,34 @@ SSH_KEY="${SSH_KEY:-$HOME/.ssh/pacame_vps_srv1921063}"
 REMOTE_DIR="/opt/properties4you"
 REF="${1:-HEAD}"
 APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-SSH=(ssh -i "$SSH_KEY" -o StrictHostKeyChecking=accept-new "$VPS_USER@$VPS_HOST")
+SSH_OPTIONS=(-i "$SSH_KEY" -o "StrictHostKeyChecking=${SSH_STRICT_HOST_KEY_CHECKING:-accept-new}" -o BatchMode=yes -o ConnectTimeout=15 -o IdentitiesOnly=yes)
+SSH=(ssh "${SSH_OPTIONS[@]}" "$VPS_USER@$VPS_HOST")
 
 cd "$APP_DIR"
-SHA="$(git rev-parse --short "$REF")"
+SHA="$(git rev-parse --verify "$REF^{commit}")"
+# Verify the existing server configuration before replacing any source files.
+"${SSH[@]}" "test -f $REMOTE_DIR/.env && command -v docker >/dev/null && docker compose version >/dev/null"
 echo "▶ 1/5  Empaquetando $REF ($SHA)…"
 TGZ="$(mktemp -t p4y-XXXX.tgz)"
-git archive --format=tar.gz -o "$TGZ" "$REF"
+trap 'rm -f "$TGZ"' EXIT
+git archive --format=tar.gz -o "$TGZ" "$SHA"
 
 echo "▶ 2/5  Subiendo fuentes a $REMOTE_DIR/src…"
-"${SSH[@]}" "mkdir -p $REMOTE_DIR/src && find $REMOTE_DIR/src -mindepth 1 -delete && tar xzf - -C $REMOTE_DIR/src && echo $SHA > $REMOTE_DIR/DEPLOYED_SHA" < "$TGZ"
+"${SSH[@]}" "mkdir -p $REMOTE_DIR/src && find $REMOTE_DIR/src -mindepth 1 -delete && tar xzf - -C $REMOTE_DIR/src" < "$TGZ"
 rm -f "$TGZ"
 
 echo "▶ 3/5  compose.yml…"
-scp -q -i "$SSH_KEY" -o StrictHostKeyChecking=accept-new "$APP_DIR/deploy/compose.yml" "$VPS_USER@$VPS_HOST:$REMOTE_DIR/compose.yml"
+# Take compose.yml from the same commit as the archived application.
+git show "$SHA:deploy/compose.yml" | "${SSH[@]}" "cat > $REMOTE_DIR/compose.yml"
 
 echo "▶ 4/5  Build + arranque en el VPS (tarda unos minutos)…"
 "${SSH[@]}" "test -f $REMOTE_DIR/.env || { echo '✗ falta $REMOTE_DIR/.env en el VPS'; exit 1; }
-  cd $REMOTE_DIR && docker compose up -d --build --remove-orphans && docker image prune -f >/dev/null"
+  cd $REMOTE_DIR && docker compose up -d --build --remove-orphans"
 
 echo "▶ 5/5  Comprobación local en el VPS…"
 "${SSH[@]}" "for i in 1 2 3 4 5 6; do
   code=\$(curl -s -o /dev/null -w '%{http_code}' -m 10 http://127.0.0.1:3200/es || true)
-  [ \"\$code\" = 200 ] && { echo \"✓ 127.0.0.1:3200/es → 200 (sha \$(cat $REMOTE_DIR/DEPLOYED_SHA))\"; exit 0; }
+  [ \"\$code\" = 200 ] && { echo $SHA > $REMOTE_DIR/DEPLOYED_SHA; echo \"✓ 127.0.0.1:3200/es → 200 (sha $SHA)\"; exit 0; }
   sleep 5; done; echo \"✗ el contenedor no responde 200 (último: \$code)\"; docker compose -f $REMOTE_DIR/compose.yml logs --tail=40 web; exit 1"
 
 echo "✅ Desplegado. Comprueba desde fuera: https://properties4you.es/es"

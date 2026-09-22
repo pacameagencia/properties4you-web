@@ -1,0 +1,73 @@
+name: Deploy to Hostinger VPS
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: properties4you-vps-production
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    if: github.ref == 'refs/heads/master' && vars.VPS_DEPLOY_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+      NEXT_PUBLIC_SUPABASE_URL: https://njlbbvkdkuavbayqcszp.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: sb_publishable_ZuAG90j9E1ox-M6t9KfPIA_hJhtxABE
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run lint
+      - run: npm run build
+
+  deploy:
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: production-vps
+      url: https://properties4you.es
+    env:
+      VPS_HOST: 195.200.15.103
+      VPS_USER: root
+      SSH_KEY: ${{ runner.temp }}/properties4you-deploy-key
+      SSH_STRICT_HOST_KEY_CHECKING: 'yes'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Configure deployment credentials
+        env:
+          DEPLOY_KEY: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+          KNOWN_HOSTS: ${{ secrets.VPS_SSH_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          test -n "$DEPLOY_KEY" || { echo 'Missing VPS_SSH_PRIVATE_KEY'; exit 1; }
+          test -n "$KNOWN_HOSTS" || { echo 'Missing VPS_SSH_KNOWN_HOSTS'; exit 1; }
+          umask 077
+          mkdir -p "$HOME/.ssh"
+          printf '%s\n' "$DEPLOY_KEY" > "$SSH_KEY"
+          printf '%s\n' "$KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          ssh-keygen -y -P '' -f "$SSH_KEY" > /dev/null
+          ssh-keygen -F "$VPS_HOST" -f "$HOME/.ssh/known_hosts" > /dev/null
+      - name: Deploy the verified commit
+        run: bash deploy/vps-deploy.sh "$GITHUB_SHA"
+      - name: Check public website
+        run: curl --fail --silent --show-error --location --retry 5 --retry-delay 5 --max-time 30 --output /dev/null https://properties4you.es/es
+      - name: Remove temporary credentials
+        if: always()
+        run: rm -f "$SSH_KEY" "$HOME/.ssh/known_hosts"
