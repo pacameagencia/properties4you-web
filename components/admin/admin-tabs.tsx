@@ -2,15 +2,16 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Building2, Inbox, Settings } from "lucide-react";
+import { Building2, Inbox, Settings, BookOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-/** Pestañas del panel: Propiedades · Leads (con contador de nuevos) · Ajustes. */
+/** Pestañas del panel: Propiedades · Guía · Leads (con contador) · Ajustes. */
 export function AdminTabs({ newLeads }: { newLeads: number }) {
   const pathname = usePathname();
 
   const tabs = [
     { href: "/admin", label: "Propiedades", icon: Building2, exact: false },
+    { href: "/admin/guia", label: "Guía", icon: BookOpen, exact: false },
     { href: "/admin/leads", label: "Leads", icon: Inbox, exact: true },
     { href: "/admin/ajustes", label: "Ajustes", icon: Settings, exact: true },
   ];

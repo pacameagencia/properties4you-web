@@ -6,6 +6,7 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getPublishedProperties } from "@/lib/queries";
 import { alternatesFor } from "@/lib/seo";
 import { PropertiesExplorer } from "@/components/site/properties-explorer";
+import { PropertiesFallback } from "@/components/site/properties-fallback";
 import { Reveal } from "@/components/site/reveal";
 
 export const revalidate = 600;
@@ -18,7 +19,11 @@ export async function generateMetadata({
   const { lang } = await params;
   const locale = isLocale(lang) ? lang : "es";
   const dict = getDictionary(locale);
-  return { title: dict.nav.properties, alternates: alternatesFor(locale, "/propiedades") };
+  return {
+    title: dict.nav.properties,
+    description: dict.finder.subtitle,
+    alternates: alternatesFor(locale, "/propiedades"),
+  };
 }
 
 export default async function PropertiesPage({
@@ -50,7 +55,13 @@ export default async function PropertiesPage({
       </Reveal>
 
       <div className="mt-16">
-        <Suspense fallback={null}>
+        {/* El fallback NO puede ser null: es lo que se publica en el HTML
+            estático, porque useSearchParams() dentro del explorador aborta el
+            prerender de este subárbol. Con null, /propiedades salía sin una
+            sola ficha ni enlace para Google. */}
+        <Suspense
+          fallback={<PropertiesFallback properties={properties} locale={locale} dict={dict} />}
+        >
           <PropertiesExplorer properties={properties} locale={locale} dict={dict} />
         </Suspense>
       </div>
