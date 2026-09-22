@@ -55,6 +55,7 @@ export function PropertyForm({ initial }: { initial: Property | null }) {
     video_url: initial?.video_url ?? "",
     featured: initial?.featured ?? false,
     published: initial?.published ?? true,
+    skipTranslate: false,
     sort_order: initial?.sort_order?.toString() ?? "0",
     description_es: es.description ?? "",
     features_es: (es.features ?? []).join("\n"),
@@ -108,6 +109,7 @@ export function PropertyForm({ initial }: { initial: Property | null }) {
       amenities,
       description_es: f.description_es,
       features_es: f.features_es.split("\n"),
+      skipTranslate: f.skipTranslate,
     };
     start(async () => {
       const res = await saveProperty(payload);
@@ -363,6 +365,25 @@ export function PropertyForm({ initial }: { initial: Property | null }) {
             />
           </Field>
         </Grid>
+        {/* Salida de emergencia: si la traducción automática no está
+            disponible, guardar fallaría entero y se perdería el trabajo.
+            Marcando esto se guarda el español y los demás idiomas lo muestran
+            hasta que se vuelva a guardar con la casilla desmarcada. */}
+        <label className="mt-5 flex cursor-pointer items-start gap-3 border-t border-line pt-5">
+          <input
+            type="checkbox"
+            checked={Boolean(f.skipTranslate)}
+            onChange={(e) => set("skipTranslate", e.target.checked)}
+            className="mt-0.5 h-5 w-5 cursor-pointer accent-[#c9a464]"
+          />
+          <span className="text-sm text-muted">
+            Guardar solo en español, sin traducir
+            <span className="mt-1 block text-xs text-faint">
+              Úsalo si la traducción automática está dando error. Los demás idiomas
+              mostrarán el español hasta que vuelvas a guardar sin esta casilla.
+            </span>
+          </span>
+        </label>
       </Section>
 
       {error && (

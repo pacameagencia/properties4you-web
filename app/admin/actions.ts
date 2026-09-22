@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { translateProperty, TranslationError } from "@/lib/translate";
+import { translateProperty, translatePost, TranslationError } from "@/lib/translate";
 import { locales } from "@/lib/i18n/config";
 import type { GalleryImage, PropertyContent } from "@/lib/types";
 
@@ -48,6 +48,8 @@ export type PropertyInput = {
   video_url: string | null;
   description_es: string;
   features_es: string[];
+  /** Guardar solo en español, sin traducir. */
+  skipTranslate?: boolean;
 };
 
 async function requireAdmin() {
@@ -79,7 +81,9 @@ export async function saveProperty(input: PropertyInput) {
      español fingiendo estar traducida. */
   let translations;
   try {
-    translations = await translateProperty(esContent);
+    translations = input.skipTranslate
+      ? { es: esContent }
+      : await translateProperty(esContent);
   } catch (e) {
     if (e instanceof TranslationError) {
       return { ok: false, error: e.message };
@@ -202,5 +206,112 @@ export async function saveSettings(input: {
     .eq("id", 1);
   if (error) return { ok: false, error: error.message };
   revalidateSite();
+  return { ok: true };
+}
+
+// ==================== GUÍA DEL COMPRADOR (blog) ====================
+
+export type PostInput = {
+  id?: string;
+  slug: string;
+  published: boolean;
+  sort_order: number;
+  cover_image: string | null;
+  title_es: string;
+  excerpt_es: string;
+  body_es: string;
+  /** Guardar solo en español, sin traducir (para cuando la traducción no está
+      disponible o se quiere revisar el texto antes de gastar en traducirlo). */
+  skipTranslate?: boolean;
+};
+
+/** Revalida la Guía en los cinco idiomas. */
+function revalidateGuia(slug?: string | null) {
+  for (const l of locales) {
+    revalidatePath(`/${l}/blog`);
+    if (slug) revalidatePath(`/${l}/blog/${slug}`);
+  }
+  revalidatePath("/admin/guia");
+}
+
+export async function savePost(input: PostInput) {
+  const supabase = await requireAdmin();
+
+  const slug = input.slug.trim().toLowerCase();
+  if (!/^[a-z0-9-]+$/.test(slug)) {
+    return { ok: false, error: "El identificador solo admite minúsculas, números y guiones." };
+  }
+  if (!input.title_es.trim()) return { ok: false, error: "El título en español es obligatorio." };
+
+  // Mismo criterio que en las propiedades: si la traducción falla, no se
+  // guarda nada. Un artículo en español con bandera alemana es peor que
+  // ningún artículo.
+  const esContent = {
+    title: input.title_es.trim(),
+    excerpt: input.excerpt_es.trim(),
+    body: input.body_es.trim(),
+  };
+
+  let translations;
+  try {
+    // Guardar sin traducir deja los otros idiomas SIN escribir: la web hace
+    // fallback al español y el panel lo muestra como "1/5 idiomas". Es
+    // distinto de copiar el español en el campo alemán, que es lo que se
+    // hacía antes y hacía creer que estaba traducido.
+    translations = input.skipTranslate ? { es: esContent } : await translatePost(esContent);
+  } catch (e) {
+    if (e instanceof TranslationError) return { ok: false, error: e.message };
+    console.error("[savePost] error inesperado al traducir:", e);
+    return {
+      ok: false,
+      error: `Error inesperado al traducir: ${e instanceof Error ? e.message : String(e)}`,
+    };
+  }
+
+  const row = {
+    slug,
+    published: input.published,
+    sort_order: input.sort_order,
+    cover_image: input.cover_image,
+    translations,
+  };
+
+  let error;
+  if (input.id) {
+    ({ error } = await supabase.from("posts").update(row).eq("id", input.id));
+  } else {
+    ({ error } = await supabase.from("posts").insert(row));
+  }
+  if (error) {
+    // 23505 = clave duplicada: el slug ya existe.
+    if (error.code === "23505") {
+      return { ok: false, error: `Ya hay un artículo con el identificador "${slug}".` };
+    }
+    return { ok: false, error: error.message };
+  }
+
+  revalidateGuia(slug);
+  return { ok: true };
+}
+
+export async function togglePostPublished(id: string, published: boolean) {
+  const supabase = await requireAdmin();
+  const { data, error } = await supabase
+    .from("posts")
+    .update({ published })
+    .eq("id", id)
+    .select("slug")
+    .single();
+  if (error) return { ok: false, error: error.message };
+  revalidateGuia(data?.slug);
+  return { ok: true };
+}
+
+export async function deletePost(id: string) {
+  const supabase = await requireAdmin();
+  const { data: prev } = await supabase.from("posts").select("slug").eq("id", id).maybeSingle();
+  const { error } = await supabase.from("posts").delete().eq("id", id);
+  if (error) return { ok: false, error: error.message };
+  revalidateGuia(prev?.slug);
   return { ok: true };
 }

@@ -35,10 +35,23 @@ if (!carpeta) {
   process.exit(1);
 }
 
-const URL = process.env.P4Y_SUPABASE_URL;
+const URL = process.env.P4Y_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
 const KEY = process.env.P4Y_SERVICE_KEY;
-if (!dryRun && (!URL || !KEY)) {
-  console.error("Faltan P4Y_SUPABASE_URL y/o P4Y_SERVICE_KEY en el entorno.");
+// Segunda vía de acceso: la cuenta del panel /admin. La política RLS deja
+// escribir en `properties` y subir al bucket a quien esté en `app_admins`,
+// que es exactamente lo que hace el panel. Sirve cuando no se tiene a mano la
+// service_role (que solo se saca del dashboard de Supabase).
+const ADMIN_EMAIL = process.env.P4Y_ADMIN_EMAIL;
+const ADMIN_PASSWORD = process.env.P4Y_ADMIN_PASSWORD;
+const ANON =
+  process.env.P4Y_ANON_KEY ||
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  "sb_publishable_ZuAG90j9E1ox-M6t9KfPIA_hJhtxABE"; // clave pública del proyecto
+
+if (!dryRun && (!URL || (!KEY && !(ADMIN_EMAIL && ADMIN_PASSWORD)))) {
+  console.error("Faltan credenciales. Necesitas P4Y_SUPABASE_URL y UNA de estas dos:");
+  console.error("  · P4Y_SERVICE_KEY   — service_role (Supabase → Settings → API)");
+  console.error("  · P4Y_ADMIN_EMAIL + P4Y_ADMIN_PASSWORD — la cuenta del panel /admin");
   process.exit(1);
 }
 
@@ -125,7 +138,34 @@ if (dryRun) {
 // ---- Subida ----
 // Import perezoso: validar y --dry-run no deben depender de node_modules.
 const { createClient } = await import("@supabase/supabase-js");
-const supabase = createClient(URL, KEY, { auth: { persistSession: false } });
+
+let supabase;
+if (KEY) {
+  supabase = createClient(URL, KEY, { auth: { persistSession: false } });
+  console.log("Acceso: service_role\n");
+} else {
+  supabase = createClient(URL, ANON, { auth: { persistSession: false } });
+  const { data: sesion, error: errLogin } = await supabase.auth.signInWithPassword({
+    email: ADMIN_EMAIL,
+    password: ADMIN_PASSWORD,
+  });
+  if (errLogin) {
+    console.error(`No se pudo entrar como ${ADMIN_EMAIL}: ${errLogin.message}`);
+    process.exit(1);
+  }
+  // Estar autenticado no basta: escribir exige estar en app_admins. Si no lo
+  // está, las escrituras fallarían una a una a mitad de la subida.
+  const { data: esAdmin, error: errAdmin } = await supabase
+    .from("app_admins")
+    .select("user_id")
+    .eq("user_id", sesion.user.id)
+    .maybeSingle();
+  if (errAdmin || !esAdmin) {
+    console.error(`${ADMIN_EMAIL} no figura en app_admins: no puede escribir.`);
+    process.exit(1);
+  }
+  console.log(`Acceso: cuenta de administrador (${ADMIN_EMAIL})\n`);
+}
 let subidas = 0;
 
 for (const { ficha, dir, fotos } of plan) {
@@ -172,6 +212,32 @@ for (const { ficha, dir, fotos } of plan) {
   if (error) throw new Error(`${ficha.slug}: ${error.message}`);
   console.log(`  ficha guardada · ${gallery.length} fotos`);
 }
+
+// ---- Verificación: que lo escrito esté de verdad ----
+// Un upsert que devuelve sin error y una fila que existe no son lo mismo:
+// releemos lo subido en vez de fiarnos de que ninguna llamada lanzó.
+const slugs = plan.map(({ ficha }) => ficha.slug);
+const { data: guardadas, error: errLectura } = await supabase
+  .from("properties")
+  .select("slug, cover_image, gallery")
+  .in("slug", slugs);
+if (errLectura) throw new Error(`No se pudo verificar lo subido: ${errLectura.message}`);
+
+const porSlug = new Map((guardadas ?? []).map((p) => [p.slug, p]));
+const fallos = [];
+for (const { ficha, fotos } of plan) {
+  const g = porSlug.get(ficha.slug);
+  if (!g) fallos.push(`${ficha.slug}: no aparece en la tabla`);
+  else if (!g.cover_image) fallos.push(`${ficha.slug}: sin portada`);
+  else if ((g.gallery?.length ?? 0) !== fotos.length)
+    fallos.push(`${ficha.slug}: ${g.gallery?.length ?? 0} fotos guardadas de ${fotos.length}`);
+}
+if (fallos.length) {
+  console.error("\n✗ La subida dice que fue bien, pero la comprobación no cuadra:");
+  fallos.forEach((f) => console.error(`   · ${f}`));
+  process.exit(1);
+}
+console.log(`\n✓ Verificado: ${guardadas.length}/${plan.length} fichas están en la base de datos.`);
 
 console.log(`\nListo: ${plan.length} ficha(s), ${subidas} fotos.`);
 console.log("Comprueba con: node scripts/audit-data.mjs");

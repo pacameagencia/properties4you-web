@@ -2,6 +2,10 @@ import Anthropic from "@anthropic-ai/sdk";
 import type { Locale } from "./i18n/config";
 import type { PropertyContent, Translations } from "./types";
 
+/** Un artículo de la Guía del comprador, en un idioma. */
+export type PostContent = { title?: string; excerpt?: string; body?: string };
+export type PostTranslations = Partial<Record<Locale, PostContent>>;
+
 const TARGETS: Locale[] = ["en", "de", "nl", "fr"];
 const LANG_NAME: Record<Locale, string> = {
   es: "español",
@@ -197,6 +201,105 @@ export async function translateProperty(
     throw new TranslationError(
       `La traducción falló en ${failures.length} de ${TARGETS.length} idiomas: ${failures.join("; ")}. ` +
         "No se ha guardado nada para no publicar texto en español haciéndose pasar por traducido.",
+    );
+  }
+
+  return result;
+}
+
+/**
+ * Traduce un artículo de la Guía del comprador a EN/DE/NL/FR.
+ *
+ * Mismo contrato que `translateProperty`: si falla algún idioma, lanza. Un
+ * artículo a medio traducir es peor que no tenerlo, porque se publica en
+ * español bajo una bandera alemana y el lector lo nota antes que nadie.
+ *
+ * El cuerpo va en Markdown sencillo (párrafos, listas, ##). Se le pide al
+ * modelo que respete esa estructura para que el artículo no se descoloque.
+ */
+export async function translatePost(es: PostContent): Promise<PostTranslations> {
+  const result: PostTranslations = { es };
+
+  const hasContent = Boolean(es.title?.trim() || es.body?.trim());
+  if (!hasContent) {
+    for (const t of TARGETS) result[t] = es;
+    return result;
+  }
+
+  const problems = checkConfig();
+  if (problems.length) {
+    throw new TranslationError(`No se puede traducir el artículo. ${problems.join(" ")}`);
+  }
+
+  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY! });
+
+  const settled = await Promise.allSettled(
+    TARGETS.map(async (target) => {
+      const msg = await client.messages.create({
+        model: MODEL,
+        max_tokens: 8000,
+        system:
+          "Eres traductor profesional especializado en contenido inmobiliario y jurídico divulgativo. Traduce con naturalidad, sin añadir ni omitir información, y respeta EXACTAMENTE el formato Markdown del original (encabezados ##, listas, saltos de párrafo). Los nombres propios de trámites e impuestos españoles (NIE, ITP, plusvalía municipal) se mantienen en español, con una aclaración breve entre paréntesis la primera vez que aparecen. Devuelve EXCLUSIVAMENTE un JSON válido con las claves 'title', 'excerpt' y 'body', sin texto adicional.",
+        messages: [
+          {
+            role: "user",
+            content: `Traduce del español al ${LANG_NAME[target]} este artículo.\n\n${JSON.stringify(
+              { title: es.title ?? "", excerpt: es.excerpt ?? "", body: es.body ?? "" },
+              null,
+              2,
+            )}`,
+          },
+        ],
+      });
+
+      const text = msg.content
+        .map((b) => (b.type === "text" ? b.text : ""))
+        .join("")
+        .trim();
+
+      const start = text.indexOf("{");
+      const end = text.lastIndexOf("}");
+      if (start === -1 || end === -1) {
+        throw new Error(`respuesta sin JSON reconocible (empezaba por: ${text.slice(0, 80)}…)`);
+      }
+
+      let parsed: PostContent;
+      try {
+        parsed = JSON.parse(text.slice(start, end + 1)) as PostContent;
+      } catch (e) {
+        throw new Error(`JSON inválido: ${e instanceof Error ? e.message : String(e)}`);
+      }
+
+      if (!parsed.title?.trim() && !parsed.body?.trim()) {
+        throw new Error("la traducción vino vacía");
+      }
+
+      return {
+        locale: target,
+        content: {
+          title: parsed.title?.trim() || es.title,
+          excerpt: parsed.excerpt?.trim() || es.excerpt,
+          body: parsed.body?.trim() || es.body,
+        } satisfies PostContent,
+      };
+    }),
+  );
+
+  const failures: string[] = [];
+  settled.forEach((r, i) => {
+    const target = TARGETS[i];
+    if (r.status === "fulfilled") result[r.value.locale] = r.value.content;
+    else {
+      const reason = r.reason instanceof Error ? r.reason.message : String(r.reason);
+      console.error(`[translate] fallo traduciendo el artículo a ${target}:`, r.reason);
+      failures.push(`${LANG_NAME[target]} (${reason})`);
+    }
+  });
+
+  if (failures.length) {
+    throw new TranslationError(
+      `La traducción falló en ${failures.length} de ${TARGETS.length} idiomas: ${failures.join("; ")}. ` +
+        "No se ha guardado nada para no publicar español haciéndose pasar por traducido.",
     );
   }
 

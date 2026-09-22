@@ -46,6 +46,26 @@ for (const p of data) {
   }
   const galBad = (p.gallery ?? []).filter((g) => !g?.url).length;
   if (galBad) probs.push(`${galBad} imágenes sin url`);
+
+  /* Fotos de varias carpetas en la misma galería.
+     El cliente lo detectó en julio de 2026 ("si vas pasando por las fotos, se
+     ven imágenes de otras viviendas mezcladas"): al enriquecer una ficha se le
+     añadieron fotos de otra fase o del piso piloto, que son casas distintas.
+     No es un error técnico, así que nada lo cantaba. Ahora sí. */
+  const carpetas = {};
+  for (const g of p.gallery ?? []) {
+    const m = (g?.url ?? "").match(/\/properties\/(?:casas\/)?([^/]+)\//);
+    const k = m ? m[1] : "(sin carpeta)";
+    carpetas[k] = (carpetas[k] ?? 0) + 1;
+  }
+  const grupos = Object.keys(carpetas);
+  if (grupos.length > 1) {
+    probs.push(
+      `galería con fotos de ${grupos.length} orígenes: ` +
+        grupos.map((k) => `${k} (${carpetas[k]})`).join(" + ") +
+        " — revisa que todas sean de ESTA vivienda",
+    );
+  }
   if (probs.length) {
     issues++;
     console.log(`✗ ${p.slug} (${p.status})`);
