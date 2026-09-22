@@ -48,11 +48,15 @@ export async function resolvePropertyTranslations(
   previous: Translations | undefined,
   translate: (source: PropertyContent) => Promise<Translations>,
 ): Promise<{ translations: Translations; warning?: string }> {
-  if (previous && sameContent(previous.es, es)) return { translations: { ...previous, es } };
+  const unchanged = previous && sameContent(previous.es, es);
+  const complete = previous && ["en", "de", "nl", "fr"].every((locale) =>
+    Boolean(previous[locale as keyof Translations]?.description?.trim()),
+  );
+  if (unchanged && complete) return { translations: { ...previous, es } };
   try {
     return { translations: await translate(es) };
   } catch {
     // Never publish old translations against a changed Spanish source.
-    return { translations: { es }, warning: "Guardado en español. La traducción automática no está disponible; revisa los idiomas antes de publicar." };
+    return { translations: unchanged ? { ...previous, es } : { es }, warning: "Guardado en español. La traducción automática no está disponible; revisa los idiomas antes de publicar." };
   }
 }

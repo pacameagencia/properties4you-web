@@ -1,0 +1,35 @@
+name: Verify application
+
+on:
+  pull_request:
+  push:
+    branches: [master, codex/revision-cliente-panel]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+      # Public configuration for building public pages, already used by deploy.yml.
+      # No SMTP, service-role or administrator credentials are required.
+      NEXT_PUBLIC_SUPABASE_URL: https://njlbbvkdkuavbayqcszp.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: sb_publishable_ZuAG90j9E1ox-M6t9KfPIA_hJhtxABE
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run lint
+      - run: npm run build

@@ -63,3 +63,21 @@ test('visits reject impossible calendar dates; the date is optional', () => {
   assert.equal(enquirySchema.safeParse({...enquiry,kind:'visita',preferredDate:'2026-02-30'}).success, false);
   assert.equal(enquirySchema.safeParse({...enquiry,kind:'visita',preferredDate:''}).success, true);
 });
+
+
+test('an unchanged Spanish-only draft retries translation after service recovery', async () => {
+  const es = {description: 'Descripción', features: ['Piscina']};
+  const complete = Object.fromEntries(['es','en','de','nl','fr'].map(locale => [locale, {...es, description: locale === 'es' ? es.description : `Translation ${locale}`} ]));
+  let calls = 0;
+  const result = await resolvePropertyTranslations(es, {es}, async () => {calls++; return complete;});
+  assert.equal(calls, 1);
+  assert.deepEqual(result.translations, complete);
+  assert.equal(result.warning, undefined);
+});
+
+test('retrying an incomplete draft does not discard existing translations on failure', async () => {
+  const previous = {es: {description: 'Descripción', features: []}, en: {description: 'Description', features: []}};
+  const result = await resolvePropertyTranslations(previous.es, previous, async () => {throw new Error('offline');});
+  assert.deepEqual(result.translations, previous);
+  assert.ok(result.warning);
+});

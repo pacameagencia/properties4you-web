@@ -77,3 +77,16 @@ La consulta de metadatos también detectó seis grupos compartidos entre Lo Mara
 ## Conservación del diseño
 
 Se ha documentado el sistema visual existente en `DESIGN.md` y el comportamiento en `UX-CONTRACT.md`. No se cambia la identidad aprobada por el cliente. Ajustes duraderos: acciones de imágenes visibles en móvil, errores y estados persistentes, diálogos de confirmación con foco y controles de consentimiento accesibles.
+
+
+## Seguimiento — 22 de septiembre de 2026
+
+El usuario ha solicitado completar la entrega. La PR #4 sigue siendo la revisión vigente; `master` conserva la versión anterior.
+
+- Se añade una comprobación automática en GitHub para las pruebas, ESLint y el build con TypeScript, sin credenciales de administrador ni de correo.
+- Se corrige la recuperación de un borrador solo en español: al guardar de nuevo se reintentan los idiomas ausentes aunque no haya cambiado el texto. Un fallo de ese reintento conserva las traducciones parciales existentes. Las pruebas pasan de 10 a 12.
+- Se añade [la guía del panel](guia-panel.md), identificada como correspondiente a la versión pendiente de despliegue.
+- El estado de despliegue de Vercel del commit inicial de esta PR es **failure**. La conexión disponible devuelve **403 Forbidden / Not authorized** para el proyecto del equipo `pacames-projects`; no ha sido posible leer la causa del build. El check «Vercel Preview Comments» sí aparece verde, pero solo comprueba comentarios, no el despliegue.
+- No hay clave SSH del VPS en esta sesión ni un conector VPS operativo. El conector disponible de Hostinger AI Builder no administra ese servidor. No se han sustituido credenciales ni intentado eludir el acceso.
+
+La entrega continúa bloqueada por acceso al servidor, diagnóstico del despliegue fallido, sesión administradora y los datos/fotos originales indicados arriba. No se ha fusionado ni desplegado una revisión presentando como correctas comprobaciones que no se pueden realizar.
