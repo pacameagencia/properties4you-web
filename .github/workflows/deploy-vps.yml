@@ -44,7 +44,6 @@ jobs:
     env:
       VPS_HOST: 195.200.15.103
       VPS_USER: root
-      SSH_KEY: ${{ runner.temp }}/properties4you-deploy-key
       SSH_STRICT_HOST_KEY_CHECKING: 'yes'
     steps:
       - uses: actions/checkout@v4
@@ -56,6 +55,8 @@ jobs:
           KNOWN_HOSTS: ${{ secrets.VPS_SSH_KNOWN_HOSTS }}
         run: |
           set -euo pipefail
+          SSH_KEY="$RUNNER_TEMP/properties4you-deploy-key"
+          printf 'SSH_KEY=%s\n' "$SSH_KEY" >> "$GITHUB_ENV"
           test -n "$DEPLOY_KEY" || { echo 'Missing VPS_SSH_PRIVATE_KEY'; exit 1; }
           test -n "$KNOWN_HOSTS" || { echo 'Missing VPS_SSH_KNOWN_HOSTS'; exit 1; }
           umask 077
@@ -70,4 +71,4 @@ jobs:
         run: curl --fail --silent --show-error --location --retry 5 --retry-delay 5 --max-time 30 --output /dev/null https://properties4you.es/es
       - name: Remove temporary credentials
         if: always()
-        run: rm -f "$SSH_KEY" "$HOME/.ssh/known_hosts"
+        run: rm -f "$RUNNER_TEMP/properties4you-deploy-key" "$HOME/.ssh/known_hosts"
