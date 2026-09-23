@@ -78,7 +78,13 @@ function validar(ficha, fotos) {
   if (!ficha.maps_url) p.push("sin maps_url");
   if (!ficha.energy_rating) p.push("sin certificado energético");
   if (!Array.isArray(ficha.pois) || ficha.pois.length < 3) p.push(`POIs: ${ficha.pois?.length ?? 0} (mínimo 3)`);
-  if (fotos.length < 5) p.push(`solo ${fotos.length} foto${fotos.length === 1 ? "" : "s"} (mínimo 5)`);
+  /* Mínimo 3 imágenes de la vivienda, no 5.
+     Los modelos de catálogo (los que se construyen sobre la parcela que elija
+     el comprador) no tienen fotos de obra: traen renders y planos comerciales,
+     y de algunos el promotor solo entrega uno de cada. Exigir 5 dejaba fuera
+     fichas completas y correctas. Lo que no se negocia es que haya al menos
+     una imagen de la casa, y eso lo garantiza la portada. */
+  if (fotos.length < 3) p.push(`solo ${fotos.length} imagen${fotos.length === 1 ? "" : "es"} (mínimo 3)`);
 
   const es = ficha.translations?.es?.description?.trim();
   for (const l of LANGS) {
@@ -95,7 +101,10 @@ async function fotosDe(dir) {
   try {
     const todo = await readdir(dir);
     return todo
-      .filter((f) => EXT_FOTO.has(path.extname(f).toLowerCase()))
+      // "plano.*" no entra en la galería: se sube al campo floor_plan, que la
+      // ficha pinta en su propia sección. El cliente pidió justo eso: que los
+      // planos no aparezcan mezclados entre las fotos.
+      .filter((f) => EXT_FOTO.has(path.extname(f).toLowerCase()) && !/^plano\./i.test(f))
       .sort((a, b) => a.localeCompare(b, "es", { numeric: true }));
   } catch {
     return [];
@@ -194,9 +203,35 @@ for (const { ficha, dir, fotos } of plan) {
   }
   console.log("");
 
+  /* Plano de la vivienda. Si la carpeta trae "plano.jpg" (o .png), se sube
+     aparte y va al campo floor_plan, que la ficha pinta en su propia sección
+     bajo el título "Plano de la vivienda". Así no acaba mezclado entre las
+     fotos, que es justo lo que el cliente señaló en su revisión. */
+  let floorPlan = ficha.floor_plan ?? null;
+  const planoLocal = (await readdir(dir)).find((f) => /^plano\.(jpe?g|png|webp)$/i.test(f));
+  if (planoLocal) {
+    const destino = `casas/${ficha.slug}/plano.jpg`;
+    let buffer = await readFile(path.join(dir, planoLocal));
+    if (sharp) {
+      buffer = await sharp(buffer)
+        .rotate()
+        .resize({ width: ANCHO_MAX, withoutEnlargement: true })
+        .jpeg({ quality: CALIDAD, progressive: true })
+        .toBuffer();
+    }
+    const { error } = await supabase.storage
+      .from(BUCKET)
+      .upload(destino, buffer, { contentType: "image/jpeg", upsert: true });
+    if (error) throw new Error(`${ficha.slug} · ${planoLocal}: ${error.message}`);
+    floorPlan = supabase.storage.from(BUCKET).getPublicUrl(destino).data.publicUrl;
+    subidas++;
+    console.log("  plano de la vivienda subido");
+  }
+
   const fila = {
     ...ficha,
     gallery,
+    floor_plan: floorPlan,
     cover_image: gallery[0].url,
     published: ficha.published ?? true,
     status: ficha.status ?? "en_venta",
