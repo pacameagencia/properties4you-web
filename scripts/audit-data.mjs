@@ -33,7 +33,10 @@ for (const p of data) {
   if (p.bathrooms == null) probs.push("sin baños");
   if (p.area_m2 == null) probs.push("sin m2");
   if (!p.cover_image) probs.push("SIN PORTADA");
-  if (!p.gallery || p.gallery.length < 5) probs.push(`galería corta: ${p.gallery?.length ?? 0}`);
+  /* Mínimo 3, igual que ingest-casas.mjs. Los modelos de catálogo que se
+     construyen a medida no tienen fotos de obra: traen renders y planos
+     comerciales, y de algunos el promotor solo entrega uno de cada. */
+  if (!p.gallery || p.gallery.length < 3) probs.push(`galería corta: ${p.gallery?.length ?? 0}`);
   if (!p.pois || p.pois.length < 3) probs.push(`POIs: ${p.pois?.length ?? 0}`);
   if (!p.maps_url) probs.push("sin maps_url");
   if (!p.energy_rating) probs.push("sin cert. energético");
