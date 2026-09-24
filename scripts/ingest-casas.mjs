@@ -71,13 +71,18 @@ function validar(ficha, fotos) {
   if (!ficha.name?.trim()) p.push("sin nombre");
   if (!ficha.reference) p.push("sin referencia");
   if (!ficha.zone) p.push("sin zona");
-  if (ficha.price == null && !ficha.price_from) p.push("sin precio");
-  if (ficha.bedrooms == null) p.push("sin dormitorios");
-  if (ficha.bathrooms == null) p.push("sin baños");
-  if (ficha.area_m2 == null) p.push("sin m2");
+  /* datos_parciales: campos que el promotor NO publica (p. ej. una promoción
+     sin unidades a la venta todavía). Se declaran a mano en la ficha para que
+     el hueco sea una decisión y no un olvido: nunca se rellenan inventando. */
+  const parcial = new Set(ficha.datos_parciales ?? []);
+  if (ficha.price == null && !ficha.price_from && !parcial.has("price")) p.push("sin precio");
+  if (ficha.bedrooms == null && !parcial.has("bedrooms")) p.push("sin dormitorios");
+  if (ficha.bathrooms == null && !parcial.has("bathrooms")) p.push("sin baños");
+  if (ficha.area_m2 == null && !parcial.has("area_m2")) p.push("sin m2");
   if (!ficha.maps_url) p.push("sin maps_url");
   if (!ficha.energy_rating) p.push("sin certificado energético");
-  if (!Array.isArray(ficha.pois) || ficha.pois.length < 3) p.push(`POIs: ${ficha.pois?.length ?? 0} (mínimo 3)`);
+  if ((!Array.isArray(ficha.pois) || ficha.pois.length < 3) && !parcial.has("pois"))
+    p.push(`POIs: ${ficha.pois?.length ?? 0} (mínimo 3)`);
   /* Mínimo 3 imágenes de la vivienda, no 5.
      Los modelos de catálogo (los que se construyen sobre la parcela que elija
      el comprador) no tienen fotos de obra: traen renders y planos comerciales,
@@ -228,8 +233,11 @@ for (const { ficha, dir, fotos } of plan) {
     console.log("  plano de la vivienda subido");
   }
 
+  // datos_parciales y las notas "_x" son del lote, no columnas de la tabla
+  const { datos_parciales, ...columnas } = ficha;
+  for (const k of Object.keys(columnas)) if (k.startsWith("_")) delete columnas[k];
   const fila = {
-    ...ficha,
+    ...columnas,
     gallery,
     floor_plan: floorPlan,
     cover_image: gallery[0].url,
