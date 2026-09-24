@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getPublishedProperties } from "@/lib/queries";
+import { toCard } from "@/lib/utils";
 import { alternatesFor } from "@/lib/seo";
 import { PropertiesExplorer } from "@/components/site/properties-explorer";
 import { PropertiesFallback } from "@/components/site/properties-fallback";
@@ -62,7 +63,7 @@ export default async function PropertiesPage({
         <Suspense
           fallback={<PropertiesFallback properties={properties} locale={locale} dict={dict} />}
         >
-          <PropertiesExplorer properties={properties} locale={locale} dict={dict} />
+          <PropertiesExplorer properties={properties.map(toCard)} locale={locale} dict={dict} />
         </Suspense>
       </div>
     </section>

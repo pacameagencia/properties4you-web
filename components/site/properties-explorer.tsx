@@ -260,9 +260,11 @@ export function PropertiesExplorer({
       </div>
 
       <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-faint">
+        {/* h2 (no p): las tarjetas llevan h3 y sin un h2 delante el orden de
+            encabezados salta de h1 a h3 (Lighthouse heading-order). */}
+        <h2 className="text-sm font-normal text-faint">
           {filtered.length} {dict.filters.results}
-        </p>
+        </h2>
       </div>
 
       {filtered.length === 0 ? (

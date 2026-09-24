@@ -90,11 +90,11 @@ export function ShareButtons({
       >
         <FacebookIcon /> Facebook
       </a>
-      <button onClick={copy} className={btn}>
+      <button type="button" onClick={copy} className={btn}>
         {copied ? <Check size={14} className="text-gold" /> : <Link2 size={14} />}
         {copied ? dict.share.copied : dict.share.copy}
       </button>
-      <button onClick={nativeShare} className={`${btn} sm:hidden`}>
+      <button type="button" onClick={nativeShare} aria-label={dict.share.title} className={`${btn} sm:hidden`}>
         <Share2 size={14} />
       </button>
     </div>
