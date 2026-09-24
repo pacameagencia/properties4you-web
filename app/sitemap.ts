@@ -5,6 +5,11 @@ import { LEGAL_SLUGS } from "@/lib/legal";
 
 const BASE = "https://properties4you.es";
 
+/* Sin esto el sitemap se genera una vez al desplegar y se queda congelado:
+   las fichas que se suben desde el panel o por ingesta no llegaban a Google
+   hasta el siguiente deploy (pasó con las 13 villas del catálogo Rústico). */
+export const revalidate = 3600;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [properties, posts] = await Promise.all([
     getPublishedProperties(),
