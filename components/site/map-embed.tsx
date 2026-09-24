@@ -17,7 +17,7 @@ export function MapEmbed({
   label,
   dict,
 }: {
-  /** Texto ya codificado para la URL (zona + provincia). */
+  /** Texto ya codificado para la URL: "lat,lng" o zona + provincia. */
   query: string;
   /** Texto legible: "Torrevieja · Alicante". */
   label: string;
@@ -28,7 +28,7 @@ export function MapEmbed({
   if (consent === "all") {
     return (
       <iframe
-        src={`https://www.google.com/maps?q=${query}&z=13&output=embed`}
+        src={`https://www.google.com/maps?q=${query}&z=${/^-?\d+(\.\d+)?,-?\d+(\.\d+)?$/.test(query) ? 15 : 13}&output=embed`}
         title={label}
         loading="lazy"
         referrerPolicy="no-referrer-when-downgrade"

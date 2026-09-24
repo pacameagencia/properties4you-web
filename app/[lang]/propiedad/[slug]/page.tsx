@@ -117,9 +117,13 @@ export default async function PropertyPage({
 
   const zoneInfo = property.zone ? ZONE_INFO[property.zone] : undefined;
   const video = property.video_url ? embedUrl(property.video_url) : null;
-  const mapQuery = encodeURIComponent(
-    `${property.zone ?? ""} ${property.province ?? "Alicante"} España`,
-  );
+  /* Con coordenadas, el mapa y "Cómo llegar" van a la vivienda; sin ellas, a la
+     zona. Antes siempre iban al centro del pueblo aunque la ficha tuviera la
+     ubicación exacta (40 de 59 fichas la tienen). */
+  const hasCoords = property.latitude != null && property.longitude != null;
+  const mapQuery = hasCoords
+    ? `${property.latitude},${property.longitude}`
+    : encodeURIComponent(`${property.zone ?? ""} ${property.province ?? "Alicante"} España`);
 
   const specs = [
     property.bedrooms != null && {
