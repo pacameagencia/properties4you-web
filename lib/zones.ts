@@ -174,4 +174,54 @@ export const ZONE_INFO: Record<string, ZoneInfo> = {
       fr: "Urbanisation établie sur les collines de Rojales, avec le golf La Marquesa à deux pas, des commerces et restaurants ouverts toute l'année et une grande communauté internationale. Les plages de Guardamar sont à environ 10 minutes en voiture.",
     },
   },
+  Benijófar: {
+    chips: ["services", "golf", "beach", "dining"],
+    text: {
+      es: "Pueblo pequeño y tranquilo de la Vega Baja, pegado a Rojales y Ciudad Quesada. Tiene los servicios del día a día a pie, varios campos de golf a pocos kilómetros y las playas de Guardamar del Segura a unos 10 km.",
+      en: "A small, quiet town in the Vega Baja, right next to Rojales and Ciudad Quesada. Everyday services are within walking distance, several golf courses are a few kilometres away and the beaches of Guardamar del Segura are about 10 km off.",
+      de: "Ein kleiner, ruhiger Ort in der Vega Baja, direkt neben Rojales und Ciudad Quesada. Alles für den Alltag ist zu Fuß erreichbar, mehrere Golfplätze liegen wenige Kilometer entfernt und die Strände von Guardamar del Segura etwa 10 km.",
+      nl: "Een klein, rustig dorp in de Vega Baja, vlak naast Rojales en Ciudad Quesada. Dagelijkse voorzieningen liggen op loopafstand, verschillende golfbanen op een paar kilometer en de stranden van Guardamar del Segura op zo'n 10 km.",
+      fr: "Un petit village tranquille de la Vega Baja, collé à Rojales et Ciudad Quesada. Les services du quotidien sont accessibles à pied, plusieurs golfs sont à quelques kilomètres et les plages de Guardamar del Segura à une dizaine de kilomètres.",
+    },
+  },
+  "Torre de la Horadada": {
+    chips: ["beach", "dining", "services", "golf"],
+    text: {
+      es: "Pueblo costero de Pilar de la Horadada, el último del litoral alicantino antes de la Región de Murcia. Playas de arena, puerto deportivo, paseo marítimo con restaurantes y la torre vigía que le da nombre. Ambiente de pueblo todo el año.",
+      en: "A coastal village in Pilar de la Horadada, the last one on the Alicante coast before the Region of Murcia. Sandy beaches, a marina, a seafront promenade lined with restaurants and the old watchtower that gives it its name. A village feel all year round.",
+      de: "Küstenort der Gemeinde Pilar de la Horadada, der letzte an der Küste Alicantes vor der Region Murcia. Sandstrände, Jachthafen, Strandpromenade mit Restaurants und der alte Wachturm, der ihm den Namen gibt. Dorfleben das ganze Jahr über.",
+      nl: "Kustdorp van Pilar de la Horadada, het laatste aan de kust van Alicante vóór de regio Murcia. Zandstranden, jachthaven, een boulevard met restaurants en de oude uitkijktoren waaraan het zijn naam dankt. Het hele jaar door een dorpse sfeer.",
+      fr: "Village côtier de Pilar de la Horadada, le dernier du littoral d'Alicante avant la Région de Murcie. Plages de sable, port de plaisance, promenade bordée de restaurants et l'ancienne tour de guet qui lui donne son nom. Une ambiance de village toute l'année.",
+    },
+  },
+  "Dehesa de Campoamor": {
+    chips: ["beach", "golf", "dining", "services"],
+    text: {
+      es: "Zona residencial de Orihuela Costa entre pinadas y calas, con las playas de Campoamor, La Glea y Aguamarina, puerto deportivo y varios campos de golf a pocos minutos. Supermercados, restaurantes y farmacias en el entorno inmediato.",
+      en: "A residential area of Orihuela Costa among pine woods and coves, with the beaches of Campoamor, La Glea and Aguamarina, a marina and several golf courses a few minutes away. Supermarkets, restaurants and pharmacies close by.",
+      de: "Wohngebiet der Orihuela Costa zwischen Pinienwäldern und Buchten, mit den Stränden Campoamor, La Glea und Aguamarina, einem Jachthafen und mehreren Golfplätzen wenige Minuten entfernt. Supermärkte, Restaurants und Apotheken in direkter Nähe.",
+      nl: "Woonwijk van Orihuela Costa tussen pijnbomen en baaien, met de stranden van Campoamor, La Glea en Aguamarina, een jachthaven en diverse golfbanen op enkele minuten. Supermarkten, restaurants en apotheken vlakbij.",
+      fr: "Quartier résidentiel d'Orihuela Costa entre pinèdes et criques, avec les plages de Campoamor, La Glea et Aguamarina, un port de plaisance et plusieurs golfs à quelques minutes. Supermarchés, restaurants et pharmacies à proximité immédiate.",
+    },
+  },
+  "La Manga del Mar Menor": {
+    chips: ["beach", "nature", "dining", "golf"],
+    text: {
+      es: "Franja de arena en la Región de Murcia entre dos mares: el Mediterráneo a un lado y las aguas tranquilas del Mar Menor al otro. Playas a los dos lados, deportes náuticos, restaurantes y campos de golf en la zona de Cabo de Palos y Los Belones.",
+      en: "A strip of sand in the Region of Murcia between two seas: the Mediterranean on one side and the calm waters of the Mar Menor on the other. Beaches on both sides, water sports, restaurants and golf courses around Cabo de Palos and Los Belones.",
+      de: "Ein Sandstreifen in der Region Murcia zwischen zwei Meeren: auf der einen Seite das Mittelmeer, auf der anderen das ruhige Mar Menor. Strände auf beiden Seiten, Wassersport, Restaurants und Golfplätze rund um Cabo de Palos und Los Belones.",
+      nl: "Een zandstrook in de regio Murcia tussen twee zeeën: aan de ene kant de Middellandse Zee, aan de andere kant het kalme water van de Mar Menor. Stranden aan beide zijden, watersport, restaurants en golfbanen rond Cabo de Palos en Los Belones.",
+      fr: "Une bande de sable dans la Région de Murcie entre deux mers : la Méditerranée d'un côté et les eaux calmes de la Mar Menor de l'autre. Des plages des deux côtés, des sports nautiques, des restaurants et des golfs vers Cabo de Palos et Los Belones.",
+    },
+  },
+  Vera: {
+    chips: ["beach", "golf", "nature", "services"],
+    text: {
+      es: "Municipio del levante de Almería, con casco histórico en el interior y Vera Playa en la costa: kilómetros de playa abierta, campos de golf en los alrededores y un clima seco y soleado casi todo el año. Mojácar y Garrucha quedan muy cerca.",
+      en: "A town in eastern Almería with a historic centre inland and Vera Playa on the coast: miles of open beach, golf courses nearby and a dry, sunny climate almost all year. Mojácar and Garrucha are close by.",
+      de: "Gemeinde im Osten Almerías mit historischem Ortskern im Landesinneren und Vera Playa an der Küste: kilometerlange offene Strände, Golfplätze in der Umgebung und ein fast ganzjährig trockenes, sonniges Klima. Mojácar und Garrucha liegen ganz in der Nähe.",
+      nl: "Gemeente in het oosten van Almería, met een historisch centrum in het binnenland en Vera Playa aan de kust: kilometers open strand, golfbanen in de omgeving en een droog, zonnig klimaat bijna het hele jaar. Mojácar en Garrucha liggen dichtbij.",
+      fr: "Commune de l'est d'Almería, avec un centre historique dans les terres et Vera Playa sur la côte : des kilomètres de plage ouverte, des golfs aux alentours et un climat sec et ensoleillé presque toute l'année. Mojácar et Garrucha sont tout proches.",
+    },
+  },
 };
