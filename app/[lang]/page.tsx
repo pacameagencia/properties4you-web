@@ -36,6 +36,7 @@ const ZONES = [
   "Rojales",
   "Dolores",
   "San Fulgencio",
+  "Pinoso",
 ];
 
 const MARQUEE_WORDS: Record<Locale, string[]> = {
@@ -78,7 +79,9 @@ export default async function HomePage({
 
   const stats = [
     { value: 300, suffix: "+", label: dict.stats.sun },
-    { value: 18, suffix: "", label: dict.stats.developments },
+    // Cifra real, no fija: ponía 18 con 15 viviendas publicadas, y con el
+    // catálogo Rústico serían 28. Una cifra inflada es prueba social falsa.
+    { value: all.length, suffix: "", label: dict.stats.developments },
     { value: 10, suffix: "", label: dict.stats.warranty },
     { text: "A–B", label: dict.stats.energy },
   ];

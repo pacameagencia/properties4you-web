@@ -90,13 +90,16 @@ export function PropertyCard({
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
           {/* Distintivo: "En venta" era igual en todas; ahora dice la fase.
               Reservada/Vendida mandan; si no, "Llave en mano" cuando la
-              propiedad lleva el extra ready_now y "En construcción" en el resto. */}
+              propiedad lleva el extra ready_now, "A medida" con built_to_order
+              (modelos de catálogo que aún no existen) y "En construcción" en el resto. */}
           <span className="absolute left-4 top-4 z-10 rounded-full border border-white/20 bg-black/40 px-3 py-1 text-[0.62rem] uppercase tracking-[0.18em] text-ink backdrop-blur">
             {p.status !== "en_venta"
               ? (dict.status[p.status] ?? p.status)
               : p.amenities?.includes("ready_now")
                 ? dict.phase.keyReady
-                : dict.phase.inDevelopment}
+                : p.amenities?.includes("built_to_order")
+                  ? dict.phase.toOrder
+                  : dict.phase.inDevelopment}
           </span>
           <span className="absolute right-4 top-4 z-10 flex items-center gap-2">
             <FavButton
