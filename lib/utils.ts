@@ -65,3 +65,21 @@ export function localizedContent(
   }
   return t.es ?? {};
 }
+
+/**
+ * Versión ligera de una ficha para componentes de cliente (tarjetas, catálogo,
+ * carrusel). Sin galería, textos en 5 idiomas ni POIs: con 59 fichas, pasarlas
+ * enteras metía ~150 KB de datos en el HTML de la portada y del catálogo.
+ */
+export function toCard<T extends { gallery: unknown[]; translations: object; pois: unknown[] }>(p: T): T {
+  return { ...p, gallery: [], translations: {}, pois: [] };
+}
+
+/**
+ * URL del optimizador de Next para imágenes usadas como fondo CSS, que no pasan
+ * por <Image>. Sin esto se descargaba el original de Supabase (hasta 360 KB).
+ * El ancho debe ser uno de los deviceSizes por defecto de Next.
+ */
+export function optimizedBg(src: string, width: 640 | 828 | 1080 | 1200 | 1920 = 828, quality = 60): string {
+  return `/_next/image?url=${encodeURIComponent(src)}&w=${width}&q=${quality}`;
+}

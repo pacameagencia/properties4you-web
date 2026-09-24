@@ -48,7 +48,17 @@ export function Hero({
   useEffect(() => {
     if (!videoUrl) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    setLoadVideo(true);
+    // Ahorro de datos o red 2G: se queda el slideshow de fotos.
+    const conn = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+    if (conn?.saveData || /(^|-)2g$/.test(conn?.effectiveType ?? "")) return;
+    /* El vídeo se pide DESPUÉS de que la página termine de cargar: descargado
+       al montar competía con la imagen y el titular y el LCP móvil llegaba a
+       8,5 s (auditoría 2026-09-24). */
+    let t: ReturnType<typeof setTimeout> | undefined;
+    const start = () => { t = setTimeout(() => setLoadVideo(true), 1200); };
+    if (document.readyState === "complete") start();
+    else window.addEventListener("load", start, { once: true });
+    return () => { window.removeEventListener("load", start); if (t) clearTimeout(t); };
   }, [videoUrl]);
 
   const titleWords =

@@ -8,6 +8,7 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
 import { alternatesFor } from "@/lib/seo";
 import { PARTNERS } from "@/lib/partners";
 import { getPublishedProperties } from "@/lib/queries";
+import { optimizedBg, toCard } from "@/lib/utils";
 import { Reveal } from "@/components/site/reveal";
 import { Marquee } from "@/components/site/marquee";
 import { PropertyCard } from "@/components/site/property-card";
@@ -22,7 +23,7 @@ export const revalidate = 600;
 
 // Vídeo promocional del cliente (Supabase Storage, sin audio, faststart)
 const HERO_VIDEO =
-  "https://njlbbvkdkuavbayqcszp.supabase.co/storage/v1/object/public/properties/site/hero.mp4";
+  "https://njlbbvkdkuavbayqcszp.supabase.co/storage/v1/object/public/properties/site/hero-v2.mp4";
 
 const ZONES = [
   "Los Montesinos",
@@ -125,7 +126,7 @@ export default async function HomePage({
         {heroImages[1] && (
           <div
             className="absolute inset-0 bg-cover bg-center opacity-[0.08]"
-            style={{ backgroundImage: `url(${heroImages[1]})` }}
+            style={{ backgroundImage: `url(${optimizedBg(heroImages[1], 1200)})` }}
           />
         )}
         <div className="pointer-events-none absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
@@ -177,7 +178,7 @@ export default async function HomePage({
             {featured.map((p, i) => (
               <Reveal key={p.id} delay={(i % 3) * 120}>
                 <PropertyCard
-                  property={p}
+                  property={toCard(p)}
                   locale={locale}
                   dict={dict}
                   priority={i < 3}
@@ -232,7 +233,7 @@ export default async function HomePage({
       <OutlineMarquee words={MARQUEE_WORDS[locale]} gold />
 
       {/* PASEO POR LA COLECCIÓN — filmstrip */}
-      <CollectionShowcase properties={all} locale={locale} dict={dict} />
+      <CollectionShowcase properties={all.map(toCard)} locale={locale} dict={dict} />
 
       {/* DESTINO */}
       <section className="relative z-10 overflow-hidden border-t border-line bg-bg">
@@ -269,7 +270,7 @@ export default async function HomePage({
                       <div
                         className="absolute inset-0 bg-cover bg-center opacity-60 transition-all duration-700 group-hover:scale-105 group-hover:opacity-80"
                         style={{
-                          backgroundImage: `url(${zoneProperty.cover_image})`,
+                          backgroundImage: `url(${optimizedBg(zoneProperty.cover_image)})`,
                         }}
                       />
                     )}
