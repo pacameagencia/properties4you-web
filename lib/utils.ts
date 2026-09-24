@@ -80,6 +80,8 @@ export function toCard<T extends { gallery: unknown[]; translations: object; poi
  * por <Image>. Sin esto se descargaba el original de Supabase (hasta 360 KB).
  * El ancho debe ser uno de los deviceSizes por defecto de Next.
  */
-export function optimizedBg(src: string, width: 640 | 828 | 1080 | 1200 | 1920 = 828, quality = 60): string {
-  return `/_next/image?url=${encodeURIComponent(src)}&w=${width}&q=${quality}`;
+export function optimizedBg(src: string, width: 640 | 828 | 1080 | 1200 | 1920 = 828): string {
+  // q=75: en Next 16 solo se aceptan las calidades de images.qualities (por
+  // defecto [75]); cualquier otra devuelve 400 (visto en producción).
+  return `/_next/image?url=${encodeURIComponent(src)}&w=${width}&q=75`;
 }
