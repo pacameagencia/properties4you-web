@@ -99,7 +99,7 @@ export type Dictionary = {
     partnerCta: string;
   };
   /** Distintivo de la tarjeta: en qué fase está la promoción. */
-  phase: { keyReady: string; inDevelopment: string };
+  phase: { keyReady: string; inDevelopment: string; toOrder: string };
   /** Programa de colaboración con agencias (nav + bloque de portada). */
   partners: { nav: string; kicker: string; title: string; body: string; cta: string };
 };
@@ -257,7 +257,7 @@ const es: Dictionary = {
     website: "Web de la agencia (opcional)",
     partnerCta: "Quiero colaborar",
   },
-  phase: { keyReady: "Llave en mano", inDevelopment: "En construcción" },
+  phase: { keyReady: "Llave en mano", inDevelopment: "En construcción", toOrder: "A medida" },
   partners: {
     nav: "Colabora",
     kicker: "Para agencias inmobiliarias",
@@ -420,7 +420,7 @@ const de: Dictionary = {
     website: "Website der Agentur (optional)",
     partnerCta: "Ich möchte Partner werden",
   },
-  phase: { keyReady: "Bezugsfertig", inDevelopment: "Im Bau" },
+  phase: { keyReady: "Bezugsfertig", inDevelopment: "Im Bau", toOrder: "Nach Maß" },
   partners: {
     nav: "Partner werden",
     kicker: "Für Immobilienagenturen",
@@ -583,7 +583,7 @@ const nl: Dictionary = {
     website: "Website van het kantoor (optioneel)",
     partnerCta: "Ik wil samenwerken",
   },
-  phase: { keyReady: "Instapklaar", inDevelopment: "In aanbouw" },
+  phase: { keyReady: "Instapklaar", inDevelopment: "In aanbouw", toOrder: "Op maat" },
   partners: {
     nav: "Samenwerken",
     kicker: "Voor makelaars",
@@ -746,7 +746,7 @@ const en: Dictionary = {
     website: "Agency website (optional)",
     partnerCta: "I want to partner",
   },
-  phase: { keyReady: "Key ready", inDevelopment: "In development" },
+  phase: { keyReady: "Key ready", inDevelopment: "In development", toOrder: "Built to order" },
   partners: {
     nav: "Partner with us",
     kicker: "For estate agencies",
@@ -910,7 +910,7 @@ const fr: Dictionary = {
     website: "Site web de l'agence (facultatif)",
     partnerCta: "Je veux collaborer",
   },
-  phase: { keyReady: "Clés en main", inDevelopment: "En construction" },
+  phase: { keyReady: "Clés en main", inDevelopment: "En construction", toOrder: "Sur mesure" },
   partners: {
     nav: "Collaborer",
     kicker: "Pour les agences immobilières",

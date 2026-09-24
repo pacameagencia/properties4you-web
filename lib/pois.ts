@@ -135,6 +135,7 @@ export const AMENITIES = [
   "sea_views",
   "private_pool",
   "ready_now",
+  "built_to_order",
   "frontline_golf",
 ] as const;
 
@@ -161,6 +162,15 @@ export const AMENITY_LABELS: Record<Amenity, Record<Locale, string>> = {
     de: "Bezugsfertig",
     nl: "Instapklaar",
     fr: "Prêt à vivre",
+  },
+  /* Modelos de catálogo que se construyen sobre la parcela del comprador.
+     No existen todavía: llamarlos "En construcción" sería falso. */
+  built_to_order: {
+    es: "Construcción a medida",
+    en: "Built to order",
+    de: "Bau nach Maß",
+    nl: "Bouw op maat",
+    fr: "Construction sur mesure",
   },
   frontline_golf: {
     es: "Primera línea de golf",
