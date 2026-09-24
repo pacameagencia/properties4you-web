@@ -7,11 +7,11 @@ const supabase = createClient(
 );
 
 const LANGS = ["es", "en", "de", "nl", "fr"];
-const ZONES_INFO = [
-  "Los Montesinos", "San Miguel de Salinas", "Daya Nueva", "La Finca Golf",
-  "VistaBella Golf", "Pilar de la Horadada", "Rojales", "Dolores",
-  "San Fulgencio", "Torrevieja", "Ciudad Quesada", "Pinoso",
-];
+// Zonas con texto de entorno: se leen de lib/zones.ts (antes era una lista a
+// mano y se quedó atrás al añadir las 5 zonas de Amay el 2026-09-24).
+import { readFileSync } from "node:fs";
+const zonesSrc = readFileSync(new URL("../lib/zones.ts", import.meta.url), "utf8");
+const ZONES_INFO = [...zonesSrc.slice(zonesSrc.indexOf("ZONE_INFO")).matchAll(/^  "?([^":\n]+?)"?: \{\s*$/gm)].map((m) => m[1]);
 
 const { data, error } = await supabase
   .from("properties")
