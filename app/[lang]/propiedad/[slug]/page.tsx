@@ -96,7 +96,7 @@ export default async function PropertyPage({
   ]);
   if (!property) notFound();
 
-  const phone = settings?.contact_phone || "+34 650 37 92 58";
+  const phone = settings?.contact_phone || "+31 6 53 99 48 14";
   const email = settings?.contact_email || "info@properties4you.es";
   const whatsapp = phone.replace(/\D/g, "");
 
