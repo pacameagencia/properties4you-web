@@ -58,7 +58,7 @@ export default async function AboutPage({
   const settings = await getSettings();
 
   const email = settings?.contact_email || "info@properties4you.es";
-  const phone = settings?.contact_phone || "+34 650 37 92 58";
+  const phone = settings?.contact_phone || "+31 6 53 99 48 14";
   const address = settings?.address || "03187 Los Montesinos, Alicante";
   const about = ABOUT[locale];
 

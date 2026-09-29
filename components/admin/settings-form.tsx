@@ -40,7 +40,7 @@ export function SettingsForm({
         <input
           value={f.contact_phone}
           onChange={(e) => setF({ ...f, contact_phone: e.target.value })}
-          placeholder="+34 650 37 92 58"
+          placeholder="+31 6 53 99 48 14"
           className={inputCls}
         />
       </label>

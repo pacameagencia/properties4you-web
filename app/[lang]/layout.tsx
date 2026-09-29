@@ -86,7 +86,7 @@ export default async function LangLayout({
     name: "Properties4You",
     url: "https://properties4you.es",
     areaServed: "Costa Blanca, Alicante, España",
-    telephone: settings?.contact_phone || "+34 650 37 92 58",
+    telephone: settings?.contact_phone || "+31 6 53 99 48 14",
     email: settings?.contact_email || "info@properties4you.es",
     address: {
       "@type": "PostalAddress",

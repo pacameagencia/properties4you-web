@@ -33,7 +33,7 @@ export const TITULAR = {
   /** Datos del Registro Mercantil, si es sociedad. Si es autónomo, ponlo a "". */
   registro: PENDIENTE,
   email: "info@properties4you.es",
-  telefono: "+34 650 37 92 58",
+  telefono: "+31 6 53 99 48 14",
   /** Fecha de la última revisión de los textos. */
   actualizado: "2026-09-20",
 } as const;
