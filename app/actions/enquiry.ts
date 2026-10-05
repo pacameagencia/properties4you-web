@@ -2,7 +2,9 @@
 
 import { z } from "zod";
 import { createClient } from "@supabase/supabase-js";
-import { sendEnquiryMail, type Enquiry } from "@/lib/mail";
+import { headers } from "next/headers";
+import { sendEnquiryMail, sendConfirmationMail, type Enquiry } from "@/lib/mail";
+import { getSettings } from "@/lib/queries";
 
 /**
  * Server action común a los formularios públicos (visita, contacto,
@@ -47,9 +49,28 @@ const SOURCE: Record<Enquiry["kind"], "visita" | "contacto"> = {
   colabora: "contacto",
 };
 
+/* Límite por IP (memoria del contenedor, una sola instancia): ahora cada envío
+   manda además un correo a la dirección que escribe el visitante, y sin tope
+   el formulario serviría para bombardear buzones ajenos. */
+const VENTANA_MS = 10 * 60 * 1000;
+const MAX_POR_VENTANA = 5;
+const envios = new Map<string, number[]>();
+function dentroDelLimite(ip: string): boolean {
+  const ahora = Date.now();
+  const recientes = (envios.get(ip) ?? []).filter((t) => ahora - t < VENTANA_MS);
+  if (recientes.length >= MAX_POR_VENTANA) return false;
+  recientes.push(ahora);
+  envios.set(ip, recientes);
+  if (envios.size > 5000) envios.clear();
+  return true;
+}
+
 export async function sendEnquiry(raw: EnquiryInput): Promise<EnquiryResult> {
   const parsed = schema.safeParse(raw);
   if (!parsed.success) return { ok: false, error: "invalid" };
+  const h = await headers();
+  const ip = (h.get("x-forwarded-for") ?? "").split(",")[0].trim() || h.get("x-real-ip") || "desconocida";
+  if (!dentroDelLimite(ip)) return { ok: false, error: "invalid" };
   const d = parsed.data;
 
   const nz = (v: string | undefined) => (v ? v : null);
@@ -87,24 +108,36 @@ export async function sendEnquiry(raw: EnquiryInput): Promise<EnquiryResult> {
   }
 
   // 2) Correo al buzón de la agencia.
+  const enquiry: Enquiry = {
+    kind: d.kind,
+    name: d.name,
+    email: d.email,
+    phone: nz(d.phone),
+    message: nz(d.message),
+    preferredDate: nz(d.preferredDate),
+    propertyName,
+    propertyUrl: nz(d.propertyUrl),
+    agency: nz(d.agency),
+    country: nz(d.country),
+    website: nz(d.website),
+    locale: d.locale,
+  };
   try {
-    await sendEnquiryMail({
-      kind: d.kind,
-      name: d.name,
-      email: d.email,
-      phone: nz(d.phone),
-      message: nz(d.message),
-      preferredDate: nz(d.preferredDate),
-      propertyName,
-      propertyUrl: nz(d.propertyUrl),
-      agency: nz(d.agency),
-      country: nz(d.country),
-      website: nz(d.website),
-      locale: d.locale,
-    });
+    await sendEnquiryMail(enquiry);
+    console.log(`[enquiry] aviso enviado al buzón (${d.kind}, ${d.locale})`);
   } catch (err) {
     console.error("[enquiry] fallo SMTP:", err);
     return { ok: false, error: "mail" };
+  }
+
+  // 3) Acuse al cliente en su idioma. Best-effort: si falla, la solicitud ya
+  //    está en el buzón y en el panel; solo se registra para poder verlo.
+  try {
+    const settings = await getSettings().catch(() => null);
+    await sendConfirmationMail(enquiry, settings?.contact_phone || "+31 6 53 99 48 14");
+    console.log(`[enquiry] confirmación enviada (${d.kind}, ${d.locale})`);
+  } catch (err) {
+    console.error("[enquiry] fallo al enviar la confirmación al cliente:", err);
   }
   return { ok: true };
 }
