@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "standalone",
+  // standalone solo para la imagen Docker (VPS). En el hosting de Hostinger la
+  // web arranca con `next start`, que no admite la salida standalone.
+  output: process.env.NEXT_STANDALONE === "1" ? "standalone" : undefined,
   images: {
     remotePatterns: [
       {
