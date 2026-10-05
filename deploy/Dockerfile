@@ -7,7 +7,7 @@ RUN npm ci --no-audit --no-fund
 
 FROM node:22-alpine AS build
 WORKDIR /app
-ENV NEXT_TELEMETRY_DISABLED=1
+ENV NEXT_TELEMETRY_DISABLED=1 NEXT_STANDALONE=1
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 # Las NEXT_PUBLIC_* se hornean en el build: llegan por --build-arg / secreto de compose
