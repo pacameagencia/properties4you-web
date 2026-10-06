@@ -262,7 +262,7 @@ const es: Dictionary = {
     nav: "Colabora",
     kicker: "Para agencias inmobiliarias",
     title: "Colabora con nosotros y cobra el 5 % por cada venta",
-    body: "Si tienes clientes que buscan casa en la Costa Blanca, nosotros ponemos la cartera, las visitas y el acompañamiento en su idioma. Tú cobras una comisión del 5 % por cada operación cerrada.",
+    body: "Si tienes clientes que buscan casa en la Costa Blanca, nosotros ponemos la cartera, las visitas y el acompañamiento hasta la firma. Tú cobras una comisión del 5 % por cada operación cerrada.",
     cta: "Ver el programa de colaboración",
   },
 };
@@ -425,7 +425,7 @@ const de: Dictionary = {
     nav: "Partner werden",
     kicker: "Für Immobilienagenturen",
     title: "Werden Sie Partner und verdienen Sie 5 % an jedem Verkauf",
-    body: "Wenn Sie Kunden haben, die ein Haus an der Costa Blanca suchen, stellen wir das Portfolio, die Besichtigungen und die Betreuung in deren Sprache. Sie erhalten 5 % Provision für jeden abgeschlossenen Verkauf.",
+    body: "Wenn Sie Kunden haben, die ein Haus an der Costa Blanca suchen, stellen wir das Portfolio, die Besichtigungen und die Betreuung bis zur Beurkundung. Sie erhalten 5 % Provision für jeden abgeschlossenen Verkauf.",
     cta: "Zum Partnerprogramm",
   },
 };
@@ -588,7 +588,7 @@ const nl: Dictionary = {
     nav: "Samenwerken",
     kicker: "Voor makelaars",
     title: "Werk met ons samen en verdien 5 % op elke verkoop",
-    body: "Heeft u klanten die een woning zoeken aan de Costa Blanca? Wij zorgen voor het aanbod, de bezichtigingen en de begeleiding in hun taal. U ontvangt 5 % commissie op elke afgeronde verkoop.",
+    body: "Heeft u klanten die een woning zoeken aan de Costa Blanca? Wij zorgen voor het aanbod, de bezichtigingen en de begeleiding tot aan de notaris. U ontvangt 5 % commissie op elke afgeronde verkoop.",
     cta: "Bekijk het partnerprogramma",
   },
 };
@@ -751,7 +751,7 @@ const en: Dictionary = {
     nav: "Partner with us",
     kicker: "For estate agencies",
     title: "Partner with us and earn 5% on every sale",
-    body: "If you have clients looking for a home on the Costa Blanca, we provide the portfolio, the viewings and the support in their language. You earn a 5% commission on every completed sale.",
+    body: "If you have clients looking for a home on the Costa Blanca, we provide the portfolio, the viewings and support all the way to completion. You earn a 5% commission on every completed sale.",
     cta: "See the partner programme",
   },
 };
@@ -915,7 +915,7 @@ const fr: Dictionary = {
     nav: "Collaborer",
     kicker: "Pour les agences immobilières",
     title: "Collaborez avec nous et touchez 5 % sur chaque vente",
-    body: "Si vous avez des clients qui cherchent une maison sur la Costa Blanca, nous apportons le portefeuille, les visites et l'accompagnement dans leur langue. Vous percevez une commission de 5 % sur chaque vente conclue.",
+    body: "Si vous avez des clients qui cherchent une maison sur la Costa Blanca, nous apportons le portefeuille, les visites et l'accompagnement jusqu'à la signature. Vous percevez une commission de 5 % sur chaque vente conclue.",
     cta: "Voir le programme de collaboration",
   },
 };
