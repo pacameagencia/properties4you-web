@@ -28,7 +28,7 @@ export const PARTNERS: Record<Locale, PartnerContent> = {
   es: {
     title: "Colabora con nosotros",
     intro:
-      "Trabajamos con agencias inmobiliarias de fuera de España que tienen clientes interesados en comprar en la Costa Blanca. Tú aportas el contacto; nosotros ponemos la cartera de obra nueva, las visitas sobre el terreno y el acompañamiento en su idioma hasta la firma.",
+      "Trabajamos con agencias inmobiliarias de fuera de España que tienen clientes interesados en comprar en la Costa Blanca. Tú aportas el contacto; nosotros ponemos la cartera de obra nueva, las visitas sobre el terreno y el acompañamiento hasta la firma.",
     commission: "5 %",
     commissionNote: "de comisión por cada venta cerrada con un cliente que nos hayas presentado.",
     stepsTitle: "Cómo funciona",
@@ -50,7 +50,7 @@ export const PARTNERS: Record<Locale, PartnerContent> = {
   en: {
     title: "Partner with us",
     intro:
-      "We work with estate agencies outside Spain whose clients want to buy on the Costa Blanca. You bring the contact; we provide the new-build portfolio, the viewings on the ground and support in their language all the way to completion.",
+      "We work with estate agencies outside Spain whose clients want to buy on the Costa Blanca. You bring the contact; we provide the new-build portfolio, the viewings on the ground and support all the way to completion.",
     commission: "5%",
     commissionNote: "commission on every completed sale to a client you introduce to us.",
     stepsTitle: "How it works",
@@ -72,7 +72,7 @@ export const PARTNERS: Record<Locale, PartnerContent> = {
   de: {
     title: "Partner werden",
     intro:
-      "Wir arbeiten mit Immobilienagenturen außerhalb Spaniens zusammen, deren Kunden an der Costa Blanca kaufen möchten. Sie bringen den Kontakt; wir stellen das Neubau-Portfolio, die Besichtigungen vor Ort und die Betreuung in der Sprache des Kunden bis zur Beurkundung.",
+      "Wir arbeiten mit Immobilienagenturen außerhalb Spaniens zusammen, deren Kunden an der Costa Blanca kaufen möchten. Sie bringen den Kontakt; wir stellen das Neubau-Portfolio, die Besichtigungen vor Ort und die Betreuung bis zur Beurkundung.",
     commission: "5 %",
     commissionNote: "Provision für jeden abgeschlossenen Verkauf an einen von Ihnen vermittelten Kunden.",
     stepsTitle: "So funktioniert es",
@@ -94,7 +94,7 @@ export const PARTNERS: Record<Locale, PartnerContent> = {
   nl: {
     title: "Samenwerken",
     intro:
-      "We werken samen met makelaars buiten Spanje die klanten hebben die aan de Costa Blanca willen kopen. U brengt het contact aan; wij zorgen voor het nieuwbouwaanbod, de bezichtigingen ter plaatse en de begeleiding in hun taal tot aan de notaris.",
+      "We werken samen met makelaars buiten Spanje die klanten hebben die aan de Costa Blanca willen kopen. U brengt het contact aan; wij zorgen voor het nieuwbouwaanbod, de bezichtigingen ter plaatse en de begeleiding tot aan de notaris.",
     commission: "5 %",
     commissionNote: "commissie op elke afgeronde verkoop aan een klant die u bij ons aanbrengt.",
     stepsTitle: "Zo werkt het",
@@ -116,7 +116,7 @@ export const PARTNERS: Record<Locale, PartnerContent> = {
   fr: {
     title: "Collaborer avec nous",
     intro:
-      "Nous travaillons avec des agences immobilières hors d'Espagne dont les clients souhaitent acheter sur la Costa Blanca. Vous apportez le contact ; nous fournissons le portefeuille de programmes neufs, les visites sur place et l'accompagnement dans leur langue jusqu'à la signature.",
+      "Nous travaillons avec des agences immobilières hors d'Espagne dont les clients souhaitent acheter sur la Costa Blanca. Vous apportez le contact ; nous fournissons le portefeuille de programmes neufs, les visites sur place et l'accompagnement jusqu'à la signature.",
     commission: "5 %",
     commissionNote: "de commission sur chaque vente conclue avec un client que vous nous avez présenté.",
     stepsTitle: "Comment ça marche",
